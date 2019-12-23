@@ -1,0 +1,16 @@
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.deps.json
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.runtimeconfig.json
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.runtimeconfig.dev.json
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.dll
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.pdb
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooCommonLayer.dll
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.dll
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.csprojAssemblyReference.cache
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.AssemblyInfo.cs
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.csproj.CopyComplete
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.dll
+C:\Users\User\source\repos\FundooApp\FundooBusinessLayer1\obj\Debug\netcoreapp2.1\FundooBusinessLayer1.pdb
