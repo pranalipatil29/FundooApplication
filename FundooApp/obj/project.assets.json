@@ -4625,7 +4625,7 @@
           "lib/netstandard1.3/System.Xml.XPath.XDocument.dll": {}
         }
       },
-      "FundooBusinessLayer1/1.0.0": {
+      "FundooBusinessLayer/1.0.0": {
         "type": "project",
         "framework": ".NETCoreApp,Version=v2.1",
         "dependencies": {
@@ -4634,10 +4634,10 @@
           "Microsoft.NETCore.App": "2.1.0"
         },
         "compile": {
-          "bin/placeholder/FundooBusinessLayer1.dll": {}
+          "bin/placeholder/FundooBusinessLayer.dll": {}
         },
         "runtime": {
-          "bin/placeholder/FundooBusinessLayer1.dll": {}
+          "bin/placeholder/FundooBusinessLayer.dll": {}
         }
       },
       "FundooCommonLayer/1.0.0": {
@@ -12587,10 +12587,10 @@
         "system.xml.xpath.xdocument.nuspec"
       ]
     },
-    "FundooBusinessLayer1/1.0.0": {
+    "FundooBusinessLayer/1.0.0": {
       "type": "project",
-      "path": "../FundooBusinessLayer1/FundooBusinessLayer1.csproj",
-      "msbuildProject": "../FundooBusinessLayer1/FundooBusinessLayer1.csproj"
+      "path": "../FundooBusinessLayer1/FundooBusinessLayer.csproj",
+      "msbuildProject": "../FundooBusinessLayer1/FundooBusinessLayer.csproj"
     },
     "FundooCommonLayer/1.0.0": {
       "type": "project",
@@ -12605,7 +12605,7 @@
   },
   "projectFileDependencyGroups": {
     ".NETCoreApp,Version=v2.1": [
-      "FundooBusinessLayer1 >= 1.0.0",
+      "FundooBusinessLayer >= 1.0.0",
       "FundooCommonLayer >= 1.0.0",
       "FundooRepositoryLayer >= 1.0.0",
       "Microsoft.AspNetCore.App >= 2.1.1",
@@ -12644,8 +12644,8 @@
       "frameworks": {
         "netcoreapp2.1": {
           "projectReferences": {
-            "C:\\Users\\User\\source\\repos\\FundooApp\\FundooBusinessLayer1\\FundooBusinessLayer1.csproj": {
-              "projectPath": "C:\\Users\\User\\source\\repos\\FundooApp\\FundooBusinessLayer1\\FundooBusinessLayer1.csproj"
+            "C:\\Users\\User\\source\\repos\\FundooApp\\FundooBusinessLayer1\\FundooBusinessLayer.csproj": {
+              "projectPath": "C:\\Users\\User\\source\\repos\\FundooApp\\FundooBusinessLayer1\\FundooBusinessLayer.csproj"
             },
             "C:\\Users\\User\\source\\repos\\FundooApp\\FundooCommonLayer\\FundooCommonLayer.csproj": {
               "projectPath": "C:\\Users\\User\\source\\repos\\FundooApp\\FundooCommonLayer\\FundooCommonLayer.csproj"

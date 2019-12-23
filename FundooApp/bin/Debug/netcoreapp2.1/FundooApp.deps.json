@@ -24,7 +24,7 @@
     ".NETCoreApp,Version=v2.1": {
       "FundooApp/1.0.0": {
         "dependencies": {
-          "FundooBusinessLayer1": "1.0.0",
+          "FundooBusinessLayer": "1.0.0",
           "FundooCommonLayer": "1.0.0",
           "FundooRepositoryLayer": "1.0.0",
           "Microsoft.AspNetCore.App": "2.1.1",
@@ -528,17 +528,17 @@
           "System.Threading.Tasks": "4.3.0"
         }
       },
-      "FundooBusinessLayer1/1.0.0": {
+      "FundooBusinessLayer/1.0.0": {
         "dependencies": {
           "FundooCommonLayer": "1.0.0",
           "FundooRepositoryLayer": "1.0.0",
           "Microsoft.NETCore.App": "2.1.0"
         },
         "runtime": {
-          "FundooBusinessLayer1.dll": {}
+          "FundooBusinessLayer.dll": {}
         },
         "compile": {
-          "FundooBusinessLayer1.dll": {}
+          "FundooBusinessLayer.dll": {}
         }
       },
       "FundooCommonLayer/1.0.0": {
@@ -3705,7 +3705,7 @@
       "path": "system.linq.parallel/4.3.0",
       "hashPath": "system.linq.parallel.4.3.0.nupkg.sha512"
     },
-    "FundooBusinessLayer1/1.0.0": {
+    "FundooBusinessLayer/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

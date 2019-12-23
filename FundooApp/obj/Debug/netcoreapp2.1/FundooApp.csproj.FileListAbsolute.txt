@@ -3,10 +3,10 @@ C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.runtimeconfig.dev.json
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.dll
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.pdb
-C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.dll
+C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooBusinessLayer.dll
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooCommonLayer.dll
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.dll
-C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooBusinessLayer1.pdb
+C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooBusinessLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csprojAssemblyReference.cache

@@ -9,9 +9,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundooCommonLayer", "Fundoo
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundooRepositoryLayer", "FundooRepositoryLayer\FundooRepositoryLayer.csproj", "{1F124262-D6C4-4885-9387-45F3A09948A6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundooBusinessLayer1", "FundooBusinessLayer1\FundooBusinessLayer1.csproj", "{21F8D3FA-C340-4445-BC72-0235FA5284BA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundooBusinessLayer", "FundooBusinessLayer1\FundooBusinessLayer.csproj", "{21F8D3FA-C340-4445-BC72-0235FA5284BA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MSMQReceiver", "MSMQReceiver\MSMQReceiver.csproj", "{54B822F2-ECB9-4FB6-9867-888364BE060F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSMQReceiver", "MSMQReceiver\MSMQReceiver.csproj", "{54B822F2-ECB9-4FB6-9867-888364BE060F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
