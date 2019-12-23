@@ -15,5 +15,11 @@ namespace FundooRepositoryLayer.Context
         }
 
         public DbSet<ApplicationModel> UserDataTable { get; set; }
+
+        public DbSet<NoteModel> Note { get; set; }
+
+        public DbSet<LabelModel> Label { get; set; }
+
+        public DbSet<NoteLabelModel> NoteLabel { get; set; }
     }
 }

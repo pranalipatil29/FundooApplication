@@ -8,7 +8,7 @@ namespace FundooCommonLayer.Model
     public class RegistrationModel
     {
         [Key]
-        public int Id { get; set; }
+        public string Id { get; set; }
 
         [Required]
         public string FirstName { get; set; }

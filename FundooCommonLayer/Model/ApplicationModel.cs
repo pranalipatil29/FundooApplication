@@ -23,6 +23,5 @@ namespace FundooCommonLayer.Model
 
         [ForeignKey("ServiceModel")]
         public string ServiceType { get; set; }
-
     }
 }

@@ -19,6 +19,89 @@ namespace FundooRepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("FundooCommonLayer.Model.LabelModel", b =>
+                {
+                    b.Property<int>("LabelID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("DateTime");
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("DateTime");
+
+                    b.HasKey("LabelID");
+
+                    b.ToTable("Label");
+                });
+
+            modelBuilder.Entity("FundooCommonLayer.Model.NoteLabelModel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Label")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int>("LabelID");
+
+                    b.Property<int>("NoteID");
+
+                    b.Property<int>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("NoteLabel");
+                });
+
+            modelBuilder.Entity("FundooCommonLayer.Model.NoteModel", b =>
+                {
+                    b.Property<int>("NoteID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Collaborator")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Color")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("DateTime");
+
+                    b.Property<string>("Description")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("Image")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<bool>("IsArchive");
+
+                    b.Property<bool>("IsPin");
+
+                    b.Property<bool>("IsTrash");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("DateTime");
+
+                    b.Property<DateTime>("Reminder")
+                        .HasColumnType("DateTime");
+
+                    b.Property<string>("Title")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("NoteID");
+
+                    b.ToTable("Note");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")

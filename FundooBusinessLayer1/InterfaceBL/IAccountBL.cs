@@ -10,16 +10,12 @@ namespace FundooBusinessLayer1.InterfaceBL
     {
        
         Task<bool> Register(RegistrationModel registrationModel);
-
         
         Task<string> Login(LoginModel loginModel);
-
       
         Task<bool> ForgetPassword(ForgetPasswordModel forgetPasswordModel);
-
       
         Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
-
        
         Task<bool> SocialLogin(RegistrationModel registrationModel);
     }

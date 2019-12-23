@@ -104,7 +104,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim("UserID",user.Id.ToString())
+                        new Claim("UserID",user.Id.ToString()),
+                        new Claim("EmailID",user.Email.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
@@ -113,7 +114,6 @@ namespace FundooRepositoryLayer.ServiceRL
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-               
                 return token;
             }
             else

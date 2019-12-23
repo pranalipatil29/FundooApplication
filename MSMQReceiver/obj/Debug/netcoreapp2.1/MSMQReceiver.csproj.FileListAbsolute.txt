@@ -3,6 +3,7 @@ C:\Users\User\source\repos\FundooApp\MSMQReceiver\bin\Debug\netcoreapp2.1\MSMQRe
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\bin\Debug\netcoreapp2.1\MSMQReceiver.runtimeconfig.dev.json
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\bin\Debug\netcoreapp2.1\MSMQReceiver.dll
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\bin\Debug\netcoreapp2.1\MSMQReceiver.pdb
+C:\Users\User\source\repos\FundooApp\MSMQReceiver\obj\Debug\netcoreapp2.1\MSMQReceiver.csprojAssemblyReference.cache
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\obj\Debug\netcoreapp2.1\MSMQReceiver.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\obj\Debug\netcoreapp2.1\MSMQReceiver.AssemblyInfoInputs.cache
 C:\Users\User\source\repos\FundooApp\MSMQReceiver\obj\Debug\netcoreapp2.1\MSMQReceiver.AssemblyInfo.cs

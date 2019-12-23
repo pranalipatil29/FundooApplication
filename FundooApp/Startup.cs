@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FundooBusinessLayer.InterfaceBL;
+using FundooBusinessLayer.ServicesBL;
 using FundooBusinessLayer1.InterfaceBL;
 using FundooBusinessLayer1.ServicesBL;
 using FundooCommonLayer.Model;
@@ -40,6 +42,11 @@ namespace FundooApp
             services.AddTransient<IAccountBL, AccountBL>();
             services.AddTransient<IAccountRL, AccountRL>();
 
+
+            services.AddTransient<INoteBL, NoteBL>();
+            services.AddTransient<INoteRL, NoteRL>();
+
+
             services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSetting"));
 
             //services.AddDbContext<AuthenticationContext>(option => option.UseSqlServer(Configuration["ConnectionString:IdentityConnection"]));
@@ -72,13 +79,28 @@ namespace FundooApp
                 };
             });
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
-
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new Info { Title="Fundoo API", Description="Swagger Core API"});
+                c.SwaggerDoc("v1", new Info { Title = "Fundoo API", Description = "Swagger Core API" });
+
+                c.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "Swagger",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>{
+                    {
+                        "Bearer",new string[]{ } }
+                });
+
             });
+
+
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
         }
 
 
@@ -93,14 +115,16 @@ namespace FundooApp
                 app.UseHsts();
             }
 
-           
-            app.UseAuthentication();            
-            app.UseMvc();
+
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint("/swagger/v1/swagger.json", "Fundoo API");
             });
+            app.UseAuthentication();
+
+            app.UseMvc();
+
         }
     }
 }
