@@ -62,7 +62,6 @@ namespace FundooRepositoryLayer.ServiceRL
                     Email = registrationModel.EmailID,
                     UserType = registrationModel.UserType,
                     ServiceType = registrationModel.ServiceType
-
                 };
 
                 // assigning password and info of user into table 
@@ -114,7 +113,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-
+               
                 return token;
             }
             else
@@ -146,6 +145,7 @@ namespace FundooRepositoryLayer.ServiceRL
                    {
                       new Claim("EmailID",user.Email.ToString())
                    }),
+
                     Expires = DateTime.UtcNow.AddMinutes(5),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
@@ -217,9 +217,14 @@ namespace FundooRepositoryLayer.ServiceRL
                     UserName = registrationModel.UserName,
                     Email = registrationModel.EmailID,
                     UserType = registrationModel.UserType,
-                    IsFacebook = registrationModel.IsFacebook
+                    IsFacebook = registrationModel.IsFacebook,
+                    ServiceType=registrationModel.ServiceType
                     
                 };
+
+                // assigning password and info of user into table 
+                var result = await this.userManager.CreateAsync(data, registrationModel.Password);
+
                 return true;
             }
             else

@@ -143,5 +143,33 @@ namespace FundooApp.Controllers
                 return BadRequest(new { fail, errorMessage });
             }
         }
+
+        /// <summary>
+        /// Socials the login.
+        /// </summary>
+        /// <param name="registrationModel">The registration model.</param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("SocialLogin")]
+        // Post: /api/Account/SocialLogin
+        public async Task<IActionResult> SocialLogin(RegistrationModel registrationModel)
+        {
+            // geting the token for new password
+            var result = await accountBL.SocialLogin(registrationModel);
+
+            // check whether the token is generated or not
+            if (result)
+            {
+                bool success = true;
+                var message = "Social Login Successfully done..! ";
+                return Ok(new { success, message });
+            }
+            else
+            {
+                bool fail = false;
+                var errorMessage = "Login Failed";
+                return BadRequest(new { fail, errorMessage });
+            }
+        }
     }
 }
