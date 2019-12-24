@@ -1,4 +1,5 @@
 ﻿using FundooCommonLayer.Model;
+using FundooCommonLayer.Model.Request;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,12 +9,12 @@ namespace FundooBusinessLayer.InterfaceBL
 {
     public interface INoteBL
     {
-        Task<bool> CreateNote(NoteModel noteModel,string userID);
+        Task<bool> CreateNote(RequestNote requestNote,string userID);
 
-        //Task<bool> DisplayNotes(NoteModel noteModel);
+        IList<NoteModel> DisplayNotes(string userID);
 
-        //Task<bool> UpdateNote(NoteModel noteModel);
+        Task<NoteModel> UpdateNote(RequestNote noteRequest, int noteID);
 
-        Task<bool> DeleteNote(int userID);
+        Task<bool> DeleteNote(int noteID);
     }
 }

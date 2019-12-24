@@ -8,6 +8,7 @@ namespace FundooCommonLayer.Model
 {
     public class ApplicationModel:IdentityUser
     {
+        
         [Column(TypeName = "nvarchar(150)")]
         public string FirstName { get; set; }
 

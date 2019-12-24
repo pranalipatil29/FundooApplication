@@ -107,7 +107,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         new Claim("UserID",user.Id.ToString()),
                         new Claim("EmailID",user.Email.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddMinutes(30),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -218,8 +218,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     Email = registrationModel.EmailID,
                     UserType = registrationModel.UserType,
                     IsFacebook = registrationModel.IsFacebook,
-                    ServiceType=registrationModel.ServiceType
-                    
+                    ServiceType=registrationModel.ServiceType                    
                 };
 
                 // assigning password and info of user into table 

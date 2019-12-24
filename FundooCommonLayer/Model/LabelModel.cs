@@ -12,6 +12,9 @@ namespace FundooCommonLayer.Model
         [Key]
         public int LabelID { get; set; }
 
+        [ForeignKey("RegistrationModel")]
+        public string UserID { get; set; }
+
         [Column(TypeName = "nvarchar(150)")]
         public string Label { get; set; }
 

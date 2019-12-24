@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using FundooBusinessLayer.InterfaceBL;
 using FundooCommonLayer.Model;
+using FundooCommonLayer.Model.Request;
 using FundooRepositoryLayer.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -23,18 +24,16 @@ namespace FundooApp.Controllers
             this.noteBL = noteBL;
         }
 
-
         [HttpPost]
         [Route("CreateNote")]
         // Post: /api/Note/CreateNote
-        public async Task<IActionResult> CreateNote(NoteModel noteModel)
+        public async Task<IActionResult> CreateNote(RequestNote noteRequest)
         {
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                // storing new account info in database
-                var result = await noteBL.CreateNote(noteModel, userId);
+                var result = await noteBL.CreateNote(noteRequest, userId);
                 bool success = false;
                 var message = "";
 
@@ -59,7 +58,6 @@ namespace FundooApp.Controllers
             }
         }
 
-
         [HttpPost]
         [Route("DeleteNote")]
         // Post: /api/Note/DeleteNote
@@ -68,16 +66,11 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-
-                // storing new account info in database
                 var result = await noteBL.DeleteNote(noteID);
                 bool success = false;
                 var message = "";
-
-                // checking whether result is successfull or nor
                 if (result)
                 {
-                    // if yes then return the result 
                     success = true;
                     message = "Succeffully Deleted Note";
                     return this.Ok(new { success, message });
@@ -85,7 +78,7 @@ namespace FundooApp.Controllers
                 else
                 {
                     success = false;
-                    message = "Note Id does not exist";
+                    message = "NoteId does not exist";
                     return this.BadRequest(new { success, message });
                 }
             }
@@ -95,5 +88,68 @@ namespace FundooApp.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("UpdateNote")]
+        // Put: /api/Note/UpdateNote
+        public async Task<IActionResult> UpdateNote(RequestNote noteRequest,int noteID)
+        {
+            try
+            {
+                var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                var result = await noteBL.UpdateNote(noteRequest, noteID);
+
+                bool success = false;
+                var message = "";
+                if(result != null)
+                {
+                    success = true;
+                    message = "Updated Successfully";
+                    return this.Ok(new { success, message,result});
+                }
+                else
+                {
+                    success = false;
+                    message = "Failed";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(exception.Message);
+            }
+        }
+
+        [HttpGet]
+        [Route("DisplayNotes")]
+        // Post: /api/Note/DisplayNotes
+        public async Task<IActionResult> DisplayNotes()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                IList<NoteModel> data =   noteBL.DisplayNotes(userId);
+
+                bool success = false;
+                var message = "";
+
+                if (data.Count != 0)
+                {
+                    success = true;
+                    message = "Notes: ";
+                    return this.Ok(new { success, message, data});
+                }
+                else
+                {
+                    success = false;
+                    message = "Notes not available";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { exception.Message });
+            }
+        }
     }
 }

@@ -34,6 +34,8 @@ namespace FundooRepositoryLayer.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("DateTime");
 
+                    b.Property<string>("UserID");
+
                     b.HasKey("LabelID");
 
                     b.ToTable("Label");

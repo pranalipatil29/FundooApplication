@@ -46,6 +46,8 @@ namespace FundooApp
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
 
+            services.AddTransient<ILabelBL, LabelBL>();
+            services.AddTransient<ILabelRL, LabelRL>();
 
             services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSetting"));
 

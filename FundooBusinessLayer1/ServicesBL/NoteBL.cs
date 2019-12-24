@@ -1,5 +1,6 @@
 ﻿using FundooBusinessLayer.InterfaceBL;
 using FundooCommonLayer.Model;
+using FundooCommonLayer.Model.Request;
 using FundooRepositoryLayer.InterfaceRL;
 using System;
 using System.Collections.Generic;
@@ -17,13 +18,13 @@ namespace FundooBusinessLayer.ServicesBL
             this.noteRL = noteRL;
         }
 
-        public async Task<bool> CreateNote(NoteModel noteModel,string userID)
+        public async Task<bool> CreateNote(RequestNote requestNote, string userID)
         {
             try
             {
-                if (noteModel != null)
+                if (requestNote != null)
                 {
-                    return await noteRL.CreateNote(noteModel,userID);
+                    return await noteRL.CreateNote(requestNote, userID);
                 }
                 else
                 {
@@ -40,13 +41,51 @@ namespace FundooBusinessLayer.ServicesBL
         {
             try
             {
-                if (noteID != null)
+                if (noteID != 0)
                 {
                     return await noteRL.DeleteNote(noteID);
                 }
                 else
                 {
-                    throw new Exception("Data Required");
+                    throw new Exception("Pleaase enter Note ID");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<NoteModel> UpdateNote(RequestNote requestNote, int noteID)
+        {
+            try
+            {
+                if(noteID != 0)
+                {
+                    return await noteRL.UpdateNote(requestNote, noteID);
+                }
+                else
+                {
+                    throw new Exception("Pleaase enter Note ID");
+                }                    
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public IList<NoteModel> DisplayNotes(string userID)
+        {
+            try
+            {
+                if(userID != null)
+                {
+                    return noteRL.DisplayNotes(userID);
+                }
+                else
+                {
+                    throw new Exception("User not found");
                 }
             }
             catch (Exception exception)
