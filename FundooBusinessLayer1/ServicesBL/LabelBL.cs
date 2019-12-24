@@ -37,17 +37,55 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public async Task<LabelModel> UpdateLabel(RequestLabel requestLabel, int labelID)
+        public async Task<LabelModel> UpdateLabel(RequestLabel requestLabel, int labelID, string userID)
         {
             try
             {
                 if (labelID != 0)
                 {
-                    return await labelRL.UpdateLabel(requestLabel, labelID);
+                    return await labelRL.UpdateLabel(requestLabel, labelID,userID);
                 }
                 else
                 {
                     throw new Exception("Please enter LabelID");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> DeleteLabel(int labelID, string userID)
+        {
+            try
+            {
+                if (labelID != 0)
+                {
+                    return await labelRL.DeleteLabel(labelID, userID);
+                }
+                else
+                {
+                    throw new Exception("Pleaase enter label ID");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public IList<LabelModel> DisplayLabels(string userID)
+        {
+            try
+            {
+                if (userID != null)
+                {
+                    return labelRL.DisplayLabels(userID);
+                }
+                else
+                {
+                    throw new Exception("User not found");
                 }
             }
             catch (Exception exception)

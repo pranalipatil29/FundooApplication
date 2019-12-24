@@ -11,7 +11,12 @@ namespace FundooBusinessLayer.InterfaceBL
     {
         Task<bool> CreateLabel(RequestLabel requestLabel,string userID);
 
-        Task<LabelModel> UpdateLabel(RequestLabel requestLabel, int labelID);
-       
+        Task<LabelModel> UpdateLabel(RequestLabel requestLabel, int labelID,string userID);
+
+        IList<LabelModel> DisplayLabels(string userID);
+
+
+        Task<bool> DeleteLabel(int labelID, string userID);
+
     }
 }

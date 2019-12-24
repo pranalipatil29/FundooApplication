@@ -27,13 +27,13 @@ namespace FundooApp.Controllers
         [HttpPost]
         [Route("CreateNote")]
         // Post: /api/Note/CreateNote
-        public async Task<IActionResult> CreateNote(RequestNote noteRequest)
+        public async Task<IActionResult> CreateNote(RequestNote requestNote)
         {
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                var result = await noteBL.CreateNote(noteRequest, userId);
+                var result = await noteBL.CreateNote(requestNote, userId);
                 bool success = false;
                 var message = "";
 
@@ -66,7 +66,7 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-                var result = await noteBL.DeleteNote(noteID);
+                var result = await noteBL.DeleteNote(noteID,userId);
                 bool success = false;
                 var message = "";
                 if (result)
@@ -96,7 +96,8 @@ namespace FundooApp.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-                var result = await noteBL.UpdateNote(noteRequest, noteID);
+
+                var result = await noteBL.UpdateNote(noteRequest, noteID, userID);
 
                 bool success = false;
                 var message = "";

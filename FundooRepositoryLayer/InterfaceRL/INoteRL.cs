@@ -9,11 +9,11 @@ namespace FundooRepositoryLayer.InterfaceRL
 {
    public interface INoteRL
     {
-        Task<bool> CreateNote(RequestNote noteRequest,string userID);
+        Task<bool> CreateNote(RequestNote requestNote, string userID);
 
-        Task<bool> DeleteNote(int noteID);
+        Task<bool> DeleteNote(int noteID, string userID);
 
-        Task<NoteModel> UpdateNote(RequestNote noteRequest, int noteID);
+        Task<NoteModel> UpdateNote(RequestNote noteRequest, int noteID, string userID);
 
         IList<NoteModel> DisplayNotes(string userID);
     }

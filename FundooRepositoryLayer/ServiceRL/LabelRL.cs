@@ -49,11 +49,11 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<LabelModel> UpdateLabel(RequestLabel requestLabel,int labelID)
+        public async Task<LabelModel> UpdateLabel(RequestLabel requestLabel,int labelID, string userID)
         {
             try
             {
-                var LabelInfo = authenticationContext.Label.Where(s => s.LabelID == labelID).FirstOrDefault();
+                var LabelInfo = authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
 
                 if(LabelInfo != null)
                 {
@@ -78,7 +78,43 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 throw new Exception(exception.Message);
             }
-   
+        }
+
+        public async Task<bool> DeleteLabel(int labelID, string userID)
+        {
+            try
+            {
+                var label = authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
+
+                if (label != null)
+                {
+                    authenticationContext.Label.Remove(label);
+                    await authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public IList<LabelModel> DisplayLabels(string userID)
+        {
+            try
+            {
+                var data = authenticationContext.Label.Where(s => s.UserID == userID);
+
+                return data.ToList();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
         }
     }
 }

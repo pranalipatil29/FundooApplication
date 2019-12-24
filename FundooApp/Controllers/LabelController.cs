@@ -62,16 +62,16 @@ namespace FundooApp.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-                var result = await labelBL.UpdateLabel(requestLabel, labelID);
+                var data = await labelBL.UpdateLabel(requestLabel, labelID,userID);
 
                 bool success = false;
                 var message = "";
 
-                if (result != null)
+                if (data != null)
                 {
                     success = true;
                     message = "Successfully updated label";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message, data });
                 }
                 else
                 {
@@ -86,5 +86,70 @@ namespace FundooApp.Controllers
                 return BadRequest(new { exception.Message });
             }
         }
+
+        [HttpPost]
+        [Route("DeleteLabel")]
+        // Post: /api/Note/DeleteLabel
+        public async Task<IActionResult> DeleteLabel(int labelID)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                var result = await labelBL.DeleteLabel(labelID, userId);
+
+                bool success = false;
+                var message = "";
+                if (result)
+                {
+                    success = true;
+                    message = "Succeffully Deleted Label";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "LabelID does not exist";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { exception.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("DisplayLabels")]
+        // Post: /api/Note/DisplayNotes
+        public async Task<IActionResult> DisplayLabels()
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                IList<LabelModel> data = labelBL.DisplayLabels(userId);
+
+                bool success = false;
+                var message = "";
+
+                if (data.Count != 0)
+                {
+                    success = true;
+                    message = "Labels: ";
+                    return this.Ok(new { success, message, data });
+                }
+                else
+                {
+                    success = false;
+                    message = "Labels not available";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { exception.Message });
+            }
+        }
+
     }
 }

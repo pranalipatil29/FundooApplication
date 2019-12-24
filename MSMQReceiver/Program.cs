@@ -14,10 +14,7 @@
 namespace MSMQReceiver
 { // Including the requried assemblies in to the program
     using System;
-    using System.Messaging;
     using Experimental.System.Messaging;
-    using MSMQReceiver;
-    using static MSMQReceiver.Program;
 
     /// <summary>
     /// creating delegate

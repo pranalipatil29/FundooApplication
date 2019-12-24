@@ -58,11 +58,11 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> DeleteNote(int noteID)
+        public async Task<bool> DeleteNote(int noteID, string userID)
         {
             try
             {
-                var user = authenticationContext.Note.Where(s => s.NoteID == noteID).FirstOrDefault();
+                var user = authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
 
                 if (user != null)
                 {
@@ -81,11 +81,11 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<NoteModel> UpdateNote(RequestNote noteRequest, int noteID)
+        public async Task<NoteModel> UpdateNote(RequestNote noteRequest, int noteID, string userID)
         {
             try
             {
-                var note = authenticationContext.Note.Where(s => s.NoteID == noteID).FirstOrDefault();
+                var note = authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID==userID).FirstOrDefault();
 
                 if (note != null)
                 {

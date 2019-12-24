@@ -37,13 +37,13 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public async Task<bool> DeleteNote(int noteID)
+        public async Task<bool> DeleteNote(int noteID, string userID)
         {
             try
             {
                 if (noteID != 0)
                 {
-                    return await noteRL.DeleteNote(noteID);
+                    return await noteRL.DeleteNote(noteID,userID);
                 }
                 else
                 {
@@ -56,13 +56,13 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public async Task<NoteModel> UpdateNote(RequestNote requestNote, int noteID)
+        public async Task<NoteModel> UpdateNote(RequestNote requestNote, int noteID, string userID)
         {
             try
             {
                 if(noteID != 0)
                 {
-                    return await noteRL.UpdateNote(requestNote, noteID);
+                    return await noteRL.UpdateNote(requestNote, noteID, userID);
                 }
                 else
                 {
