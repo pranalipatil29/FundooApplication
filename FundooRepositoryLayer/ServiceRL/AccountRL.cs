@@ -1,31 +1,51 @@
-﻿using FundooCommonLayer.Model;
-using FundooCommonLayer.MSMQ;
-using FundooRepositoryLayer.InterfaceRL;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// ******************************************************************************
+//  <copyright file="AccountRL.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  AccountRL.cs
+//  
+//     Purpose:  Implementing login, registartion,reset password and forget password methods
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   14-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooRepositoryLayer.ServiceRL
 {
+    // Including the requried assemblies in to the program
+    using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
+    using FundooCommonLayer.MSMQ;
+    using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Identity;
+    using Microsoft.Extensions.Options;
+    using Microsoft.IdentityModel.Tokens;
+    using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// this class contains differnrt methods to intract with database
+    /// </summary>
     public class AccountRL : IAccountRL
     {
         /// <summary>
-        /// creating private property of User manager
+        /// creating reference of User manager
         /// </summary>
         private readonly UserManager<ApplicationModel> userManager;
 
         /// <summary>
-        /// creating private property of sign in manager
+        /// creating reference of sign in manager
         /// </summary>
         private readonly SignInManager<ApplicationModel> signinManager;
 
+        /// <summary>
+        /// creating reference of application settings class
+        /// </summary>
         private readonly ApplicationSetting applicationSettings;
 
         /// <summary>
@@ -88,16 +108,46 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="loginModel"></param>
         /// <returns> returns message indication whether operation is successfull or not</returns>
-        public async Task<string> LogIn(LoginModel loginModel)
+        public async Task<LoginReponse> LogIn(LoginModel loginModel)
         {
             // check whether the user entered email id is present in datbase
             var user = await this.userManager.FindByEmailAsync(loginModel.EmailId);
 
-            // check whether the user entered password is matching
+             // check whether the user entered password is matching
             var userPassword = await userManager.CheckPasswordAsync(user, loginModel.Password);
 
+            // check whether user data is null or not or user password is correct 
+            if(user != null && userPassword)
+            {
+                // get the required user data 
+                var data = new LoginReponse()
+                {
+                    FirstName = user.FirstName,
+                    LastName = user.LastName,
+                    EmailID = user.Email,
+                    UserName = user.UserName
+                };
+
+                // return the user data
+                return data;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="loginReponse">The login reponse.</param>
+        /// <returns> returns the token</returns>
+        public async Task<string> GenerateToken(LoginReponse loginReponse)
+        {
+            var user = await this.userManager.FindByEmailAsync(loginReponse.EmailID);
+          
             // check whether user email id and password is found or not 
-            if (user != null && userPassword)
+            if (user != null)
             {
                 // creating token for specific email id
                 var tokenDescriptor = new SecurityTokenDescriptor
@@ -114,6 +164,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
+
                 return token;
             }
             else

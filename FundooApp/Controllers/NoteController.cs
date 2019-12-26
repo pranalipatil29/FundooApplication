@@ -1,17 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Threading.Tasks;
-using FundooBusinessLayer.InterfaceBL;
-using FundooCommonLayer.Model;
-using FundooCommonLayer.Model.Request;
-using FundooRepositoryLayer.Context;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿// ******************************************************************************
+//  <copyright file="NoteController.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  NoteController.cs
+//  
+//     Purpose:  Creating a controller to manage api calls
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   23-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooApp.Controllers
 {
+    // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FundooBusinessLayer.InterfaceBL;
+    using FundooCommonLayer.Model.Request;
+    using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class NoteController : ControllerBase
@@ -27,13 +39,13 @@ namespace FundooApp.Controllers
         [HttpPost]
         [Route("CreateNote")]
         // Post: /api/Note/CreateNote
-        public async Task<IActionResult> CreateNote(RequestNote requestNote)
+        public async Task<IActionResult> CreateNote(NoteRequest noteRequest)
         {
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                var result = await noteBL.CreateNote(requestNote, userId);
+                var result = await noteBL.CreateNote(noteRequest, userId);
                 bool success = false;
                 var message = "";
 
@@ -91,7 +103,7 @@ namespace FundooApp.Controllers
         [HttpPut]
         [Route("UpdateNote")]
         // Put: /api/Note/UpdateNote
-        public async Task<IActionResult> UpdateNote(RequestNote noteRequest,int noteID)
+        public async Task<IActionResult> UpdateNote(NoteRequest noteRequest,int noteID)
         {
             try
             {
@@ -129,7 +141,7 @@ namespace FundooApp.Controllers
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                IList<NoteModel> data =   noteBL.DisplayNotes(userId);
+                IList<NoteResponse> data =   noteBL.DisplayNotes(userId);
 
                 bool success = false;
                 var message = "";

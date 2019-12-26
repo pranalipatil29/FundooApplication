@@ -1,14 +1,29 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using FundooBusinessLayer1.InterfaceBL;
-using FundooCommonLayer.Model;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-
+﻿// ******************************************************************************
+//  <copyright file="AccountController.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  AccountController.cs
+//  
+//     Purpose:  Creating a controller to manage api calls
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   13-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooApp.Controllers
 {
+    // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
+    using FundooBusinessLayer1.InterfaceBL;
+    using FundooCommonLayer.Model;
+    using FundooRepositoryLayer.ServiceRL;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Mvc;
+
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
@@ -68,14 +83,17 @@ namespace FundooApp.Controllers
             var message = "";
 
             // checking login information
-            var token = await accountBL.Login(loginModel);
+            var data = await accountBL.Login(loginModel);
 
             // check whether user get login or not
-            if (token != null)
+            if (data != null)
             {
                 success = true;
                 message = "Login Successfull";
-                return Ok(new { success, message, token });
+
+                // generate the token
+                var token = await accountBL.GenerateToken(data);
+                return Ok(new { success, message, token, data});
             }
             else
             {

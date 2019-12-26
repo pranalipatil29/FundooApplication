@@ -1,13 +1,30 @@
-﻿using FundooBusinessLayer1.InterfaceBL;
-using FundooCommonLayer.Model;
-using FundooRepositoryLayer.InterfaceRL;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// ******************************************************************************
+//  <copyright file="AccountBL.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  AccountBL.cs
+//  
+//     Purpose:  Implementing business logic for apllication
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   12-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooBusinessLayer1.ServicesBL
 {
+    // Including the requried assemblies in to the program
+    using FundooBusinessLayer1.InterfaceBL;
+    using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
+    using FundooRepositoryLayer.InterfaceRL;
+    using System;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// this class is used to check the business logic of application
+    /// </summary>
+    /// <seealso cref="FundooBusinessLayer1.InterfaceBL.IAccountBL" />
     public class AccountBL : IAccountBL
     {
         /// <summary>
@@ -66,7 +83,7 @@ namespace FundooBusinessLayer1.ServicesBL
         /// EmailId or Password Requirred
         /// or
         /// </exception>
-        public async Task<string> Login(LoginModel loginModel)
+        public async Task<LoginReponse> Login(LoginModel loginModel)
         {
             try
             {
@@ -174,6 +191,26 @@ namespace FundooBusinessLayer1.ServicesBL
                 else
                 {
                     throw new Exception("Please provide correct data");
+                }
+            }
+            catch (Exception exceptiion)
+            {
+                throw new Exception(exceptiion.Message);
+            }
+        }
+
+        public async Task<string> GenerateToken(LoginReponse loginReponse)
+        {
+            try
+            {
+                if (loginReponse != null)
+                {
+                    var result = await accountRL.GenerateToken(loginReponse);
+                    return result;
+                }
+                else
+                {
+                    throw new Exception("invalid token");
                 }
             }
             catch (Exception exceptiion)

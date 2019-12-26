@@ -1,33 +1,49 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FundooBusinessLayer.InterfaceBL;
-using FundooBusinessLayer.ServicesBL;
-using FundooBusinessLayer1.InterfaceBL;
-using FundooBusinessLayer1.ServicesBL;
-using FundooCommonLayer.Model;
-using FundooRepositoryLayer.Context;
-using FundooRepositoryLayer.InterfaceRL;
-using FundooRepositoryLayer.ServiceRL;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.Tokens;
-using Swashbuckle.AspNetCore.Swagger;
-
+﻿// ******************************************************************************
+//  <copyright file="Startup.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  Startup.cs
+//  
+//     Purpose:  configure services and the app's request pipeline.
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   18-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooApp
 {
+    // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using FundooBusinessLayer.InterfaceBL;
+    using FundooBusinessLayer.ServicesBL;
+    using FundooBusinessLayer1.InterfaceBL;
+    using FundooBusinessLayer1.ServicesBL;
+    using FundooCommonLayer.Model;
+    using FundooRepositoryLayer.Context;
+    using FundooRepositoryLayer.InterfaceRL;
+    using FundooRepositoryLayer.ServiceRL;
+    using Microsoft.AspNetCore.Authentication.JwtBearer;
+    using Microsoft.AspNetCore.Builder;
+    using Microsoft.AspNetCore.Hosting;
+    using Microsoft.AspNetCore.Mvc;
+    using Microsoft.EntityFrameworkCore;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.DependencyInjection;
+    using Microsoft.IdentityModel.Tokens;
+    using Swashbuckle.AspNetCore.Swagger;
+
+    /// <summary>
+    ///  defines the services
+    /// </summary>
     public class Startup
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Startup"/> class.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -35,13 +51,15 @@ namespace FundooApp
 
         public IConfiguration Configuration { get; }
 
-
+        /// <summary>
+        /// Configures the services.
+        /// </summary>
+        /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
         {
 
             services.AddTransient<IAccountBL, AccountBL>();
             services.AddTransient<IAccountRL, AccountRL>();
-
 
             services.AddTransient<INoteBL, NoteBL>();
             services.AddTransient<INoteRL, NoteRL>();
@@ -49,6 +67,7 @@ namespace FundooApp
             services.AddTransient<ILabelBL, LabelBL>();
             services.AddTransient<ILabelRL, LabelRL>();
 
+            
             services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSetting"));
 
             //services.AddDbContext<AuthenticationContext>(option => option.UseSqlServer(Configuration["ConnectionString:IdentityConnection"]));
@@ -81,6 +100,7 @@ namespace FundooApp
                 };
             });
 
+            
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Fundoo API", Description = "Swagger Core API" });
@@ -99,13 +119,16 @@ namespace FundooApp
                 });
 
             });
-
-
+           
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
         }
 
-
+        /// <summary>
+        /// Configures the specified application.
+        /// </summary>
+        /// <param name="app">The application.</param>
+        /// <param name="env">The env.</param>
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())

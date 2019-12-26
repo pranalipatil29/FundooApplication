@@ -1,11 +1,29 @@
-﻿using FundooCommonLayer.Model;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿// ******************************************************************************
+//  <copyright file="IAccountRL.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  IAccountRL.cs
+//  
+//     Purpose:  Creating interface for repository layer
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   13-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooRepositoryLayer.InterfaceRL
 {
+    // Including the requried assemblies in to the program
+    using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
+
+    /// <summary>
+    /// creating account interface for repository layer
+    /// </summary>
     public interface IAccountRL
     {
         /// <summary>
@@ -20,7 +38,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns> returns message indicating operation result is successfull or not</returns>
-        Task<string> LogIn(LoginModel loginModel);
+        Task<LoginReponse> LogIn(LoginModel loginModel);
 
         /// <summary>
         /// Socials the login.
@@ -42,5 +60,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="resetPasswordModel">The reset password model.</param>
         /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
+
+        Task<string> GenerateToken(LoginReponse loginReponse);
     }
 }
