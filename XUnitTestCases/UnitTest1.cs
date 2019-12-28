@@ -8,7 +8,6 @@ namespace XUnitTestCases
         [Fact]
         public void Test1()
         {
-
         }
     }
 }

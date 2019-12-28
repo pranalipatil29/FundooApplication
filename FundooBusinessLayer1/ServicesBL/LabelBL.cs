@@ -14,14 +14,14 @@
 namespace FundooBusinessLayer.ServicesBL
 {
     // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using FundooBusinessLayer.InterfaceBL;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
-    using System;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// this class is used to check the business logic of label
@@ -37,7 +37,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// <summary>
         /// Initializes a new instance of the <see cref="LabelBL"/> class.
         /// </summary>
-        /// <param name="labelRL">The label rl.</param>
+        /// <param name="labelRL"> reference of repository layer label class.</param>
         public LabelBL(ILabelRL labelRL)
         {
             this.labelRL = labelRL;
@@ -48,7 +48,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// </summary>
         /// <param name="labelRequest">The label request.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns> returns true or false indicating operation is successful or not</returns>
         /// <exception cref="Exception">
         /// Data Required
         /// or
@@ -57,16 +57,16 @@ namespace FundooBusinessLayer.ServicesBL
         {
            try
             {
-                if(labelRequest != null)
+                if (labelRequest != null)
                 {
-                    return await labelRL.CreateLabel(labelRequest, userID);
+                    return await this.labelRL.CreateLabel(labelRequest, userID);
                 }
                 else
                 {
                     throw new Exception("Label Data Required");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -91,7 +91,7 @@ namespace FundooBusinessLayer.ServicesBL
             {
                 if (labelID != 0)
                 {
-                    return await labelRL.UpdateLabel(labelRequest, labelID,userID);
+                    return await this.labelRL.UpdateLabel(labelRequest, labelID, userID);
                 }
                 else
                 {
@@ -113,7 +113,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// returns message indicating operation is done or not
         /// </returns>
         /// <exception cref="Exception">
-        /// Pleaase enter label ID
+        /// Please enter label ID
         /// or
         /// </exception>
         public async Task<bool> DeleteLabel(int labelID, string userID)
@@ -122,11 +122,11 @@ namespace FundooBusinessLayer.ServicesBL
             {
                 if (labelID != 0)
                 {
-                    return await labelRL.DeleteLabel(labelID, userID);
+                    return await this.labelRL.DeleteLabel(labelID, userID);
                 }
                 else
                 {
-                    throw new Exception("Pleaase enter label ID");
+                    throw new Exception("Please enter label ID");
                 }
             }
             catch (Exception exception)
@@ -146,13 +146,13 @@ namespace FundooBusinessLayer.ServicesBL
         /// User not found
         /// or
         /// </exception>
-        public IList<LabelResponse> DisplayLabels( string userID)
+        public IList<LabelResponse> DisplayLabels(string userID)
         {
             try
             {
                 if (userID != null)
                 {
-                    return labelRL.DisplayLabels(userID);
+                    return this.labelRL.DisplayLabels(userID);
                 }
                 else
                 {

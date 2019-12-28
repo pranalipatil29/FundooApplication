@@ -41,7 +41,7 @@ namespace FundooApp.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="LabelController"/> class.
         /// </summary>
-        /// <param name="labelBL">The label bl.</param>
+        /// <param name="labelBL">The reference of interface of business layer label class.</param>
         public LabelController(ILabelBL labelBL)
         {
             this.labelBL = labelBL;
@@ -54,7 +54,7 @@ namespace FundooApp.Controllers
         /// <returns>returns the result</returns>
         [HttpPost]
         [Route("CreateLabel")]
-        // Post: /api/Note/CreateLabel
+        ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> CreateLabel(LabelRequest labelRequest)
         {
             try
@@ -63,9 +63,9 @@ namespace FundooApp.Controllers
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the result indicating whether new label is created or not
-                var result = await labelBL.CreateLabel(labelRequest, userID);
+                var result = await this.labelBL.CreateLabel(labelRequest, userID);
                 bool success = false;
-                var message = "";
+                var message = string.Empty;
 
                 // check whether result variable indicates true or false
                 if (result)
@@ -83,7 +83,7 @@ namespace FundooApp.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(new { exception.Message });
+                return this.BadRequest(new { exception.Message });
             }
         }
 
@@ -95,7 +95,7 @@ namespace FundooApp.Controllers
         /// <returns>returns the result</returns>
         [HttpPut]
         [Route("UpdateLabel")]
-        // Post: /api/Note/CreateLabel
+        ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> UpdateLabel(LabelRequest labelRequest, int labelID)
         {
             try
@@ -104,9 +104,9 @@ namespace FundooApp.Controllers
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // gets the updated values for label
-                var data = await labelBL.UpdateLabel(labelRequest, labelID, userID);
+                var data = await this.labelBL.UpdateLabel(labelRequest, labelID, userID);
                 bool success = false;
-                var message = "";
+                var message = string.Empty;
 
                 // chck whether data variable holds value or not
                 if (data != null)
@@ -124,7 +124,7 @@ namespace FundooApp.Controllers
             }
             catch (Exception exception)
             {
-                return BadRequest(new { exception.Message });
+                return this.BadRequest(new { exception.Message });
             }
         }
 
@@ -135,7 +135,7 @@ namespace FundooApp.Controllers
         /// <returns>returns the result</returns>
         [HttpPost]
         [Route("DeleteLabel")]
-        // Post: /api/Note/DeleteLabel
+        ////Post: /api/Note/DeleteLabel
         public async Task<IActionResult> DeleteLabel(int labelID)
         {
             try
@@ -144,9 +144,9 @@ namespace FundooApp.Controllers
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // check whether label is deleted from tabel or not
-                var result = await labelBL.DeleteLabel(labelID, userId);
+                var result = await this.labelBL.DeleteLabel(labelID, userId);
                 bool success = false;
-                var message = "";
+                var message = string.Empty;
 
                 // check whether result indicates true or false value
                 if (result)
@@ -174,7 +174,7 @@ namespace FundooApp.Controllers
         /// <returns>returns the result</returns>
         [HttpGet]
         [Route("DisplayLabels")]
-        // Post: /api/Note/DisplayNotes
+        ////Post: /api/Note/DisplayNotes
         public async Task<IActionResult> DisplayLabels()
         {
             try
@@ -183,9 +183,9 @@ namespace FundooApp.Controllers
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the list of labels
-                IList<LabelResponse> data = labelBL.DisplayLabels(userId);
+                IList<LabelResponse> data = this.labelBL.DisplayLabels(userId);
                 bool success = false;
-                var message = "";
+                var message = string.Empty;
 
                 // check whether data holds list or not
                 if (data.Count != 0)

@@ -14,14 +14,14 @@
 namespace FundooCommonLayer.Model
 {
     // Including the requried assemblies in to the program
-    using Microsoft.AspNetCore.Identity;
     using System.ComponentModel.DataAnnotations.Schema;
+    using Microsoft.AspNetCore.Identity;
 
     /// <summary>
     /// this class is used to define Application model
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Identity.IdentityUser" />
-    public class ApplicationModel:IdentityUser
+    public class ApplicationModel : IdentityUser
     {
         /// <summary>
         /// Gets or sets the first name.

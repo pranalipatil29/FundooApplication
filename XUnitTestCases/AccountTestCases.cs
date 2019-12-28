@@ -1,6 +1,21 @@
-﻿
+﻿// ******************************************************************************
+//  <copyright file="AccountTestCases.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  AccountTestCases.cs
+//  
+//     Purpose:  Creating Test cases for Account class
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   27-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace XUnitTestCases
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
     using FundooApp.Controllers;
     using FundooBusinessLayer1.InterfaceBL;
     using FundooBusinessLayer1.ServicesBL;
@@ -8,9 +23,6 @@ namespace XUnitTestCases
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Mvc;
     using Moq;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
     using Xunit;
 
     public class AccountTestCases
@@ -25,11 +37,11 @@ namespace XUnitTestCases
             accountController = new AccountController(accountBL);
         }
 
-
         [Fact]
         public void TestRegistration()
         {
-            var repository =new Mock<IAccountRL>();
+            //var repository =new Mock<IAccountRL>();
+
             RegistrationModel data = new RegistrationModel()
             {
                 FirstName = "Pranali",
@@ -44,7 +56,6 @@ namespace XUnitTestCases
             var createdResponse = accountController.Register(data);
 
             Assert.NotNull(createdResponse);
-            
         }
     }
 }

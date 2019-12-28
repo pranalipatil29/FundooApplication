@@ -14,18 +14,18 @@
 namespace FundooRepositoryLayer.ServiceRL
 {
     // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Linq;
+    using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.Context;
     using FundooRepositoryLayer.InterfaceRL;
-    using System;
-    using System.Collections.Generic;
-    using System.Linq;
-    using System.Threading.Tasks;
-
+ 
     /// <summary>
-    /// this class contains differnrt methods to intract with label tabel
+    /// this class contains different methods to interact with label table
     /// </summary>
     public class LabelRL : ILabelRL
     {
@@ -48,14 +48,14 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="labelRequest">The label request.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns></returns>
-        /// <exception cref="Exception"></exception>
+        /// <returns> returns true or false indicating operation is successful or not</returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<bool> CreateLabel(LabelRequest labelRequest, string userID)
         {
             try
             {
                 // check whether user entered all label data or not
-                if(labelRequest != null)
+                if (labelRequest != null)
                 {
                     // set the label data values
                     var data = new LabelModel()
@@ -67,10 +67,10 @@ namespace FundooRepositoryLayer.ServiceRL
                     };
 
                     // add the new data in tabel
-                    authenticationContext.Label.Add(data);
+                    this.authenticationContext.Label.Add(data);
 
                     // save the changes in database
-                    await authenticationContext.SaveChangesAsync();
+                    await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -78,7 +78,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     return false;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -93,37 +93,37 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <returns>
         /// returns the info of label
         /// </returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<LabelModel> UpdateLabel(LabelRequest labelRequest, int labelID, string userID)
         {
             try
             {
                 // get the label info from label tabel
-                var Label = authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
+                var label = this.authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
 
                 // check whether label data is null or not
-                if(Label != null)
+                if (label != null)
                 {
                     // set the current date and time for modified date property
-                    Label.ModifiedDate = DateTime.Now;
+                    label.ModifiedDate = DateTime.Now;
 
                     // check whether user enter label name or not
-                   if(labelRequest.Label !=null && labelRequest.Label != "")
+                   if (labelRequest.Label != null && labelRequest.Label != string.Empty)
                     {
-                        Label.Label = labelRequest.Label;
+                        label.Label = labelRequest.Label;
                     }
 
                    // update the label name
-                    authenticationContext.Label.Update(Label);
-                    await authenticationContext.SaveChangesAsync();
-                    return Label;
+                    this.authenticationContext.Label.Update(label);
+                    await this.authenticationContext.SaveChangesAsync();
+                    return label;
                 }
                 else
                 {
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -137,20 +137,20 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <returns>
         /// returns message indicating operation is done or not
         /// </returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<bool> DeleteLabel(int labelID, string userID)
         {
             try
             {
                 // get the label info from label tabel
-                var label = authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
+                var label = this.authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
 
                 // check whether label is present in tabel or not
                 if (label != null)
                 {
                     // delete the label entry from tabel
-                    authenticationContext.Label.Remove(label);
-                    await authenticationContext.SaveChangesAsync();
+                    this.authenticationContext.Label.Remove(label);
+                    await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
                 else
@@ -171,17 +171,17 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <returns>
         /// returns the list of label
         /// </returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public IList<LabelResponse> DisplayLabels(string userID)
         {
             try
             {
                 // get the labels data from tabel
-                var data = authenticationContext.Label.Where(s => s.UserID == userID);
+                var data = this.authenticationContext.Label.Where(s => s.UserID == userID);
 
-                var List = new List<LabelResponse>();
+                var list = new List<LabelResponse>();
 
-                if (data!=null)
+                if (data != null)
                 {
                     foreach (var label in data)
                     {
@@ -193,15 +193,15 @@ namespace FundooRepositoryLayer.ServiceRL
                             ModifiedDate = label.ModifiedDate
                         };
 
-                        List.Add(labels);
+                        list.Add(labels);
                     }
-                    return List;
+
+                    return list;
                 }
                 else
                 {
                     return null;
-                }
-               
+                }               
             }
             catch (Exception exception)
             {

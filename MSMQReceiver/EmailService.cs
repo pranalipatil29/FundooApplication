@@ -13,14 +13,14 @@
 // ******************************************************************************
 namespace MSMQReceiver
 { // Including the requried assemblies in to the program
-    using Experimental.System.Messaging;
     using System;
     using System.Collections.Generic;
     using System.Net.Mail;
     using System.Text;
-
+    using Experimental.System.Messaging;
+   
     /// <summary>
-    /// this class containes different methods to implementing email services
+    /// this class contains different methods to implementing email services
     /// </summary>
     public class EmailService
     {
@@ -40,7 +40,7 @@ namespace MSMQReceiver
             // initializing url address of forget password
             string url = "https://localhost:44345/api/Account/ResetPassword";
 
-            //  used to serialize an object into or deserialize an object from the body of a message read from or written to the queue.
+            // used to serialize an object into or deserialize an object from the body of a message read from or written to the queue.
             messageQueue.Formatter = new XmlMessageFormatter(new Type[] { typeof(string) });
 
             // creating object of Mail message class

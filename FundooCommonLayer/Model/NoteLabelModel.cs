@@ -18,7 +18,7 @@ namespace FundooCommonLayer.Model
     using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// this class is used to create tabel for label and note
+    /// this class is used to create table for label and note
     /// </summary>
     public class NoteLabelModel
     {
@@ -64,7 +64,7 @@ namespace FundooCommonLayer.Model
         /// <value>
         /// The label.
         /// </value>
-        [Column(TypeName ="nvarchar(150)")]
+        [Column(TypeName = "nvarchar(150)")]
         public string Label { get; set; }
     }
 }

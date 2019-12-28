@@ -19,7 +19,7 @@ namespace FundooCommonLayer.Model
     using System.ComponentModel.DataAnnotations.Schema;
 
     /// <summary>
-    /// this class is used to create tabel for label
+    /// this class is used to create table for label
     /// </summary>
     public class LabelModel 
     {

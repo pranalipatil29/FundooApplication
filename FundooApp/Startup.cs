@@ -46,9 +46,15 @@ namespace FundooApp
         /// <param name="configuration">The configuration.</param>
         public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
+            this.Configuration = configuration;
         }
 
+        /// <summary>
+        /// Gets the configuration.
+        /// </summary>
+        /// <value>
+        /// The configuration.
+        /// </value>
         public IConfiguration Configuration { get; }
 
         /// <summary>
@@ -56,8 +62,7 @@ namespace FundooApp
         /// </summary>
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
-        {
-
+        { 
             services.AddTransient<IAccountBL, AccountBL>();
             services.AddTransient<IAccountRL, AccountRL>();
 
@@ -66,18 +71,15 @@ namespace FundooApp
 
             services.AddTransient<ILabelBL, LabelBL>();
             services.AddTransient<ILabelRL, LabelRL>();
-
             
-            services.Configure<ApplicationSetting>(Configuration.GetSection("ApplicationSetting"));
-
-            //services.AddDbContext<AuthenticationContext>(option => option.UseSqlServer(Configuration["ConnectionString:IdentityConnection"]));
+            services.Configure<ApplicationSetting>(this.Configuration.GetSection("ApplicationSetting"));
 
             services.AddDbContext<AuthenticationContext>(Options =>
-           Options.UseSqlServer(Configuration.GetConnectionString("IdentityConnection")));
+           Options.UseSqlServer(this.Configuration.GetConnectionString("IdentityConnection")));
 
             services.AddDefaultIdentity<ApplicationModel>().AddEntityFrameworkStores<AuthenticationContext>();
 
-            var key = Encoding.UTF8.GetBytes(Configuration["ApplicationSetting:JWTSecret"].ToString());
+            var key = Encoding.UTF8.GetBytes(this.Configuration["ApplicationSetting:JWTSecret"].ToString());
 
             services.AddAuthentication(x =>
             {
@@ -99,7 +101,6 @@ namespace FundooApp
                     ClockSkew = TimeSpan.Zero
                 };
             });
-
             
             services.AddSwaggerGen(c =>
             {
@@ -113,15 +114,13 @@ namespace FundooApp
                     Type = "apiKey"
                 });
 
-                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>>{
+                c.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
                     {
-                        "Bearer",new string[]{ } }
+                        "Bearer", new string[] { } }
                 });
-
             });
            
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
-
         }
 
         /// <summary>
@@ -140,7 +139,6 @@ namespace FundooApp
                 app.UseHsts();
             }
 
-
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
@@ -149,7 +147,6 @@ namespace FundooApp
             app.UseAuthentication();
 
             app.UseMvc();
-
         }
     }
 }

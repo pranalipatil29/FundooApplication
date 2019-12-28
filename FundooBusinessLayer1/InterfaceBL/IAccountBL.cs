@@ -14,12 +14,12 @@
 namespace FundooBusinessLayer1.InterfaceBL
 {
     // Including the requried assemblies in to the program
-    using FundooCommonLayer.Model;
-    using FundooCommonLayer.Model.Response;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
 
     /// <summary>
     /// creating interface for business layer
@@ -33,13 +33,12 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// <returns> returns message indicating operation is done or not</returns>
         Task<bool> Register(RegistrationModel registrationModel);
 
-
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns> returns message indicating operation is done or not</returns>
-        Task<LoginReponse> Login(LoginModel loginModel);
+        Task<LoginResponse> Login(LoginModel loginModel);
 
         /// <summary>
         /// Forgets the password.
@@ -55,7 +54,6 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
 
-
         /// <summary>
         /// Socials the login.
         /// </summary>
@@ -63,6 +61,11 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// <returns> returns message indicating operation is done or not</returns>
         Task<bool> SocialLogin(RegistrationModel registrationModel);
 
-        Task<string> GenerateToken(LoginReponse loginReponse);
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="loginResponse">The login response.</param>
+        /// <returns> returns the token</returns>
+        Task<string> GenerateToken(LoginResponse loginResponse);
     }
 }

@@ -14,12 +14,9 @@
 namespace FundooRepositoryLayer.InterfaceRL
 {
     // Including the requried assemblies in to the program
+    using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// creating account interface for repository layer
@@ -30,28 +27,28 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// Registers the specified registration model.
         /// </summary>
         /// <param name="registrationModel">The registration model.</param>
-        /// <returns> returns true or false depending upon operation result is successfull or not</returns>
+        /// <returns> returns true or false depending upon operation result is successful or not</returns>
         Task<bool> Register(RegistrationModel registrationModel);
 
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
-        /// <returns> returns message indicating operation result is successfull or not</returns>
-        Task<LoginReponse> LogIn(LoginModel loginModel);
+        /// <returns> returns message indicating operation result is successful or not</returns>
+        Task<LoginResponse> LogIn(LoginModel loginModel);
 
         /// <summary>
         /// Socials the login.
         /// </summary>
         /// <param name="registrationModel">The registration model.</param>
-        /// <returns>  returns true or false depending upon operation result is successfull or not</returns>
+        /// <returns>  returns true or false depending upon operation result is successful or not</returns>
         Task<bool> SocialLogin(RegistrationModel registrationModel);
 
         /// <summary>
         /// Forgets the password.
         /// </summary>
         /// <param name="forgetPasswordModel">The forget password model.</param>
-        /// <returns> returns message indicating operation result is successfull or not</returns>
+        /// <returns> returns message indicating operation result is successful or not</returns>
         Task<bool> ForgetPassword(ForgetPasswordModel forgetPasswordModel);
 
         /// <summary>
@@ -61,6 +58,11 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
 
-        Task<string> GenerateToken(LoginReponse loginReponse);
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="loginResponse">The login response.</param>
+        /// <returns> returns the token</returns>
+        Task<string> GenerateToken(LoginResponse loginResponse);
     }
 }

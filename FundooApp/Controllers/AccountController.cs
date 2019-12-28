@@ -24,12 +24,17 @@ namespace FundooApp.Controllers
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// this class contains different methods to handle API calls for account
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase
-    {/// <summary>
-     ///  creating reference of Account business layer class
-     /// </summary>
+    {
+        /// <summary>
+        ///  creating reference of Account business layer class
+        /// </summary>
         private readonly IAccountBL accountBL;
 
         /// <summary>
@@ -41,16 +46,20 @@ namespace FundooApp.Controllers
             this.accountBL = accountBL;
         }
 
+        /// <summary>
+        /// Registers the specified registration model.
+        /// </summary>
+        /// <param name="registrationModel">The registration model.</param>
+        /// <returns> returns message indicating operation is successful or not</returns>
         [HttpPost]
         [Route("Register")]
-        // Post: /api/Account/Register
+        ////Post: /api/Account/Register
         public async Task<IActionResult> Register(RegistrationModel registrationModel)
         {
             // storing new account info in database
-            var result = await accountBL.Register(registrationModel);
+            var result = await this.accountBL.Register(registrationModel);
             bool success = false;
-            var message = "";
-
+            var message = string.Empty;
 
             // checking whether result is successfull or nor
             if (result)
@@ -66,24 +75,23 @@ namespace FundooApp.Controllers
                 message = "Registration Failed";
                 return this.BadRequest(new { success, message });
             }
-
         }
 
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
-        /// <returns> returns the values indicating whether operation is successfull or not</returns>
+        /// <returns> returns the values indicating whether operation is successful or not</returns>
         [HttpPost]
         [Route("Login")]
-        // Post: /api/Account/Login
+        ////Post: /api/Account/Login
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             bool success = false;
-            var message = "";
+            var message = string.Empty;
 
             // checking login information
-            var data = await accountBL.Login(loginModel);
+            var data = await this.accountBL.Login(loginModel);
 
             // check whether user get login or not
             if (data != null)
@@ -92,14 +100,14 @@ namespace FundooApp.Controllers
                 message = "Login Successfull";
 
                 // generate the token
-                var token = await accountBL.GenerateToken(data);
-                return Ok(new { success, message, token, data});
+                var token = await this.accountBL.GenerateToken(data);
+                return this.Ok(new { success, message, token, data });
             }
             else
             {
                 success = false;
                 message = "Login Failed";
-                return BadRequest(new { success, message });
+                return this.BadRequest(new { success, message });
             }
         }
 
@@ -107,30 +115,30 @@ namespace FundooApp.Controllers
         /// Forgets the password.
         /// </summary>
         /// <param name="forgetPasswordModel">The forget password model.</param>
-        /// <returns> returns the values indicating whether operation is successfull or not</returns>
+        /// <returns> returns the values indicating whether operation is successful or not</returns>
         [HttpPost]
         [Route("ForgetPassword")]
-        // Post: /api/Account/ForgetPassword
+        ////Post: /api/Account/ForgetPassword
         public async Task<IActionResult> ForgetPassword(ForgetPasswordModel forgetPasswordModel)
         {
             bool success = false;
-            var message = "";
+            var message = string.Empty;
 
             // geting the token
-            var token = await accountBL.ForgetPassword(forgetPasswordModel);
+            var token = await this.accountBL.ForgetPassword(forgetPasswordModel);
 
             // chek whether token is generated or not
             if (token)
             {
                 success = true;
                 message = "Token is sent to your email id..Please Check your mail";
-                return Ok(new { success, message });
+                return this.Ok(new { success, message });
             }
             else
             {
                 success = false;
                 message = "Invalid emailID";
-                return BadRequest(new { success, message });
+                return this.BadRequest(new { success, message });
             }
         }
 
@@ -138,27 +146,29 @@ namespace FundooApp.Controllers
         /// Resets the password.
         /// </summary>
         /// <param name="resetPasswordModel">The reset password model.</param>
-        /// <returns>  returns the values indicating whether operation is successfull or not</returns>
+        /// <returns> returns the values indicating whether operation is successful or not</returns>
         [HttpPut]
         [Route("ResetPassword")]
-        // Post: /api/Account/ResetPassword
+        ////Post: /api/Account/ResetPassword
         public async Task<IActionResult> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             // geting the token for new password
-            var token = await accountBL.ResetPassword(resetPasswordModel);
+            var token = await this.accountBL.ResetPassword(resetPasswordModel);
+            string message = string.Empty;
+            bool success = false;
 
             // check whether the token is generated or not
-            if (token != null)
+            if (token)
             {
-                bool success = true;
-                var message = "Password changed successfully ";
-                return Ok(new { success, message });
+                success = true;
+                message = "Password changed successfully ";
+                return this.Ok(new { success, message });
             }
             else
             {
-                bool fail = false;
-                var errorMessage = "Password Reset Failed";
-                return BadRequest(new { fail, errorMessage });
+                success = false;
+                message = "Password Reset Failed";
+                return this.BadRequest(new { success, message });
             }
         }
 
@@ -166,27 +176,29 @@ namespace FundooApp.Controllers
         /// Socials the login.
         /// </summary>
         /// <param name="registrationModel">The registration model.</param>
-        /// <returns></returns>
+        /// <returns> returns the values indicating whether operation is successful or not</returns>
         [HttpPut]
         [Route("SocialLogin")]
-        // Post: /api/Account/SocialLogin
+        ////Post: /api/Account/SocialLogin
         public async Task<IActionResult> SocialLogin(RegistrationModel registrationModel)
         {
             // geting the token for new password
-            var result = await accountBL.SocialLogin(registrationModel);
+            var result = await this.accountBL.SocialLogin(registrationModel);
+            string message = string.Empty;
+            bool success = false;
 
             // check whether the token is generated or not
             if (result)
             {
-                bool success = true;
-                var message = "Social Login Successfully done..! ";
-                return Ok(new { success, message });
+                success = true;
+                message = "Social Login Successfully done..! ";
+                return this.Ok(new { success, message });
             }
             else
             {
-                bool fail = false;
-                var errorMessage = "Login Failed";
-                return BadRequest(new { fail, errorMessage });
+                success = false;
+                message = "Login Failed";
+                return this.BadRequest(new { success, message });
             }
         }
     }

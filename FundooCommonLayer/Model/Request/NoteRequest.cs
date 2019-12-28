@@ -20,7 +20,7 @@ namespace FundooCommonLayer.Model.Request
     using System.Text;
 
     /// <summary>
-    /// this class contains properties of note tabel
+    /// this class contains properties of note table
     /// </summary>
     public class NoteRequest
     {

@@ -1,8 +1,8 @@
 ﻿// ******************************************************************************
-//  <copyright file="ApplicationSettings.cs" company="Bridgelabz">
+//  <copyright file="ApplicationSetting.cs" company="Bridgelabz">
 //    Copyright © 2019 Company
 //
-//     Execution:  ApplicationSettings.cs
+//     Execution:  ApplicationSetting.cs
 //  
 //     Purpose: Get or set secret key and client url
 //     @author  Pranali Patil

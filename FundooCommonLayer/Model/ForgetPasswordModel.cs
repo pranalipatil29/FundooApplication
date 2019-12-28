@@ -14,7 +14,7 @@
 namespace FundooCommonLayer.Model
 {
      /// <summary>
-    /// this class is used to get or set the properties for forget password api
+    /// this class is used to get or set the properties for forget password API
     /// </summary>
     public class ForgetPasswordModel
     {

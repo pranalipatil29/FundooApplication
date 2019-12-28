@@ -14,13 +14,11 @@
 namespace FundooCommonLayer.MSMQ
 {
     // Including the requried assemblies in to the program
-    using Experimental.System.Messaging;
     using System;
-    using System.Collections.Generic;
-    using System.Text;
+    using Experimental.System.Messaging;
 
     /// <summary>
-    /// this class contains different methods to send message through msmq
+    /// this class contains different methods to send message through MSMQ
     /// </summary>
     public class MSMQSender
     {
@@ -29,7 +27,7 @@ namespace FundooCommonLayer.MSMQ
         /// </summary>
         /// <param name="email">The email.</param>
         /// <param name="token">The token.</param>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public void SendToQueue(string email, string token)
         {
             // assigning message queue to null
@@ -49,6 +47,7 @@ namespace FundooCommonLayer.MSMQ
                 // otherwise get the existing queue path
                 messageQueue = new MessageQueue(QueuePath);
             }
+
             try
             {
                 // send the emailid and token to queue
@@ -62,8 +61,8 @@ namespace FundooCommonLayer.MSMQ
             {
                 messageQueue.Close();
             }
+
             Console.WriteLine("Email Sent");
         }
     }
 }
-

@@ -14,6 +14,12 @@
 namespace FundooRepositoryLayer.ServiceRL
 {
     // Including the requried assemblies in to the program
+    using System;
+    using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Text;
+    using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooCommonLayer.MSMQ;
@@ -21,15 +27,9 @@ namespace FundooRepositoryLayer.ServiceRL
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
-    using System;
-    using System.IdentityModel.Tokens.Jwt;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Text;
-    using System.Threading.Tasks;
-
+  
     /// <summary>
-    /// this class contains differnrt methods to intract with database
+    /// this class contains different methods to interact with database
     /// </summary>
     public class AccountRL : IAccountRL
     {
@@ -49,10 +49,11 @@ namespace FundooRepositoryLayer.ServiceRL
         private readonly ApplicationSetting applicationSettings;
 
         /// <summary>
-        /// injecting reference of user manager and sign in manager in this class constructor
+        /// Initializes a new instance of the <see cref="AccountRL"/> class.
         /// </summary>
-        /// <param name="userManager"></param>
-        /// <param name="signInManager"></param>
+        /// <param name="userManager">The user manager.</param>
+        /// <param name="signInManager">The sign in manager.</param>
+        /// <param name="appSettings">The application settings.</param>
         public AccountRL(UserManager<ApplicationModel> userManager, SignInManager<ApplicationModel> signInManager, IOptions<ApplicationSetting> appSettings)
         {
             this.userManager = userManager;
@@ -61,10 +62,10 @@ namespace FundooRepositoryLayer.ServiceRL
         }
 
         /// <summary>
-        /// this method is used to store new account info into databse
+        /// this method is used to store new account info into database
         /// </summary>
-        /// <param name="registrationModel"></param>
-        /// <returns> returns message indication whether operation is successfull or not</returns>
+        /// <param name="registrationModel"> injecting registration model</param>
+        /// <returns> returns message indication whether operation is successful or not</returns>
         public async Task<bool> Register(RegistrationModel registrationModel)
         {
             // check whether user data already exist in the database or not
@@ -106,21 +107,21 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// this method is used to get the login
         /// </summary>
-        /// <param name="loginModel"></param>
-        /// <returns> returns message indication whether operation is successfull or not</returns>
-        public async Task<LoginReponse> LogIn(LoginModel loginModel)
+        /// <param name="loginModel"> injecting login model</param>
+        /// <returns> returns message indication whether operation is successful or not</returns>
+        public async Task<LoginResponse> LogIn(LoginModel loginModel)
         {
             // check whether the user entered email id is present in datbase
             var user = await this.userManager.FindByEmailAsync(loginModel.EmailId);
 
              // check whether the user entered password is matching
-            var userPassword = await userManager.CheckPasswordAsync(user, loginModel.Password);
+            var userPassword = await this.userManager.CheckPasswordAsync(user, loginModel.Password);
 
             // check whether user data is null or not or user password is correct 
-            if(user != null && userPassword)
+            if (user != null && userPassword)
             {
                 // get the required user data 
-                var data = new LoginReponse()
+                var data = new LoginResponse()
                 {
                     FirstName = user.FirstName,
                     LastName = user.LastName,
@@ -140,11 +141,11 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// Generates the token.
         /// </summary>
-        /// <param name="loginReponse">The login reponse.</param>
+        /// <param name="loginResponse">The login response.</param>
         /// <returns> returns the token</returns>
-        public async Task<string> GenerateToken(LoginReponse loginReponse)
+        public async Task<string> GenerateToken(LoginResponse loginResponse)
         {
-            var user = await this.userManager.FindByEmailAsync(loginReponse.EmailID);
+            var user = await this.userManager.FindByEmailAsync(loginResponse.EmailID);
           
             // check whether user email id and password is found or not 
             if (user != null)
@@ -154,11 +155,11 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                     {
-                        new Claim("UserID",user.Id.ToString()),
-                        new Claim("EmailID",user.Email.ToString())
+                        new Claim("UserID", user.Id.ToString()),
+                        new Claim("EmailID", user.Email.ToString())
                     }),
                     Expires = DateTime.UtcNow.AddMinutes(30),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -174,10 +175,10 @@ namespace FundooRepositoryLayer.ServiceRL
         }
 
         /// <summary>
-        /// this method is used to perform operations for forget password api
+        /// this method is used to perform operations for forget password API
         /// </summary>
-        /// <param name="forgetPasswordModel"></param>
-        /// <returns> returns message indication whether operation is successfull or not</returns>
+        /// <param name="forgetPasswordModel"> injecting forget password model</param>
+        /// <returns> returns message indication whether operation is successful or not</returns>
         public async Task<bool> ForgetPassword(ForgetPasswordModel forgetPasswordModel)
         {
             // check whether user entered emailid is present in database or not
@@ -194,11 +195,11 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     Subject = new ClaimsIdentity(new Claim[]
                    {
-                      new Claim("EmailID",user.Email.ToString())
+                      new Claim("EmailID", user.Email.ToString())
                    }),
 
                     Expires = DateTime.UtcNow.AddMinutes(5),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 
                 var tokenHandler = new JwtSecurityTokenHandler();
@@ -216,29 +217,29 @@ namespace FundooRepositoryLayer.ServiceRL
         }
 
         /// <summary>
-        /// this class is used to perform operations for reset password api
+        /// this class is used to perform operations for reset password API
         /// </summary>
-        /// <param name="resetPasswordModel"></param>
-        /// <returns> returns message indication whether operation is successfull or not</returns>
+        /// <param name="resetPasswordModel"> injecting reset password model</param>
+        /// <returns> returns message indication whether operation is successful or not</returns>
         public async Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel)
         {
             // get the token
             var token = new JwtSecurityToken(jwtEncodedString: resetPasswordModel.Token);
 
             // get the emailid form token
-            var email = (token.Claims.First(c => c.Type == "EmailID").Value);
+            var email = token.Claims.First(c => c.Type == "EmailID").Value;
 
             // check whether emailid is present in database or not
-            var user = await userManager.FindByEmailAsync(email);
+            var user = await this.userManager.FindByEmailAsync(email);
 
             // if email id is present in database then reset the password
             if (email != null)
             {
                 // generate the new token for user emailid and new password 
-                var resetToken = await userManager.GeneratePasswordResetTokenAsync(user);
+                var resetToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
 
                 // reset the new password
-                var result = await userManager.ResetPasswordAsync(user, resetToken, resetPasswordModel.Password);
+                var result = await this.userManager.ResetPasswordAsync(user, resetToken, resetPasswordModel.Password);
                 return true;
             }
             else
@@ -250,8 +251,8 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// Socials the login.
         /// </summary>
-        /// <param name="loginModel">The login model.</param>
-        /// <returns></returns>
+        /// <param name="registrationModel">The registration Model.</param>
+        /// <returns> returns true or false indicating operation is successful or not</returns>
         public async Task<bool> SocialLogin(RegistrationModel registrationModel)
         {
             // check whether user data already exist in the database or not
@@ -269,7 +270,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     Email = registrationModel.EmailID,
                     UserType = registrationModel.UserType,
                     IsFacebook = registrationModel.IsFacebook,
-                    ServiceType=registrationModel.ServiceType                    
+                    ServiceType = registrationModel.ServiceType
                 };
 
                 // assigning password and info of user into table 

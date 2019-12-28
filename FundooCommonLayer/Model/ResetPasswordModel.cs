@@ -13,12 +13,6 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
-    // Including the requried assemblies in to the program
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-
-
     /// <summary>
     /// this class is used for get or set properties for reset password model
     /// </summary>

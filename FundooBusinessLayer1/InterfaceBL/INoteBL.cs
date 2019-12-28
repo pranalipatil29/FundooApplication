@@ -14,13 +14,13 @@
 namespace FundooBusinessLayer.InterfaceBL
 {
     // Including the requried assemblies in to the program
-    using FundooCommonLayer.Model;
-    using FundooCommonLayer.Model.Request;
-    using FundooCommonLayer.Model.Response;
     using System;
     using System.Collections.Generic;
     using System.Text;
     using System.Threading.Tasks;
+    using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Request;
+    using FundooCommonLayer.Model.Response;
 
     /// <summary>
     /// creating note interface for business layer
@@ -32,7 +32,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// </summary>
         /// <param name="requestNote">The request note.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns>returns message indicating operation is done or not</returns>
+        /// <returns>returns message indicating operation is succcessful or not</returns>
         Task<bool> CreateNote(NoteRequest requestNote, string userID);
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the info of label</returns>
-        Task<NoteModel> UpdateNote(NoteRequest noteRequest, int noteID,string userID);
+        Task<NoteModel> UpdateNote(NoteRequest noteRequest, int noteID, string userID);
 
         /// <summary>
         /// Deletes the note.
@@ -57,6 +57,40 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns message indicating operation is done or not</returns>
-        Task<bool> DeleteNote(int noteID,string userID);
+        Task<bool> DeleteNote(int noteID, string userID);
+
+        /// <summary>
+        /// Determines whether the specified note identifier is archive.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="archive">if set to <c>true</c> [archive].</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns true indicating note is Archived or false to indicate note is UnArchived </returns>
+        Task<bool> IsArchive(int noteID, bool archive, string userID);
+
+        /// <summary>
+        /// Gets the archived notes.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns list of archived notes</returns>
+        IList<NoteResponse> GetArchivedNotes(string userID);
+
+        /// <summary>
+        /// Determines whether the specified note identifier is pin.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>  returns true indicating note is Pinned or false to indicate note is UnPinned</returns>
+        Task<bool> IsPin(int noteID, bool isPin, string userID);
+
+        /// <summary>
+        /// Gets the pinned notes.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns list of pinned notes</returns>
+        IList<NoteResponse> GetPinnedNotes(string userID);
+
+        Task<bool> IsTrash(int noteID, bool isTrash, string userID);
     }
 }

@@ -19,8 +19,8 @@ namespace MSMQReceiver
     /// <summary>
     /// creating delegate
     /// </summary>
-    /// <param name="sender"></param>
-    /// <param name="args"></param>
+    /// <param name="sender"> sender object</param>
+    /// <param name="args"> reference of message event args class</param>
     public delegate void MessageReceivedEventHandler(object sender, MessageEventArgs args);
 
     /// <summary>
@@ -34,10 +34,10 @@ namespace MSMQReceiver
         public static void Main()
         {
             // inititalizing queue path where messages are stored
-            const string queuePath = @".\Private$\EmailQueue";
+            const string QueuePath = @".\Private$\EmailQueue";
 
             // creating object of MSMQ listner class
-            MSMQListner msmqListner = new MSMQListner(queuePath);
+            MSMQListner msmqListner = new MSMQListner(QueuePath);
             msmqListner.FormatterTypes = new Type[] { typeof(string) };
 
             // geting message through event
@@ -49,9 +49,9 @@ namespace MSMQReceiver
         /// <summary>
         /// this method is used to receive the message
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="messageEventArgs"></param>
-        static void ListnerMessageReceived(object sender, MessageEventArgs messageEventArgs)
+        /// <param name="sender"> sender object</param>
+        /// <param name="messageEventArgs">reference of message event args class</param>
+        public static void ListnerMessageReceived(object sender, MessageEventArgs messageEventArgs)
         {
             Console.WriteLine("Message Received");
         }
@@ -62,58 +62,72 @@ namespace MSMQReceiver
     /// </summary>
     public class MSMQListner
     {
+        /// <summary>
+        /// The listen
+        /// </summary>
         private bool listen;
+
+        /// <summary>
+        /// The types
+        /// </summary>
         private Type[] types;
 
-        // creating reference of Message Queue class
+        /// <summary>
+        ///  creating reference of Message Queue class
+        /// </summary>
         private MessageQueue queue;
 
-        // creating event which is reference of delegate
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MSMQListner"/> class.
+        /// </summary>
+        /// <param name="queuePath">The queue path.</param>
+        public MSMQListner(string queuePath)
+        {
+            this.queue = new MessageQueue(queuePath);
+        }
+
+        /// <summary>
+        /// Occurs when [message received].
+        /// </summary>
         public event MessageReceivedEventHandler MessageReceived;
 
         /// <summary>
-        /// constructor is used to initialize the queue path
+        /// Gets or sets the formatter types.
         /// </summary>
-        /// <param name="queuePath"></param>
-        public MSMQListner(string queuePath)
-        {
-            queue = new MessageQueue(queuePath);
-        }
-
-        /// <summary>
-        /// get or set the format type of message
-        /// </summary>
+        /// <value>
+        /// The formatter types.
+        /// </value>
         public Type[] FormatterTypes
         {
-            get { return types; }
-            set { types = value; }
+            get { return this.types; }
+            set { this.types = value; }
         }
 
         /// <summary>
-        /// this methode is used to start the reading the message
+        /// this method is used to start the reading the message
         /// </summary>
         public void Start()
         {
-            listen = true;
+            this.listen = true;
 
-            if (types != null && types.Length > 0)
+            if (this.types != null && this.types.Length > 0)
             {
-                queue.Formatter = new XmlMessageFormatter(types);
+                this.queue.Formatter = new XmlMessageFormatter(this.types);
             }
 
             // featching message from queue
-            queue.ReceiveCompleted += new ReceiveCompletedEventHandler(OnReceiveCompleted);
-            StartListening();
+            this.queue.ReceiveCompleted += new ReceiveCompletedEventHandler(this.OnReceiveCompleted);
+            this.StartListening();
             Console.ReadKey();
         }
 
         /// <summary>
-        /// stop featching message 
+        /// stop fetching message 
         /// </summary>
         public void Stop()
         {
-            listen = false;
-            queue.ReceiveCompleted -= new ReceiveCompletedEventHandler(OnReceiveCompleted);
+            this.listen = false;
+            this.queue.ReceiveCompleted -= new ReceiveCompletedEventHandler(this.OnReceiveCompleted);
         }
 
         /// <summary>
@@ -121,45 +135,45 @@ namespace MSMQReceiver
         /// </summary>
         private void StartListening()
         {
-            if (!listen)
+            if (!this.listen)
             {
                 return;
             }
 
-            if (queue.Transactional)
+            if (this.queue.Transactional)
             {
                 // Initiates an asynchronous peek operation by telling Message Queuing to begin peeking a message 
                 // and notify the event handler when finished.
-                queue.BeginPeek();
+                this.queue.BeginPeek();
             }
             else
             {
                 // Begins to asynchronously receive data from a connected Socket.
-                queue.BeginReceive();
+                this.queue.BeginReceive();
             }
         }
 
         /// <summary>
         /// this method is used to indicate message is received
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="body"> object type parameter</param>
         private void FireReceiveEvent(object body)
         {
-            if (MessageReceived != null)
+            if (this.MessageReceived != null)
             {
                 // An event that indicates that a message was received on the Datagram Socket object
-                MessageReceived(this, new MessageEventArgs(body));
+                this.MessageReceived(this, new MessageEventArgs(body));
             }
         }
 
         /// <summary>
         /// this method is used to send email address and token 
         /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
+        /// <param name="sender"> object type sender</param>
+        /// <param name="e"> reference of receive complete event class</param>
         private void OnReceiveCompleted(object sender, ReceiveCompletedEventArgs e)
         {
-            Message message = queue.EndReceive(e.AsyncResult);
+            Message message = this.queue.EndReceive(e.AsyncResult);
             Console.WriteLine("Message: " + message.Body + message.Label);
 
             // creating email service class object
@@ -167,8 +181,8 @@ namespace MSMQReceiver
 
             // sending token and email address to email service class method 
             emailService.Email(message.Body.ToString(), message.Label.ToString());
-            StartListening();
-            FireReceiveEvent(message.Body);
+            this.StartListening();
+            this.FireReceiveEvent(message.Body);
         }
     }
 
@@ -176,24 +190,30 @@ namespace MSMQReceiver
     /// this class passed as an argument to the message receive Event Handler delegate.
     /// </summary>
     public class MessageEventArgs : EventArgs
-    {
+    {      
+        /// <summary>
+        /// The message body
+        /// </summary>
         private object messageBody;
 
         /// <summary>
-        /// passing the message
+        /// Gets the message body.
         /// </summary>
+        /// <value>
+        /// The message body.
+        /// </value>
         public object MessageBody
         {
-            get { return messageBody; }
+            get { return this.messageBody; }
         }
 
         /// <summary>
-        /// initializing the message
+        /// Initializes a new instance of the <see cref="MessageEventArgs"/> class.
         /// </summary>
-        /// <param name="body"></param>
+        /// <param name="body">The body.</param>
         public MessageEventArgs(object body)
         {
-            messageBody = body;
+            this.messageBody = body;
         }
     }
 }

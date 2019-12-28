@@ -14,12 +14,12 @@
 namespace FundooBusinessLayer1.ServicesBL
 {
     // Including the requried assemblies in to the program
+    using System;
+    using System.Threading.Tasks;
     using FundooBusinessLayer1.InterfaceBL;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
-    using System;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// this class is used to check the business logic of application
@@ -35,7 +35,7 @@ namespace FundooBusinessLayer1.ServicesBL
         /// <summary>
         /// Initializes a new instance of the <see cref="AccountBL"/> class.
         /// </summary>
-        /// <param name="accountRl">The account rl.</param>
+        /// <param name="accountRl">The reference of repository layer account class .</param>
         public AccountBL(IAccountRL accountRl)
         {
             this.accountRL = accountRl;
@@ -58,7 +58,7 @@ namespace FundooBusinessLayer1.ServicesBL
                 if (registrationModel != null)
                 {
                     // return true if registaration is successfull
-                    return await accountRL.Register(registrationModel);
+                    return await this.accountRL.Register(registrationModel);
                 }
                 else
                 {
@@ -80,10 +80,10 @@ namespace FundooBusinessLayer1.ServicesBL
         /// returns true or false depending upon operation result
         /// </returns>
         /// <exception cref="Exception">
-        /// EmailId or Password Requirred
+        /// EmailId or Password Required
         /// or
         /// </exception>
-        public async Task<LoginReponse> Login(LoginModel loginModel)
+        public async Task<LoginResponse> Login(LoginModel loginModel)
         {
             try
             {
@@ -91,7 +91,7 @@ namespace FundooBusinessLayer1.ServicesBL
                 if (loginModel != null)
                 {
                     // return true if login successfull
-                    var result = await accountRL.LogIn(loginModel);
+                    var result = await this.accountRL.LogIn(loginModel);
                     return result;
                 }
                 else
@@ -110,7 +110,7 @@ namespace FundooBusinessLayer1.ServicesBL
         /// Forgets the password.
         /// </summary>
         /// <param name="forgetPasswordModel">The forget password model.</param>
-        /// <returns></returns>
+        /// <returns> returns the true or false indicating operation is done or not</returns>
         /// <exception cref="Exception">
         /// Invalid EmailID
         /// or
@@ -123,7 +123,7 @@ namespace FundooBusinessLayer1.ServicesBL
                 if (forgetPasswordModel != null)
                 {
                     // return true if user entered emailid is correct
-                    var result = await accountRL.ForgetPassword(forgetPasswordModel);
+                    var result = await this.accountRL.ForgetPassword(forgetPasswordModel);
                     return result;
                 }
                 else
@@ -141,9 +141,9 @@ namespace FundooBusinessLayer1.ServicesBL
         /// Resets the password.
         /// </summary>
         /// <param name="resetPasswordModel">The reset password model.</param>
-        /// <returns></returns>
+        /// <returns> returns true or false indicating operation is successful or not</returns>
         /// <exception cref="Exception">
-        /// Invalid Emailid or password
+        /// Invalid Email id or password
         /// or
         /// </exception>
         public async Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel)
@@ -154,7 +154,7 @@ namespace FundooBusinessLayer1.ServicesBL
                 if (resetPasswordModel != null)
                 {
                     // return true if password reset operation is successfull
-                    var result = await accountRL.ResetPassword(resetPasswordModel);
+                    var result = await this.accountRL.ResetPassword(resetPasswordModel);
                     return result;
                 }
                 else
@@ -185,7 +185,7 @@ namespace FundooBusinessLayer1.ServicesBL
             {
                 if (registrationModel != null)
                 {
-                    var result = await accountRL.SocialLogin(registrationModel);
+                    var result = await this.accountRL.SocialLogin(registrationModel);
                     return true;
                 }
                 else
@@ -199,13 +199,22 @@ namespace FundooBusinessLayer1.ServicesBL
             }
         }
 
-        public async Task<string> GenerateToken(LoginReponse loginReponse)
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="loginResponse">The login response.</param>
+        /// <returns> returns the token</returns>
+        /// <exception cref="Exception">
+        /// invalid token
+        /// or
+        /// </exception>
+        public async Task<string> GenerateToken(LoginResponse loginResponse)
         {
             try
             {
-                if (loginReponse != null)
+                if (loginResponse != null)
                 {
-                    var result = await accountRL.GenerateToken(loginReponse);
+                    var result = await this.accountRL.GenerateToken(loginResponse);
                     return result;
                 }
                 else

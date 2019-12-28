@@ -14,11 +14,11 @@
 namespace FundooRepositoryLayer.InterfaceRL
 {
     // Including the requried assemblies in to the program
+    using System.Collections.Generic;
+    using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
-    using System.Collections.Generic;
-    using System.Threading.Tasks;
 
     /// <summary>
     /// creating note interface for repository layer
@@ -56,5 +56,39 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the list of note</returns>
         IList<NoteResponse> DisplayNotes(string userID);
+
+        /// <summary>
+        /// Determines whether the specified note identifier is archive.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="archive">if set to <c>true</c> [archive].</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>  returns true indicating note is Archived or false to indicate note is UnArchived</returns>
+        Task<bool> IsArchive(int noteID, bool archive, string userID);
+
+        /// <summary>
+        /// Gets the archived notes.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns list of archived notes</returns>
+        IList<NoteResponse> GetArchivedNotes(string userID);
+
+        /// <summary>
+        /// Determines whether the specified note identifier is pin.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns true indicating note is Pinned or false to indicate note is UnPinned</returns>
+        Task<bool> IsPin(int noteID, bool isPin, string userID);
+
+        /// <summary>
+        /// Gets the pinned notes.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns list of Pinned notes</returns>
+        IList<NoteResponse> GetPinnedNotes(string userID);
+
+        Task<bool> IsTrash(int noteID, bool isTrash, string userID);
     }
 }

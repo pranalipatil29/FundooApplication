@@ -1,18 +1,28 @@
-﻿using FundooApp.Controllers;
-using FundooBusinessLayer.InterfaceBL;
-using FundooBusinessLayer.ServicesBL;
-using FundooCommonLayer.Model;
-using FundooCommonLayer.Model.Request;
-using FundooRepositoryLayer.InterfaceRL;
-using Microsoft.AspNetCore.Mvc;
-using Moq;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using Xunit;
-
+﻿// ******************************************************************************
+//  <copyright file="NotesTestCases.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  NotesTestCases.cs
+//  
+//     Purpose:  Creating Test cases for Notes
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   27-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace XUnitTestCases
 {
+    using System;
+    using FundooApp.Controllers;
+    using FundooBusinessLayer.InterfaceBL;
+    using FundooBusinessLayer.ServicesBL;
+    using FundooCommonLayer.Model.Request;
+    using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Mvc;
+    using Moq;
+    using Xunit;
+
     public class NotesTestCases
     {
         NoteController noteController;
@@ -28,11 +38,11 @@ namespace XUnitTestCases
         [Fact]
         public void TestNoteCreation()
         {
-            var repository = new Mock<INoteRL>();
+            var repository = new Mock<INoteRL>().Object;
 
             var data = new NoteRequest()
             {
-                Title = "sdjgf",
+              Title="jsdgf",
                 Collaborator = "gsdj",
                 Color = "red",
                 Description = "note1",

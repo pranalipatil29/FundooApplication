@@ -1,11 +1,34 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿// ******************************************************************************
+//  <copyright file="NoteResponse.cs" company="Bridgelabz">
+//    Copyright © 2019 Company
+//
+//     Execution:  NoteResponse.cs
+//  
+//     Purpose:  Defining properties for handling note response
+//     @author  Pranali Patil
+//     @version 1.0
+//     @since   24-12-2019
+//  </copyright>
+//  <creator name="Pranali Patil"/>
+// ******************************************************************************
 namespace FundooCommonLayer.Model.Response
 {
+    // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+
+    /// <summary>
+    /// this class contains properties of note
+    /// </summary>
     public class NoteResponse
     {
+        /// <summary>
+        /// Gets or sets the note identifier.
+        /// </summary>
+        /// <value>
+        /// The note identifier.
+        /// </value>
         public int NoteID { get; set; }
 
         /// <summary>
