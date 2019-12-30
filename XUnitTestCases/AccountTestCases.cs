@@ -15,7 +15,9 @@ namespace XUnitTestCases
 {
     using System;
     using System.Collections.Generic;
+    using System.Collections.ObjectModel;
     using System.Text;
+    using System.Threading.Tasks;
     using FundooApp.Controllers;
     using FundooBusinessLayer1.InterfaceBL;
     using FundooBusinessLayer1.ServicesBL;
@@ -28,8 +30,8 @@ namespace XUnitTestCases
     public class AccountTestCases
     {
         AccountController accountController;
-        IAccountBL accountBL;
-        IAccountRL accountRL;
+        IAccountBL accountBL ;
+        IAccountRL accountRL ;
 
         public AccountTestCases()
         {
@@ -37,25 +39,39 @@ namespace XUnitTestCases
             accountController = new AccountController(accountBL);
         }
 
-        [Fact]
-        public void TestRegistration()
-        {
-            //var repository =new Mock<IAccountRL>();
+        //[Fact]
+        //public async Task TestRegistrationForBadRequest()
+        //{
+        //    //var repository =new Mock<IAccountRL>();
 
-            RegistrationModel data = new RegistrationModel()
+        //    RegistrationModel data = new RegistrationModel()
+        //    {
+        //        FirstName = "Pranali",
+        //        LastName = "Patil",
+        //        UserName = "pranali",
+        //        EmailID = "pranali@2996@gmail.com",
+        //        UserType = 0,
+        //        ServiceType = "Adavance",
+        //        Password="Pranali@29"
+        //    };
+
+        //    var result = await accountController.Register(data);
+        //    Assert.IsType<BadRequestObjectResult>(result);
+        //}
+
+        [Fact]
+        public async Task TestLoginForBadRequest()
+        {
+            LoginModel data = new LoginModel()
             {
-                FirstName = "Pranali",
-                LastName = "Patil",
-                UserName = "pranali",
-                EmailID = "pranali@2996@gmail.com",
-                UserType = 0,
-                ServiceType = "Adavance",
-                Password="Pranali@29"
+                EmailId = "pranalipatil2996@gmail.com",
+                Password = "Pranali@29"
             };
 
-            var createdResponse = accountController.Register(data);
-
-            Assert.NotNull(createdResponse);
+            var result = await accountController.Login(data);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
+
+       
     }
 }

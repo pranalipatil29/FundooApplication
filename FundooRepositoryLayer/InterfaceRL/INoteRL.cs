@@ -57,6 +57,9 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns the list of note</returns>
         IList<NoteResponse> DisplayNotes(string userID);
 
+    
+        Task<NoteResponse> GetNote(int noteID, string userID);
+
         /// <summary>
         /// Determines whether the specified note identifier is archive.
         /// </summary>
@@ -89,6 +92,11 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns list of Pinned notes</returns>
         IList<NoteResponse> GetPinnedNotes(string userID);
 
-        Task<bool> IsTrash(int noteID, bool isTrash, string userID);
+        Task<bool> MoveToTrash(int noteID, string userID);
+
+        IList<NoteResponse> GetNotesFromTrash(string userID);
+
+        Task<bool> RestoreFromTrash(int noteId, string userID);
+
     }
 }

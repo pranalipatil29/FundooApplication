@@ -36,7 +36,7 @@ namespace FundooApp.Controllers
         /// creating the reference of business layer note class
         /// </summary>
         private readonly INoteBL noteBL;
-
+        
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteController"/> class.
         /// </summary>
@@ -52,13 +52,13 @@ namespace FundooApp.Controllers
         /// <param name="noteRequest">The note request.</param>
         /// <returns> returns the message indicating operation is done or not</returns>
         [HttpPost]
-        [Route("CreateNote")]
+       // [Route("CreateNote")]
         ////Post: /api/Note/CreateNote
         public async Task<IActionResult> CreateNote(NoteRequest noteRequest)
         {
             try
             {
-                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+               var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 var result = await this.noteBL.CreateNote(noteRequest, userId);
                 bool success = false;
@@ -90,8 +90,8 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
         /// <returns> returns the message indicating operation is done or not</returns>
-        [HttpPost]
-        [Route("DeleteNote")]
+        [HttpDelete]
+        [Route("{noteID}")]
         ////Post: /api/Note/DeleteNote
         public async Task<IActionResult> DeleteNote(int noteID)
         {
@@ -110,7 +110,7 @@ namespace FundooApp.Controllers
                 else
                 {
                     success = false;
-                    message = "NoteId does not exist";
+                    message = "Note doesn't exist in trash";
                     return this.BadRequest(new { success, message });
                 }
             }
@@ -127,7 +127,7 @@ namespace FundooApp.Controllers
         /// <param name="noteID">The note identifier.</param>
         /// <returns> returns the updated info of note</returns>
         [HttpPut]
-        [Route("UpdateNote")]
+      //  [Route("UpdateNote")]
         ////Put: /api/Note/UpdateNote
         public async Task<IActionResult> UpdateNote(NoteRequest noteRequest, int noteID)
         {
@@ -163,7 +163,7 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns> returns the list of notes</returns>
         [HttpGet]
-        [Route("DisplayNotes")]
+       // [Route("DisplayNotes")]
         ////Post: /api/Note/DisplayNotes
         public async Task<IActionResult> DisplayNotes()
         {
@@ -195,6 +195,39 @@ namespace FundooApp.Controllers
             }
         }
 
+        [HttpGet]
+         [Route("{noteID}")]
+        ////Post: /api/Note/DisplayNotes
+        public async Task<IActionResult> GetNote(int noteID)
+        {
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var data = await this.noteBL.GetNote(noteID,userId);
+
+                bool success = false;
+                var message = string.Empty;
+
+                if (data != null)
+                {
+                    success = true;
+                    message = "Note Found ";
+                    return this.Ok(new { success, message, data });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note doesn't exist";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { exception.Message });
+            }
+        }
+
         /// <summary>
         /// Archives the specified note identifier.
         /// </summary>
@@ -202,17 +235,18 @@ namespace FundooApp.Controllers
         /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <returns> returns the result of operation</returns>
         [HttpPut]
-        [Route("Archive")]
+        [Route("{noteID}/Archive")]
         public async Task<IActionResult> Archive(int noteID, bool archive)
         {
+            bool success = false;
+            var message = string.Empty;
+
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.IsArchive(noteID, archive, userID);
-                bool success = false;
-                var message = string.Empty;
 
-                if(result)
+                if (result)
                 {
                     success = true;
                     message = "Note Archived";
@@ -225,9 +259,10 @@ namespace FundooApp.Controllers
                     return this.Ok(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                return this.BadRequest(new { exception.Message });
+                success = false;
+                return this.BadRequest(new { success, exception.Message });
             }
         }
 
@@ -236,18 +271,19 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns> returns the result of operation</returns>
         [HttpGet]
-        [Route("GetArchivedNotes")]
+        [Route("Archive")]
         public async Task<IActionResult> GetArchivedNotes()
         {
+            bool success = false;
+            var message = string.Empty;
+
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 var notes = this.noteBL.GetArchivedNotes(userID);
-                bool success = false;
-                var message = string.Empty;
 
-                if(notes.Count > 0)
+                if (notes.Count > 0)
                 {
                     success = true;
                     message = "Archived Notes :";
@@ -260,9 +296,10 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                return this.BadRequest(new { exception.Message });
+                success = false;
+                return this.BadRequest(new { success, exception.Message });
             }
         }
 
@@ -273,15 +310,16 @@ namespace FundooApp.Controllers
         /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <returns> returns the result of operation</returns>
         [HttpPut]
-        [Route("PinNote")]
+        [Route("{noteID}/Pin")]
         public async Task<IActionResult> IsPin(int noteID, bool isPin)
         {
+            bool success = false;
+            var message = string.Empty;
+
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.IsPin(noteID, isPin, userID);
-                bool success = false;
-                var message = string.Empty;
 
                 if (result)
                 {
@@ -298,7 +336,8 @@ namespace FundooApp.Controllers
             }
             catch (Exception exception)
             {
-                return this.BadRequest(new { exception.Message });
+                success = false;
+                return this.BadRequest(new { success, exception.Message });
             }
         }
 
@@ -307,7 +346,7 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns> returns the result of operation</returns>
         [HttpGet]
-        [Route("GetPinnedNotes")]
+        [Route("Pinned")]
         public async Task<IActionResult> GetPinnedNotes()
         {
             try
@@ -330,25 +369,24 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(exception.Message);
             }
         }
 
         [HttpPost]
-        [Route("IsTrash")]
-        public async Task<IActionResult> IsTrash(int noteID,bool isTrash)
+        [Route("{noteID}/Trash")]
+        public async Task<IActionResult> MoveToTrash(int noteID)
         {
+            bool success = false;
+            var message = string.Empty;
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                var result = await this.noteBL.MoveToTrash(noteID, userId);
 
-                var result = await this.noteBL.IsTrash(noteID, isTrash, userId);
-                bool success = false;
-                var message = string.Empty;
-
-                if(result)
+                if (result)
                 {
                     success = true;
                     message = "Note Deleted";
@@ -357,13 +395,78 @@ namespace FundooApp.Controllers
                 else
                 {
                     success = false;
-                    message = "Note succesfully restore";
-                    return this.Ok(new { success, message });
+                    message = "Note not found";
+                    return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                success = false;
+                return this.BadRequest(new { success, exception.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("Trash")]
+        public async Task<IActionResult> GetNotesFromTrash()
+        {
+            try
+            {
+                var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var notes = this.noteBL.GetNotesFromTrash(userID);
+                var message = string.Empty;
+                bool success = false;
+
+                if (notes.Count > 0)
+                {
+                    success = true;
+                    message = "Notes In Trash :- ";
+                    return this.Ok(new { success, message, notes });
+                }
+                else
+                {
+                    success = false;
+                    message = "Trash is Empty";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
             {
                 return this.BadRequest(new { exception.Message });
+            }
+        }
+
+        [HttpPut]
+        [Route("{noteID}/Restore")]
+        public async Task<IActionResult> RestoreFromTrash(int noteID)
+        {
+            bool success = false;
+            var message = string.Empty;
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var result = await this.noteBL.RestoreFromTrash(noteID, userId);
+
+                if (result)
+                {
+                    success = true;
+                    message = "Successfully Restored Note";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note not found in trash";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                success = false;
+                message = "User Authentication failed";
+                return this.BadRequest(new { success, message, exception.Message });
             }
         }
     }

@@ -111,31 +111,38 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <returns> returns message indication whether operation is successful or not</returns>
         public async Task<LoginResponse> LogIn(LoginModel loginModel)
         {
-            // check whether the user entered email id is present in datbase
-            var user = await this.userManager.FindByEmailAsync(loginModel.EmailId);
-
-             // check whether the user entered password is matching
-            var userPassword = await this.userManager.CheckPasswordAsync(user, loginModel.Password);
-
-            // check whether user data is null or not or user password is correct 
-            if (user != null && userPassword)
+            try
             {
-                // get the required user data 
-                var data = new LoginResponse()
+                // check whether the user entered email id is present in datbase
+                var user = await this.userManager.FindByEmailAsync(loginModel.EmailId);
+
+                // check whether the user entered password is matching
+                var userPassword = await this.userManager.CheckPasswordAsync(user, loginModel.Password);
+
+                // check whether user data is null or not or user password is correct 
+                if (user != null && userPassword)
                 {
-                    FirstName = user.FirstName,
-                    LastName = user.LastName,
-                    EmailID = user.Email,
-                    UserName = user.UserName
-                };
+                    // get the required user data 
+                    var data = new LoginResponse()
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        EmailID = user.Email,
+                        UserName = user.UserName
+                    };
 
-                // return the user data
-                return data;
+                    // return the user data
+                    return data;
+                }
+                else
+                {
+                    return null;
+                }
             }
-            else
+            catch(Exception exception)
             {
-                return null;
-            }
+                throw new Exception(exception.Message) ;
+            }           
         }
 
         /// <summary>

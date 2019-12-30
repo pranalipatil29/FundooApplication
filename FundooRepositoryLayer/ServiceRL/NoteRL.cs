@@ -105,13 +105,13 @@ namespace FundooRepositoryLayer.ServiceRL
             try
             {
                 // get required note for user
-                var user = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
+                var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
 
                 // check whether user have required note or not
-                if (user != null)
+                if (note != null && note.IsTrash)
                 {
                     // delete the note from note tabel
-                    this.authenticationContext.Note.Remove(user);
+                    this.authenticationContext.Note.Remove(note);
                     await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
@@ -273,6 +273,44 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        public async Task<NoteResponse> GetNote(int noteID, string userID)
+        {
+            try
+            {
+                // get all notes of user
+                var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsArchive == false && s.IsTrash == false).FirstOrDefault();
+
+                // check whether user have notes or not
+                if (data != null)
+                {
+                    var note = new NoteResponse()
+                    {
+                       NoteID = data.NoteID,
+                       Title = data.Title,
+                       Description = data.Description,
+                       Collaborator = data.Collaborator,
+                       Color = data.Color,
+                       Image = data.Image,
+                       IsArchive = data.IsArchive,
+                       IsPin = data.IsPin,
+                       IsTrash = data.IsTrash,
+                       Reminder = data.Reminder
+                    };
+
+                    // returns the note info
+                    return note;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
         /// <summary>
         /// Determines whether the specified note identifier is archive.
         /// </summary>
@@ -316,7 +354,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         await this.authenticationContext.SaveChangesAsync();
                         return true;
                     }
-                    else if (note.IsArchive && ! archive)
+                    else if (note.IsArchive && !archive)
                     {
                         // if note is archived then make it UnArchived 
                         note.IsArchive = false;
@@ -331,7 +369,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     else
                     {
                         // check whether note is already archived or not
-                        if(note.IsArchive && archive)
+                        if (note.IsArchive && archive)
                         {
                             throw new Exception("Note is already archived");
                         }
@@ -434,7 +472,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (note != null)
                 {
                     // check whether user required note is pinned or not 
-                    if (! note.IsPin && isPin)
+                    if (!note.IsPin && isPin)
                     {
                         // if user required note is not pinned then make it pinned
                         note.IsPin = true;
@@ -453,7 +491,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         await this.authenticationContext.SaveChangesAsync();
                         return true;
                     }
-                    else if (note.IsPin && ! isPin)
+                    else if (note.IsPin && !isPin)
                     {
                         // if user required note is pinned then make it UnPinned
                         note.IsPin = false;
@@ -465,7 +503,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         await this.authenticationContext.SaveChangesAsync();
                         return false;
                     }
-                     else
+                    else
                     {
                         if (note.IsPin && isPin)
                         {
@@ -527,7 +565,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         };
 
                         // add note into list
-                         list.Add(notes);
+                        list.Add(notes);
                     }
 
                     // return the list of pinned notes
@@ -560,7 +598,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Note not found
         /// or
         /// </exception>
-        public async Task<bool> IsTrash(int noteID, bool isTrash, string userID)
+        public async Task<bool> MoveToTrash(int noteID, string userID)
         {
             try
             {
@@ -568,45 +606,92 @@ namespace FundooRepositoryLayer.ServiceRL
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
                 // check whether user have required note or not
-                if (note != null)
+                if (note != null && ! note.IsTrash)
                 {
-                    if (! note.IsTrash && isTrash)
-                    {
-                        note.IsTrash = true;
+                    note.IsTrash = true;
 
-                        if(note.IsPin)
-                        {
-                            note.IsPin = false;
-                        }
-                        this.authenticationContext.Note.Update(note);
-                        await this.authenticationContext.SaveChangesAsync();
-                        return true;
-                    }
-                    else if (note.IsTrash && ! isTrash)
+                    if (note.IsPin)
                     {
-                        note.IsTrash = false;
-                        this.authenticationContext.Note.Update(note);
-                        await this.authenticationContext.SaveChangesAsync();
-                        return false;
+                        note.IsPin = false;
                     }
-                    else
-                    {
-                       if (note.IsTrash && isTrash)
-                        {
-                            throw new Exception("Note is already in trash");
-                        }
-                        else
-                        {
-                            throw new Exception("Note doesn't exist in trash");
-                        }
-                    }
+
+                    this.authenticationContext.Note.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
                 }
                 else
                 {
-                    throw new Exception("Note not found");
+                    return false;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public IList<NoteResponse> GetNotesFromTrash(string userID)
+        {
+            try
+            {
+                var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.IsTrash == true);
+                var list = new List<NoteResponse>();
+
+                if (data != null)
+                {
+                    foreach (var note in data)
+                    {
+                        var notes = new NoteResponse()
+                        {
+                            NoteID = note.NoteID,
+                            Title = note.Title,
+                            Description = note.Description,
+                            Collaborator = note.Collaborator,
+                            Color = note.Color,
+                            Image = note.Image,
+                            IsArchive = note.IsArchive,
+                            IsPin = note.IsPin,
+                            IsTrash = note.IsTrash,
+                            Reminder = note.Reminder
+                        };
+
+                        list.Add(notes);
+                    }
+
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> RestoreFromTrash(int noteID, string userID)
+        {
+            try
+            {
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
+
+                if (note != null && note.IsTrash)
+                {
+
+                    note.IsTrash = false;
+                    this.authenticationContext.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

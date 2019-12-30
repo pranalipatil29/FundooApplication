@@ -177,6 +177,28 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        public async Task<NoteResponse> GetNote(int noteID, string userID)
+        {
+            try
+            {
+                // check whther user id is null or not
+                if (userID != null)
+                {
+                    // if user id is not null then pass that id to repository layer method to display notes of that user
+                    return await this.noteRL.GetNote(noteID, userID);
+                }
+                else
+                {
+                    // if user id contains null value then throw exception
+                    throw new Exception("User not found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
         /// <summary>
         /// Determines whether the specified note identifier is archive.
         /// </summary>
@@ -313,17 +335,55 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public async Task<bool> IsTrash(int noteID, bool isTrash, string userID)
+        public async Task<bool> MoveToTrash(int noteID, string userID)
         {
             try
             {
                 if(noteID > 0)
                 {
-                    return await this.noteRL.IsTrash(noteID, isTrash, userID);
+                    return await this.noteRL.MoveToTrash(noteID, userID);
                 }
                 else
                 {
                     throw new Exception("Please enter correct Note Id");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public IList<NoteResponse> GetNotesFromTrash(string userID)
+        {
+            try
+            {
+                if(userID != null)
+                {
+                    return  this.noteRL.GetNotesFromTrash(userID);
+                }
+                else
+                {
+                    throw new Exception("User not found");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+       public async Task<bool> RestoreFromTrash(int noteId, string userID)
+        {
+            try
+            {
+                if (noteId > 0)
+                {
+                    return await this.noteRL.RestoreFromTrash(noteId, userID);
+                }
+                else
+                {
+                    throw new Exception("Please enter correct NoteID");
                 }
             }
             catch(Exception exception)

@@ -89,8 +89,8 @@ namespace FundooBusinessLayer1.ServicesBL
             {
                 // check whether user enter all data for login or not
                 if (loginModel != null)
-                {
-                    // return true if login successfull
+                {             
+                    // get the user info
                     var result = await this.accountRL.LogIn(loginModel);
                     return result;
                 }

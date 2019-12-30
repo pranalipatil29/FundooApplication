@@ -14,9 +14,11 @@
 namespace XUnitTestCases
 {
     using System;
+    using System.Threading.Tasks;
     using FundooApp.Controllers;
     using FundooBusinessLayer.InterfaceBL;
     using FundooBusinessLayer.ServicesBL;
+    using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Mvc;
@@ -35,15 +37,33 @@ namespace XUnitTestCases
             noteController = new NoteController(noteBL);
         }
 
+
         [Fact]
-        public void TestNoteCreation()
+        public async Task TestNoteCreationForBadRequest()
         {
-            var repository = new Mock<INoteRL>().Object;
+            //  var repository = new Mock<INoteRL>().Object;
 
             var data = new NoteRequest()
             {
-              Title="jsdgf",
-                Collaborator = "gsdj",
+                Color = "red",
+                Description = "note1",
+                Image = "jhd",
+                IsArchive = false,
+                IsPin = true,
+                IsTrash = false,
+                Reminder = DateTime.Now
+
+            };
+
+            var result = await noteController.CreateNote(data);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        [Fact]
+        public async Task TestNoteCreationForIsEmpty()
+        {
+            var data = new NoteRequest()
+            {
                 Color = "red",
                 Description = "note1",
                 Image = "jhd",
@@ -53,15 +73,8 @@ namespace XUnitTestCases
                 Reminder = DateTime.Now
             };
 
-            //  var createdResponse = noteController.CreateNote(data);
-            // Assert.IsType<NotFoundResult>(createdResponse);
-
-            noteController.ModelState.AddModelError("Title", "Required");
-            var badResponse = noteController.CreateNote(data);
-
-            Assert.IsType<BadRequestObjectResult>(badResponse);
-
-            //  Assert.NotEmpty(data);
+            var result = await noteController.CreateNote(data);
+            Assert.IsType<NoContentResult>(result);
         }
     }
 }

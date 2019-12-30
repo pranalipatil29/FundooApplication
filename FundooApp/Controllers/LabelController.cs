@@ -53,7 +53,7 @@ namespace FundooApp.Controllers
         /// <param name="labelRequest">The label request.</param>
         /// <returns>returns the result</returns>
         [HttpPost]
-        [Route("CreateLabel")]
+        // [Route("CreateLabel")]
         ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> CreateLabel(LabelRequest labelRequest)
         {
@@ -94,7 +94,7 @@ namespace FundooApp.Controllers
         /// <param name="labelID">The label identifier.</param>
         /// <returns>returns the result</returns>
         [HttpPut]
-        [Route("UpdateLabel")]
+        //[Route("UpdateLabel")]
         ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> UpdateLabel(LabelRequest labelRequest, int labelID)
         {
@@ -133,8 +133,8 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <param name="labelID">The label identifier.</param>
         /// <returns>returns the result</returns>
-        [HttpPost]
-        [Route("DeleteLabel")]
+        [HttpDelete]
+        [Route("{labelID}")]
         ////Post: /api/Note/DeleteLabel
         public async Task<IActionResult> DeleteLabel(int labelID)
         {
@@ -173,7 +173,7 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns>returns the result</returns>
         [HttpGet]
-        [Route("DisplayLabels")]
+        //[Route("DisplayLabels")]
         ////Post: /api/Note/DisplayNotes
         public async Task<IActionResult> DisplayLabels()
         {
