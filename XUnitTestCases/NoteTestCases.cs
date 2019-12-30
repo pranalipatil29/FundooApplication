@@ -37,7 +37,6 @@ namespace XUnitTestCases
             noteController = new NoteController(noteBL);
         }
 
-
         [Fact]
         public async Task TestNoteCreationForBadRequest()
         {
@@ -57,24 +56,6 @@ namespace XUnitTestCases
 
             var result = await noteController.CreateNote(data);
             Assert.IsType<BadRequestObjectResult>(result);
-        }
-
-        [Fact]
-        public async Task TestNoteCreationForIsEmpty()
-        {
-            var data = new NoteRequest()
-            {
-                Color = "red",
-                Description = "note1",
-                Image = "jhd",
-                IsArchive = false,
-                IsPin = true,
-                IsTrash = false,
-                Reminder = DateTime.Now
-            };
-
-            var result = await noteController.CreateNote(data);
-            Assert.IsType<NoContentResult>(result);
         }
     }
 }

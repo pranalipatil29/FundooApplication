@@ -22,6 +22,7 @@ namespace XUnitTestCases
     using FundooBusinessLayer1.InterfaceBL;
     using FundooBusinessLayer1.ServicesBL;
     using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Mvc;
     using Moq;
@@ -32,7 +33,7 @@ namespace XUnitTestCases
         AccountController accountController;
         IAccountBL accountBL ;
         IAccountRL accountRL ;
-
+       
         public AccountTestCases()
         {
             accountBL = new AccountBL(accountRL);
@@ -62,16 +63,37 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestLoginForBadRequest()
         {
+            var repository = new Mock<IAccountRL>();
+            var business = new AccountBL(repository.Object);
+            var controller = new AccountController(business);
+
             LoginModel data = new LoginModel()
             {
                 EmailId = "pranalipatil2996@gmail.com",
-                Password = "Pranali@29"
+                Password = "Pranali@"
             };
 
-            var result = await accountController.Login(data);
-            Assert.IsType<BadRequestObjectResult>(result);
+            var result = await controller.Login(data);
+            Assert.IsType<BadRequestResult>(data);
         }
 
-       
+        [Fact]
+        public async Task TestLoginForNotNull()
+        {
+            var repository = new Mock<IAccountRL>();
+            var business = new AccountBL(repository.Object);
+            var controller = new AccountController(business);
+
+            LoginModel model = new LoginModel()
+            {
+               EmailId = "pranali@2996@gmail.com",
+               Password="Pranali@29"                
+            };
+
+            // var data = business.Login(model);
+
+            var result = await controller.Login(model);
+            Assert.NotNull(result);
+        }
     }
 }

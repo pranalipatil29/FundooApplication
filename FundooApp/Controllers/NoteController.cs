@@ -179,13 +179,12 @@ namespace FundooApp.Controllers
                 if (data.Count != 0)
                 {
                     success = true;
-                    message = "Notes: ";
-                    return this.Ok(new { success, message, data });
+                    return this.Ok(new { success, data });
                 }
                 else
                 {
                     success = false;
-                    message = "Notes not available";
+                    message = "Notes doesn't exist";
                     return this.BadRequest(new { success, message });
                 }
             }
@@ -286,7 +285,7 @@ namespace FundooApp.Controllers
                 if (notes.Count > 0)
                 {
                     success = true;
-                    message = "Archived Notes :";
+                    message = "Archived Notes ";
                     return this.Ok(new { success, message, notes });
                 }
                 else
@@ -359,7 +358,7 @@ namespace FundooApp.Controllers
                 if (result.Count > 0)
                 {
                     success = true;
-                    message = "Pinned Notes: ";
+                    message = "Pinned Notes ";
                     return this.Ok(new { success, message, result });
                 }
                 else
@@ -421,7 +420,7 @@ namespace FundooApp.Controllers
                 if (notes.Count > 0)
                 {
                     success = true;
-                    message = "Notes In Trash :- ";
+                    message = "Notes In Trash";
                     return this.Ok(new { success, message, notes });
                 }
                 else
