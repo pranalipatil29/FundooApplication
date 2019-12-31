@@ -21,6 +21,7 @@ namespace FundooBusinessLayer.InterfaceBL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// creating note interface for business layer
@@ -104,5 +105,7 @@ namespace FundooBusinessLayer.InterfaceBL
         Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
 
         Task<bool> RemoveReminder(int noteId, string userID);
+
+        Task<bool> ImageUpload(int noteID, string userID, IFormFile formFile);
     }
 }

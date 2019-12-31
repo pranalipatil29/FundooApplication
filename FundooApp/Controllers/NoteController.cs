@@ -568,5 +568,39 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
+
+        [HttpPut]
+        [Route("{noteID}/Image")]
+        public async Task<IActionResult> ImageUpload(int noteID, IFormFile formFile)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+
+                var result = await this.noteBL.ImageUpload(noteID, userID, formFile);
+
+                if(result)
+                {
+                    success = true;
+                    message = "Image Uploaded ";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note doesn't exist";
+                    return this.Ok(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
     }
 }

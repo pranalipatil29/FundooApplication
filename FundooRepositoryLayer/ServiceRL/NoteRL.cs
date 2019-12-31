@@ -22,7 +22,12 @@ namespace FundooRepositoryLayer.ServiceRL
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.Context;
+    using FundooRepositoryLayer.ImageUpload;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
+    using Microsoft.AspNetCore.Http.Internal;
+    using Microsoft.Extensions.Configuration;
+    using Microsoft.Extensions.Options;
 
     /// <summary>
     ///  this class contains different methods to interact with note table
@@ -35,13 +40,17 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         private AuthenticationContext authenticationContext;
 
+        private readonly ApplicationSetting applicationSetting;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteRL"/> class.
         /// </summary>
         /// <param name="authenticationContext">The authentication context.</param>
-        public NoteRL(AuthenticationContext authenticationContext)
+        public NoteRL(AuthenticationContext authenticationContext,IOptions<ApplicationSetting> applSetting)
         {
+            this.applicationSetting = applSetting.Value;
             this.authenticationContext = authenticationContext;
+         
         }
 
         /// <summary>
@@ -253,7 +262,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                          //  Reminder = note.Reminder
+                            Reminder = note.Reminder
                         };
 
                         list.Add(notes);
@@ -294,7 +303,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         IsArchive = data.IsArchive,
                         IsPin = data.IsPin,
                         IsTrash = data.IsTrash,
-                    //    Reminder = data.Reminder
+                        Reminder = data.Reminder
                     };
 
                     // returns the note info
@@ -426,7 +435,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                           // Reminder = note.Reminder
+                            Reminder = note.Reminder
                         };
 
                         // add note into list
@@ -561,7 +570,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                          //  Reminder = note.Reminder
+                            Reminder = note.Reminder
                         };
 
                         // add note into list
@@ -652,7 +661,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                         //   Reminder = note.Reminder
+                            Reminder = note.Reminder
                         };
 
                         list.Add(notes);
@@ -725,9 +734,9 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
-                if(note != null && note.IsTrash == false)
+                if (note != null && note.IsTrash == false)
                 {
-                    if(dateTime != null && dateTime > DateTime.Now)
+                    if (dateTime != null && dateTime > DateTime.Now)
                     {
                         note.Reminder = dateTime;
                         this.authenticationContext.Note.Update(note);
@@ -744,18 +753,18 @@ namespace FundooRepositoryLayer.ServiceRL
                     return false;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
-       public async Task<bool> RemoveReminder(int noteId, string userID)
+        public async Task<bool> RemoveReminder(int noteId, string userID)
         {
             try
             {
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteId).FirstOrDefault();
-                if(note!= null && note.IsTrash == false)
+                if (note != null && note.IsTrash == false)
                 {
                     note.Reminder = null;
                     this.authenticationContext.Note.Update(note);
@@ -767,7 +776,36 @@ namespace FundooRepositoryLayer.ServiceRL
                     return false;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> ImageUpload(int noteID, string userID, IFormFile formFile)
+        {
+            try
+            {
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
+
+                if (note != null && note.IsTrash == false)
+                {
+
+                    UploadImage imageUpload = new UploadImage(this.applicationSetting.APIkey,this.applicationSetting.APISecret,this.applicationSetting.CloudName);
+                  
+                    var url = imageUpload.Upload(formFile);
+
+                    note.Image = url;
+                    this.authenticationContext.Note.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

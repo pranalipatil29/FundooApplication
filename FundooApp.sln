@@ -13,7 +13,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "FundooBusinessLayer", "Fund
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MSMQReceiver", "MSMQReceiver\MSMQReceiver.csproj", "{54B822F2-ECB9-4FB6-9867-888364BE060F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUnitTestCases", "XUnitTestCases\XUnitTestCases.csproj", "{6277BF59-9FF2-4458-B0B8-71EDBF5DC2A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUnitTestCases", "XUnitTestCases\XUnitTestCases.csproj", "{6277BF59-9FF2-4458-B0B8-71EDBF5DC2A9}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

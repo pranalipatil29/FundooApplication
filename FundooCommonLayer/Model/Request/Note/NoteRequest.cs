@@ -46,8 +46,7 @@ namespace FundooCommonLayer.Model.Request
         /// <value>
         /// The reminder.
         /// </value>
-        [Required]
-        public DateTime Reminder { get; set; }
+        public DateTime? Reminder { get; set; }
 
         /// <summary>
         /// Gets or sets the collaborator.

@@ -21,6 +21,8 @@ namespace FundooRepositoryLayer.InterfaceRL
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using System;
+    using Microsoft.AspNetCore.Http;
+
 
     /// <summary>
     /// creating note interface for repository layer
@@ -105,5 +107,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
 
         Task<bool> RemoveReminder(int noteId, string userID);
+
+        Task<bool> ImageUpload(int noteID, string userID,IFormFile formFile);
     }
 }

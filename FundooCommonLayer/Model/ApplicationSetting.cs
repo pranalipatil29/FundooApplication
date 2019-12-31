@@ -33,5 +33,12 @@ namespace FundooCommonLayer.Model
         /// The client URL.
         /// </value>
         public string ClientURL { get; set; }
+
+
+        public string CloudName { get; set; }
+
+        public string APIkey { get; set; }
+
+        public string APISecret { get; set; }
     }
 }

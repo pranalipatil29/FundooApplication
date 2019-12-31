@@ -22,6 +22,7 @@ namespace FundooBusinessLayer.ServicesBL
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// this class is used to check the business logic of note
@@ -441,6 +442,25 @@ namespace FundooBusinessLayer.ServicesBL
                 else
                 {
                     throw new Exception("Please enter correct NoteID");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+       public async Task<bool> ImageUpload(int noteID, string userID, IFormFile formFile)
+        {
+            try
+            {
+                if(noteID > 0 )
+                {
+                    return await this.noteRL.ImageUpload(noteID, userID, formFile);
+                }
+                else
+                {
+                    throw new Exception("Please enter correct noteID");
                 }
             }
             catch(Exception exception)
