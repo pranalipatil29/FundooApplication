@@ -98,5 +98,7 @@ namespace FundooBusinessLayer.InterfaceBL
         IList<NoteResponse> GetNotesFromTrash(string userID);
 
         Task<bool> RestoreFromTrash(int noteId, string userID);
+
+        Task<bool> ChangeColor(int noteID, string color, string userID);
     }
 }

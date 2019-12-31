@@ -679,11 +679,9 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 if (note != null && note.IsTrash)
                 {
-
                     note.IsTrash = false;
                     this.authenticationContext.Update(note);
                     await this.authenticationContext.SaveChangesAsync();
-
                     return true;
                 }
                 else
@@ -696,5 +694,28 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+        public async Task<bool> ChangeColor(int noteID, string color, string userID)
+        {
+            try
+            {
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
+
+                if(note != null && note.IsTrash == false)
+                {
+                    note.Color = color;
+                    this.authenticationContext.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
-}

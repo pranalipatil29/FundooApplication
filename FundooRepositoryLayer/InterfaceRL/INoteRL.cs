@@ -98,5 +98,6 @@ namespace FundooRepositoryLayer.InterfaceRL
 
         Task<bool> RestoreFromTrash(int noteId, string userID);
 
+        Task<bool> ChangeColor(int noteID, string color, string userID);
     }
 }

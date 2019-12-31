@@ -83,6 +83,7 @@ namespace FundooCommonLayer.Model
         /// <value>
         /// The color.
         /// </value>
+        [RegularExpression(@"^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")]
         [Column(TypeName = "nvarchar(150)")]
         public string Color { get; set; }
 

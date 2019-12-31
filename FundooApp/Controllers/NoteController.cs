@@ -468,5 +468,38 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message, exception.Message });
             }
         }
+
+        [HttpPut]
+        [Route("{noteID}/Color")]
+        public async Task<IActionResult> ChangeColor(int noteID, ChangeColorRequest changeColorRequest)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                var result = await this.noteBL.ChangeColor(noteID, changeColorRequest.Color, userId);
+
+                if(result)
+                {
+                    success = true;
+                    message = "Successfully changed note color";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "Failed";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new {success, message });
+            }
+        }
     }
 }

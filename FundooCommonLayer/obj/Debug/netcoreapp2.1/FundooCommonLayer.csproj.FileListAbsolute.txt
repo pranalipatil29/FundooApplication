@@ -8,3 +8,4 @@ C:\Users\User\source\repos\FundooApp\FundooCommonLayer\obj\Debug\netcoreapp2.1\F
 C:\Users\User\source\repos\FundooApp\FundooCommonLayer\obj\Debug\netcoreapp2.1\FundooCommonLayer.AssemblyInfo.cs
 C:\Users\User\source\repos\FundooApp\FundooCommonLayer\obj\Debug\netcoreapp2.1\FundooCommonLayer.dll
 C:\Users\User\source\repos\FundooApp\FundooCommonLayer\obj\Debug\netcoreapp2.1\FundooCommonLayer.pdb
+C:\Users\User\source\repos\FundooApp\FundooCommonLayer\obj\Debug\netcoreapp2.1\FundooCommonLayer.csprojAssemblyReference.cache

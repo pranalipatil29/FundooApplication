@@ -31,12 +31,13 @@ namespace XUnitTestCases
     public class AccountTestCases
     {
         AccountController accountController;
-        IAccountBL accountBL ;
-        IAccountRL accountRL ;
-       
-        public AccountTestCases()
+        private readonly IAccountBL accountBL ;
+        private readonly IAccountRL accountRL ;
+
+        public AccountTestCases(IAccountRL accountRL)
         {
-            accountBL = new AccountBL(accountRL);
+            this.accountRL = accountRL;
+            accountBL = new AccountBL(this.accountRL);
             accountController = new AccountController(accountBL);
         }
 
@@ -70,11 +71,11 @@ namespace XUnitTestCases
             LoginModel data = new LoginModel()
             {
                 EmailId = "pranalipatil2996@gmail.com",
-                Password = "Pranali@"
+                Password = ""
             };
 
             var result = await controller.Login(data);
-            Assert.IsType<BadRequestResult>(data);
+            Assert.IsType<BadRequestObjectResult>(result);
         }
 
         [Fact]
@@ -86,14 +87,32 @@ namespace XUnitTestCases
 
             LoginModel model = new LoginModel()
             {
-               EmailId = "pranali@2996@gmail.com",
+               EmailId = "pranali2996@gmail.com",
                Password="Pranali@29"                
             };
 
             // var data = business.Login(model);
-
             var result = await controller.Login(model);
             Assert.NotNull(result);
         }
+
+        [Fact]
+        public async Task TestLoginForEmailID()
+        {
+            var repository = new Mock<IAccountRL>();
+            var business = new AccountBL(repository.Object);
+            var controller = new AccountController(business);
+
+            LoginModel model = new LoginModel()
+            {
+               Password = "Pranali@29"
+            };
+
+            controller.ModelState.AddModelError("EmailId", "Required");
+            
+            var result = await controller.Login(model);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
     }
 }

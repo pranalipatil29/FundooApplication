@@ -391,5 +391,24 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
+       public async Task<bool> ChangeColor(int noteID, string color, string userID)
+        {
+            try
+            {
+                if(noteID > 0 )
+                {
+                    return await this.noteRL.ChangeColor(noteID, color, userID);
+                }
+                else
+                {
+                    throw new Exception("Please enter correct NoteID");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
