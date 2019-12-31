@@ -14,11 +14,13 @@
 namespace FundooRepositoryLayer.InterfaceRL
 {
     // Including the requried assemblies in to the program
+    using System.IO;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
+    using System;
 
     /// <summary>
     /// creating note interface for repository layer
@@ -99,5 +101,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         Task<bool> RestoreFromTrash(int noteId, string userID);
 
         Task<bool> ChangeColor(int noteID, string color, string userID);
+
+        Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
     }
 }

@@ -100,5 +100,7 @@ namespace FundooBusinessLayer.InterfaceBL
         Task<bool> RestoreFromTrash(int noteId, string userID);
 
         Task<bool> ChangeColor(int noteID, string color, string userID);
+
+        Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
     }
 }

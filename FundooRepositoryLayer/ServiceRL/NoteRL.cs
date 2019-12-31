@@ -285,16 +285,16 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     var note = new NoteResponse()
                     {
-                       NoteID = data.NoteID,
-                       Title = data.Title,
-                       Description = data.Description,
-                       Collaborator = data.Collaborator,
-                       Color = data.Color,
-                       Image = data.Image,
-                       IsArchive = data.IsArchive,
-                       IsPin = data.IsPin,
-                       IsTrash = data.IsTrash,
-                       Reminder = data.Reminder
+                        NoteID = data.NoteID,
+                        Title = data.Title,
+                        Description = data.Description,
+                        Collaborator = data.Collaborator,
+                        Color = data.Color,
+                        Image = data.Image,
+                        IsArchive = data.IsArchive,
+                        IsPin = data.IsPin,
+                        IsTrash = data.IsTrash,
+                        Reminder = data.Reminder
                     };
 
                     // returns the note info
@@ -606,7 +606,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
                 // check whether user have required note or not
-                if (note != null && ! note.IsTrash)
+                if (note != null && !note.IsTrash)
                 {
                     note.IsTrash = true;
 
@@ -701,12 +701,43 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
-                if(note != null && note.IsTrash == false)
+                if (note != null && note.IsTrash == false)
                 {
                     note.Color = color;
                     this.authenticationContext.Update(note);
                     await this.authenticationContext.SaveChangesAsync();
                     return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> SetReminder(int noteID, DateTime dateTime, string userID)
+        {
+            try
+            {
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
+
+                if(note != null && note.IsTrash == false)
+                {
+                    if(dateTime != null && dateTime > DateTime.Now)
+                    {
+                        note.Reminder = dateTime;
+                        this.authenticationContext.Note.Update(note);
+                        await this.authenticationContext.SaveChangesAsync();
+                        return true;
+                    }
+                    else
+                    {
+                        throw new Exception("Date & time are required to set reminder");
+                    }
                 }
                 else
                 {
@@ -719,3 +750,4 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
     }
+}

@@ -410,5 +410,25 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
+       public async Task<bool> SetReminder(int noteID, DateTime dateTime, string userID)
+        {
+            try
+            {
+                if(noteID > 0)
+                {
+                    return await this.noteRL.SetReminder(noteID, dateTime, userID);
+                }
+                else
+                {
+                    throw new Exception("Please enter correct NoteID");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }

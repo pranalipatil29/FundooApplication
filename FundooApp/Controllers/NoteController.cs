@@ -490,7 +490,7 @@ namespace FundooApp.Controllers
                 else
                 {
                     success = false;
-                    message = "Failed";
+                    message = "Note doesn't exist";
                     return this.BadRequest(new { success, message });
                 }
             }
@@ -501,5 +501,39 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new {success, message });
             }
         }
+
+        [HttpPut]
+        [Route("{noteID}/Reminder")]
+        public async Task<IActionResult> SetReminder(int noteID, DateTime dateTime)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+
+                var result = await this.noteBL.SetReminder(noteID, dateTime, userID);
+
+                if(result)
+                {
+                    success = true;
+                    message = "Reminder Added ";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note doesn't exist";
+                    return this.Ok(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }        
     }
 }
