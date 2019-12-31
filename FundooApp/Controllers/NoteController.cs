@@ -534,6 +534,39 @@ namespace FundooApp.Controllers
                 message = exception.Message;
                 return this.BadRequest(new { success, message });
             }
-        }        
+        }  
+        
+        [HttpDelete]
+        [Route("{noteID}/Reminder")]
+        public async Task<IActionResult> RemoveReminder(int noteID)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+                var result = await this.noteBL.RemoveReminder(noteID, userID);
+
+                if (result)
+                {
+                    success = true;
+                    message = "Reminder Removed ";
+                    return this.Ok(new { success, message });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note doesn't exist";
+                    return this.Ok(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
     }
 }

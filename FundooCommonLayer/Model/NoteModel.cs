@@ -66,7 +66,7 @@ namespace FundooCommonLayer.Model
         /// The reminder.
         /// </value>
         [Column(TypeName = "DateTime")]
-        public DateTime Reminder { get; set; }
+        public DateTime? Reminder { get; set; }
 
         /// <summary>
         /// Gets or sets the collaborator.

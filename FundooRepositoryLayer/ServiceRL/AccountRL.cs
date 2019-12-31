@@ -205,7 +205,7 @@ namespace FundooRepositoryLayer.ServiceRL
                       new Claim("EmailID", user.Email.ToString())
                    }),
 
-                    Expires = DateTime.UtcNow.AddMinutes(5),
+                    Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 

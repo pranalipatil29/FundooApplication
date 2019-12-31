@@ -430,5 +430,24 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        public async Task<bool> RemoveReminder(int noteId, string userID)
+        {
+            try
+            {
+                if(noteId > 0)
+                {
+                    return await this.noteRL.RemoveReminder(noteId, userID);
+                }
+                else
+                {
+                    throw new Exception("Please enter correct NoteID");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }

@@ -103,5 +103,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         Task<bool> ChangeColor(int noteID, string color, string userID);
 
         Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
+
+        Task<bool> RemoveReminder(int noteId, string userID);
     }
 }

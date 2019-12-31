@@ -253,7 +253,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
+                          //  Reminder = note.Reminder
                         };
 
                         list.Add(notes);
@@ -294,7 +294,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         IsArchive = data.IsArchive,
                         IsPin = data.IsPin,
                         IsTrash = data.IsTrash,
-                        Reminder = data.Reminder
+                    //    Reminder = data.Reminder
                     };
 
                     // returns the note info
@@ -426,7 +426,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
+                           // Reminder = note.Reminder
                         };
 
                         // add note into list
@@ -561,7 +561,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
+                          //  Reminder = note.Reminder
                         };
 
                         // add note into list
@@ -652,7 +652,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
+                         //   Reminder = note.Reminder
                         };
 
                         list.Add(notes);
@@ -749,5 +749,29 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+       public async Task<bool> RemoveReminder(int noteId, string userID)
+        {
+            try
+            {
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteId).FirstOrDefault();
+                if(note!= null && note.IsTrash == false)
+                {
+                    note.Reminder = null;
+                    this.authenticationContext.Note.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }
