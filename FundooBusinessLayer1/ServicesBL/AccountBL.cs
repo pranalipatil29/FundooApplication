@@ -20,6 +20,7 @@ namespace FundooBusinessLayer1.ServicesBL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// this class is used to check the business logic of application
@@ -83,7 +84,7 @@ namespace FundooBusinessLayer1.ServicesBL
         /// EmailId or Password Required
         /// or
         /// </exception>
-        public async Task<LoginResponse> Login(LoginModel loginModel)
+        public async Task<AccountResponse> Login(LoginModel loginModel)
         {
             try
             {
@@ -208,13 +209,13 @@ namespace FundooBusinessLayer1.ServicesBL
         /// invalid token
         /// or
         /// </exception>
-        public async Task<string> GenerateToken(LoginResponse loginResponse)
+        public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
             try
             {
-                if (loginResponse != null)
+                if (accountResponse != null)
                 {
-                    var result = await this.accountRL.GenerateToken(loginResponse);
+                    var result = await this.accountRL.GenerateToken(accountResponse);
                     return result;
                 }
                 else
@@ -225,6 +226,27 @@ namespace FundooBusinessLayer1.ServicesBL
             catch (Exception exceptiion)
             {
                 throw new Exception(exceptiion.Message);
+            }
+        }
+
+        public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile)
+        {
+            try
+            {
+                // ckeck whether emailID is exist or not
+                if (emailID != null)
+                {
+                    // if user entered correct note id then pass that id, user id and image to repository layer method
+                    return await this.accountRL.ChangeProfilePicture(emailID, formFile);
+                }
+                else
+                {
+                    throw new Exception("User not found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
             }
         }
     }

@@ -46,11 +46,11 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Initializes a new instance of the <see cref="NoteRL"/> class.
         /// </summary>
         /// <param name="authenticationContext">The authentication context.</param>
-        public NoteRL(AuthenticationContext authenticationContext,IOptions<ApplicationSetting> applSetting)
+        public NoteRL(AuthenticationContext authenticationContext, IOptions<ApplicationSetting> applSetting)
         {
             this.applicationSetting = applSetting.Value;
             this.authenticationContext = authenticationContext;
-         
+
         }
 
         /// <summary>
@@ -624,7 +624,10 @@ namespace FundooRepositoryLayer.ServiceRL
                         note.IsPin = false;
                     }
 
+                    // update the note info in note table
                     this.authenticationContext.Note.Update(note);
+
+                    // saving the changes in table
                     await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
@@ -643,13 +646,17 @@ namespace FundooRepositoryLayer.ServiceRL
         {
             try
             {
+                // find the required notes from note table
                 var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.IsTrash == true);
                 var list = new List<NoteResponse>();
 
+                // check whether required notes are exist or not
                 if (data != null)
                 {
+                    // iterates the loop for every notes
                     foreach (var note in data)
                     {
+                        // get info of each note
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
@@ -664,9 +671,11 @@ namespace FundooRepositoryLayer.ServiceRL
                             Reminder = note.Reminder
                         };
 
+                        // adding note into list
                         list.Add(notes);
                     }
 
+                    // returning the list of notes
                     return list;
                 }
                 else
@@ -680,22 +689,47 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> RestoreFromTrash(int noteID, string userID)
+        public async Task<NoteResponse> RestoreFromTrash(int noteID, string userID)
         {
             try
             {
+                // find the required note from note table
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
+                // check whether required note is exist or not
                 if (note != null && note.IsTrash)
                 {
+                    // restore the note form trash
                     note.IsTrash = false;
+
+                    // update the changes in note table
                     this.authenticationContext.Update(note);
+
+                    // saving the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
-                    return true;
+
+                    // get the note info
+                    var data = new NoteResponse()
+                    {
+                        NoteID = note.NoteID,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Collaborator = note.Collaborator,
+                        Color = note.Color,
+                        Image = note.Image,
+                        IsArchive = note.IsArchive,
+                        IsPin = note.IsPin,
+                        IsTrash = note.IsTrash,
+                        Reminder = note.Reminder
+                    };
+                   
+                    // returning the note info
+                    return data;
                 }
                 else
                 {
-                    return false;
+                    // if not doesn't exist then return null
+                    return null;
                 }
             }
             catch (Exception exception)
@@ -704,22 +738,47 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> ChangeColor(int noteID, string color, string userID)
+        public async Task<NoteResponse> ChangeColor(int noteID, string color, string userID)
         {
             try
             {
+                // find the required note from note table
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
+                // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    // set the new color to note
                     note.Color = color;
+
+                    // update the changes in note table
                     this.authenticationContext.Update(note);
+
+                    // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
-                    return true;
+
+                    // get the note info
+                    var data = new NoteResponse()
+                    {
+                        NoteID = note.NoteID,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Collaborator = note.Collaborator,
+                        Color = note.Color,
+                        Image = note.Image,
+                        IsArchive = note.IsArchive,
+                        IsPin = note.IsPin,
+                        IsTrash = note.IsTrash,
+                        Reminder = note.Reminder
+                    };
+
+                    // returning the note info
+                    return data;
                 }
                 else
                 {
-                    return false;
+                    // if note doesn't exist then return null
+                    return null;
                 }
             }
             catch (Exception exception)
@@ -728,29 +787,56 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> SetReminder(int noteID, DateTime dateTime, string userID)
+        public async Task<NoteResponse> SetReminder(int noteID, DateTime dateTime, string userID)
         {
             try
             {
+                // find the required note from note table
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
+                // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    // check whether user entered date and time are greater than current time
                     if (dateTime != null && dateTime > DateTime.Now)
                     {
+                        // set the new reminder
                         note.Reminder = dateTime;
+
+                        // updaye the info in note table 
                         this.authenticationContext.Note.Update(note);
+
+                        // save the changes in note table
                         await this.authenticationContext.SaveChangesAsync();
-                        return true;
+
+                        // get the note info
+                        var data = new NoteResponse()
+                        {
+                            NoteID = note.NoteID,
+                            Title = note.Title,
+                            Description = note.Description,
+                            Collaborator = note.Collaborator,
+                            Color = note.Color,
+                            Image = note.Image,
+                            IsArchive = note.IsArchive,
+                            IsPin = note.IsPin,
+                            IsTrash = note.IsTrash,
+                            Reminder = note.Reminder
+                        };
+
+                        // returning the note info
+                        return data;
                     }
                     else
                     {
+                        // if user entered time is less than current time then throw exception
                         throw new Exception("Date & time are required to set reminder");
                     }
                 }
                 else
                 {
-                    return false;
+                    // if note doesn't exist then return null
+                    return null;
                 }
             }
             catch (Exception exception)
@@ -759,21 +845,47 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> RemoveReminder(int noteId, string userID)
+        public async Task<NoteResponse> RemoveReminder(int noteId, string userID)
         {
             try
             {
+                // find the required note from note table
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteId).FirstOrDefault();
+
+                // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    // remove the reminder
                     note.Reminder = null;
+
+                    // update the changes in note table
                     this.authenticationContext.Note.Update(note);
+
+                    // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
-                    return true;
+
+                    // get the note info
+                    var data = new NoteResponse()
+                    {
+                        NoteID = note.NoteID,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Collaborator = note.Collaborator,
+                        Color = note.Color,
+                        Image = note.Image,
+                        IsArchive = note.IsArchive,
+                        IsPin = note.IsPin,
+                        IsTrash = note.IsTrash,
+                        Reminder = note.Reminder
+                    };
+
+                    // returning the note info
+                    return data;
                 }
                 else
                 {
-                    return false;
+                    // if required note doesn't exist then return null
+                    return null;
                 }
             }
             catch (Exception exception)
@@ -782,27 +894,53 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<bool> ImageUpload(int noteID, string userID, IFormFile formFile)
+        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile formFile)
         {
             try
             {
+                // find the required note from note table
                 var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID).FirstOrDefault();
 
+                // chcek whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    // send the API key,API secret key and cloud name to Upload Image class constructor
+                    UploadImage imageUpload = new UploadImage(this.applicationSetting.APIkey, this.applicationSetting.APISecret, this.applicationSetting.CloudName);
 
-                    UploadImage imageUpload = new UploadImage(this.applicationSetting.APIkey,this.applicationSetting.APISecret,this.applicationSetting.CloudName);
-                  
+                    // get the image url
                     var url = imageUpload.Upload(formFile);
 
+                    // set the image to note
                     note.Image = url;
+
+                    // update the changes in note table
                     this.authenticationContext.Note.Update(note);
+
+                    // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
-                    return true;
+
+                    // get the note info
+                    var data = new NoteResponse()
+                    {
+                        NoteID = note.NoteID,
+                        Title = note.Title,
+                        Description = note.Description,
+                        Collaborator = note.Collaborator,
+                        Color = note.Color,
+                        Image = note.Image,
+                        IsArchive = note.IsArchive,
+                        IsPin = note.IsPin,
+                        IsTrash = note.IsTrash,
+                        Reminder = note.Reminder
+                    };
+
+                    // returning the note info
+                    return data;
                 }
                 else
                 {
-                    return false;
+                    // if note doesn't exist then return null
+                    return null;
                 }
             }
             catch (Exception exception)
@@ -810,6 +948,5 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
-
     }
 }

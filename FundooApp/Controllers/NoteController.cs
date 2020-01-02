@@ -194,6 +194,11 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns> returns the info of specific note</returns>
         [HttpGet]
          [Route("{noteID}")]
         ////Post: /api/Note/DisplayNotes
@@ -202,9 +207,7 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-
                 var data = await this.noteBL.GetNote(noteID,userId);
-
                 bool success = false;
                 var message = string.Empty;
 
@@ -279,7 +282,6 @@ namespace FundooApp.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-
                 var notes = this.noteBL.GetArchivedNotes(userID);
 
                 if (notes.Count > 0)
@@ -374,6 +376,11 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Moves to trash.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPost]
         [Route("{noteID}/Trash")]
         public async Task<IActionResult> MoveToTrash(int noteID)
@@ -405,6 +412,10 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the notes from trash.
+        /// </summary>
+        /// <returns> returns the notes info from trash</returns>
         [HttpGet]
         [Route("Trash")]
         public async Task<IActionResult> GetNotesFromTrash()
@@ -412,7 +423,6 @@ namespace FundooApp.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-
                 var notes = this.noteBL.GetNotesFromTrash(userID);
                 var message = string.Empty;
                 bool success = false;
@@ -436,6 +446,11 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Restores from trash.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Restore")]
         public async Task<IActionResult> RestoreFromTrash(int noteID)
@@ -445,14 +460,13 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                var data = await this.noteBL.RestoreFromTrash(noteID, userId);
 
-                var result = await this.noteBL.RestoreFromTrash(noteID, userId);
-
-                if (result)
+                if (data != null)
                 {
                     success = true;
                     message = "Successfully Restored Note";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message, data });
                 }
                 else
                 {
@@ -469,6 +483,12 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Changes the color.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="changeColorRequest">The change color request.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Color")]
         public async Task<IActionResult> ChangeColor(int noteID, ChangeColorRequest changeColorRequest)
@@ -479,13 +499,13 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-                var result = await this.noteBL.ChangeColor(noteID, changeColorRequest.Color, userId);
+                var data = await this.noteBL.ChangeColor(noteID, changeColorRequest.Color, userId);
 
-                if(result)
+                if(data != null)
                 {
                     success = true;
                     message = "Successfully changed note color";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message, data });
                 }
                 else
                 {
@@ -502,6 +522,12 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Sets the reminder.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="dateTime">The date time.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Reminder")]
         public async Task<IActionResult> SetReminder(int noteID, DateTime dateTime)
@@ -513,46 +539,13 @@ namespace FundooApp.Controllers
             {
                 var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
 
-                var result = await this.noteBL.SetReminder(noteID, dateTime, userID);
+                var data = await this.noteBL.SetReminder(noteID, dateTime, userID);
 
-                if(result)
+                if(data != null)
                 {
                     success = true;
                     message = "Reminder Added ";
-                    return this.Ok(new { success, message });
-                }
-                else
-                {
-                    success = false;
-                    message = "Note doesn't exist";
-                    return this.Ok(new { success, message });
-                }
-            }
-            catch(Exception exception)
-            {
-                success = false;
-                message = exception.Message;
-                return this.BadRequest(new { success, message });
-            }
-        }  
-        
-        [HttpDelete]
-        [Route("{noteID}/Reminder")]
-        public async Task<IActionResult> RemoveReminder(int noteID)
-        {
-            bool success = false;
-            var message = string.Empty;
-
-            try
-            {
-                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
-                var result = await this.noteBL.RemoveReminder(noteID, userID);
-
-                if (result)
-                {
-                    success = true;
-                    message = "Reminder Removed ";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message ,data});
                 }
                 else
                 {
@@ -569,6 +562,50 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Removes the reminder.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns> returns the operation result</returns>
+        [HttpDelete]
+        [Route("{noteID}/Reminder")]
+        public async Task<IActionResult> RemoveReminder(int noteID)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+                var data = await this.noteBL.RemoveReminder(noteID, userID);
+
+                if (data != null)
+                {
+                    success = true;
+                    message = "Reminder Removed ";
+                    return this.Ok(new { success, message, data });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note doesn't exist";
+                    return this.Ok(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
+
+        /// <summary>
+        /// Images the upload.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Image")]
         public async Task<IActionResult> ImageUpload(int noteID, IFormFile formFile)
@@ -579,14 +616,13 @@ namespace FundooApp.Controllers
             try
             {
                 var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+                var data = await this.noteBL.ImageUpload(noteID, userID, formFile);
 
-                var result = await this.noteBL.ImageUpload(noteID, userID, formFile);
-
-                if(result)
+                if(data != null)
                 {
                     success = true;
                     message = "Image Uploaded ";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message, data });
                 }
                 else
                 {

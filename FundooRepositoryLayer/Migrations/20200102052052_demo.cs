@@ -47,7 +47,8 @@ namespace FundooRepositoryLayer.Migrations
                     IsFacebook = table.Column<bool>(nullable: true),
                     IsGoogle = table.Column<bool>(nullable: true),
                     UserType = table.Column<int>(type: "int", nullable: true),
-                    ServiceType = table.Column<string>(nullable: true)
+                    ServiceType = table.Column<string>(nullable: true),
+                    ProfilePicture = table.Column<string>(type: "nvarchar(150)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -79,7 +80,7 @@ namespace FundooRepositoryLayer.Migrations
                     UserID = table.Column<string>(nullable: true),
                     Title = table.Column<string>(type: "nvarchar(150)", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(150)", nullable: true),
-                    Reminder = table.Column<DateTime>(type: "DateTime", nullable: false),
+                    Reminder = table.Column<DateTime>(type: "DateTime", nullable: true),
                     Collaborator = table.Column<string>(type: "nvarchar(150)", nullable: true),
                     Color = table.Column<string>(type: "nvarchar(150)", nullable: true),
                     IsArchive = table.Column<bool>(nullable: false),

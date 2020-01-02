@@ -74,5 +74,8 @@ namespace FundooCommonLayer.Model
         /// </value>
         [ForeignKey("ServiceModel")]
         public string ServiceType { get; set; }
+
+        [Column (TypeName ="nvarchar(150)")]
+        public string ProfilePicture { get; set; }
     }
 }

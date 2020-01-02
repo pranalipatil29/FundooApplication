@@ -23,7 +23,9 @@ namespace FundooRepositoryLayer.ServiceRL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooCommonLayer.MSMQ;
+    using FundooRepositoryLayer.ImageUpload;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -109,7 +111,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="loginModel"> injecting login model</param>
         /// <returns> returns message indication whether operation is successful or not</returns>
-        public async Task<LoginResponse> LogIn(LoginModel loginModel)
+        public async Task<AccountResponse> LogIn(LoginModel loginModel)
         {
             try
             {
@@ -123,12 +125,13 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (user != null && userPassword)
                 {
                     // get the required user data 
-                    var data = new LoginResponse()
+                    var data = new AccountResponse()
                     {
                         FirstName = user.FirstName,
                         LastName = user.LastName,
                         EmailID = user.Email,
-                        UserName = user.UserName
+                        UserName = user.UserName,
+                        Profilepicture= user.ProfilePicture
                     };
 
                     // return the user data
@@ -150,9 +153,9 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="loginResponse">The login response.</param>
         /// <returns> returns the token</returns>
-        public async Task<string> GenerateToken(LoginResponse loginResponse)
+        public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
-            var user = await this.userManager.FindByEmailAsync(loginResponse.EmailID);
+            var user = await this.userManager.FindByEmailAsync(accountResponse.EmailID);
           
             // check whether user email id and password is found or not 
             if (user != null)
@@ -165,7 +168,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         new Claim("UserID", user.Id.ToString()),
                         new Claim("EmailID", user.Email.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(30),
+                    Expires = DateTime.UtcNow.AddMinutes(300),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -288,6 +291,49 @@ namespace FundooRepositoryLayer.ServiceRL
             else
             {
                 return false;
+            }
+        }
+
+        public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile)
+        {
+            try
+            {
+                // check whether user data already exist in the database or not
+                var user = await this.userManager.FindByEmailAsync(emailID);
+
+                // if user is exist or not
+                if (user != null)
+                {
+                    // send the API key,API secret key and cloud name to Upload Image class constructor
+                    UploadImage imageUpload = new UploadImage(this.applicationSettings.APIkey, this.applicationSettings.APISecret, this.applicationSettings.CloudName);
+
+                    // get the image url
+                    var url = imageUpload.Upload(formFile);
+
+                    // set the image to note
+                    user.ProfilePicture = url;
+                    var result = await this.userManager.UpdateAsync(user);
+
+                    // get the required user data 
+                    var data = new AccountResponse()
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        EmailID = user.Email,
+                        UserName = user.UserName,
+                        Profilepicture= user.ProfilePicture
+                    };
+
+                    return data;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
             }
         }
     }

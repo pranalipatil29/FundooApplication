@@ -201,5 +201,47 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
+
+        /// <summary>
+        /// Profiles the picture upload.
+        /// </summary>
+        /// <param name="formFile">The form file.</param>
+        /// <returns> returns the operation result</returns>
+        [HttpPut]
+        [Route("ProfilePicture")]
+        public async Task<IActionResult> ProfilePictureUpload(IFormFile formFile)
+        {
+            bool success = false;
+            var message = string.Empty;
+
+            try
+            {
+                // get the email ID of user
+                var emailID = HttpContext.User.Claims.First(s => s.Type == "EmailID").Value;
+
+                // pass the email ID and image to business layer method of account
+                var data = await this.accountBL.ChangeProfilePicture( emailID, formFile);
+
+                // check whether data is null or not
+                if (data != null)
+                {
+                    success = true;
+                    message = "Profile Picture is Uploaded ";
+                    return this.Ok(new { success, message, data });
+                }
+                else
+                {
+                    success = false;
+                    message = "user doesn't exist";
+                    return this.Ok(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
     }
 }

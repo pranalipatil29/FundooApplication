@@ -20,6 +20,7 @@ namespace FundooBusinessLayer1.InterfaceBL
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// creating interface for business layer
@@ -38,7 +39,7 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns> returns message indicating operation is done or not</returns>
-        Task<LoginResponse> Login(LoginModel loginModel);
+        Task<AccountResponse> Login(LoginModel loginModel);
 
         /// <summary>
         /// Forgets the password.
@@ -66,6 +67,8 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// </summary>
         /// <param name="loginResponse">The login response.</param>
         /// <returns> returns the token</returns>
-        Task<string> GenerateToken(LoginResponse loginResponse);
+        Task<string> GenerateToken(AccountResponse loginResponse);
+
+        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile);
     }
 }

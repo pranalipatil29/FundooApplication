@@ -21,7 +21,7 @@ namespace FundooCommonLayer.Model.Response
     /// <summary>
     /// Defining properties for handling login response
     /// </summary>
-    public class LoginResponse
+    public class AccountResponse
     {
         /// <summary>
         /// Gets or sets the first name.
@@ -54,5 +54,13 @@ namespace FundooCommonLayer.Model.Response
         /// The email identifier.
         /// </value>
         public string EmailID { get; set; }
+
+        /// <summary>
+        /// Gets or sets the profilepicture.
+        /// </summary>
+        /// <value>
+        /// The profilepicture.
+        /// </value>
+        public string Profilepicture { get; set; }
     }
 }

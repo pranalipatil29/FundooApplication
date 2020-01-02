@@ -17,6 +17,7 @@ namespace FundooRepositoryLayer.InterfaceRL
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// creating account interface for repository layer
@@ -35,7 +36,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns> returns message indicating operation result is successful or not</returns>
-        Task<LoginResponse> LogIn(LoginModel loginModel);
+        Task<AccountResponse> LogIn(LoginModel loginModel);
 
         /// <summary>
         /// Socials the login.
@@ -63,6 +64,14 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// </summary>
         /// <param name="loginResponse">The login response.</param>
         /// <returns> returns the token</returns>
-        Task<string> GenerateToken(LoginResponse loginResponse);
+        Task<string> GenerateToken(AccountResponse accountResponse);
+
+        /// <summary>
+        /// Images the upload.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns> returns the operation result</returns>
+        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile);
     }
 }

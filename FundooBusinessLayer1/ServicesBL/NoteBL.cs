@@ -336,12 +336,26 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Moves to trash.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct Note Id
+        /// or
+        /// </exception>
         public async Task<bool> MoveToTrash(int noteID, string userID)
         {
             try
             {
-                if(noteID > 0)
+                // ckeck whether user entered correct note id or not
+                if (noteID > 0)
                 {
+                    // if user entered correct note id then pass that id, user id to repository layer method
                     return await this.noteRL.MoveToTrash(noteID, userID);
                 }
                 else
@@ -355,16 +369,30 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Gets the notes from trash.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the note info from trash
+        /// </returns>
+        /// <exception cref="Exception">
+        /// User not found
+        /// or
+        /// </exception>
         public IList<NoteResponse> GetNotesFromTrash(string userID)
         {
             try
             {
-                if(userID != null)
+                // check whther user id is null or not
+                if (userID != null)
                 {
-                    return  this.noteRL.GetNotesFromTrash(userID);
+                    // if user id does not contains null value then pass that user id to repository layer method
+                    return this.noteRL.GetNotesFromTrash(userID);
                 }
                 else
                 {
+                    // if user id contains null value then throw exception
                     throw new Exception("User not found");
                 }
             }
@@ -374,12 +402,26 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       public async Task<bool> RestoreFromTrash(int noteId, string userID)
+        /// <summary>
+        /// Restores from trash.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct NoteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> RestoreFromTrash(int noteId, string userID)
         {
             try
             {
+                // ckeck whether user entered correct note id or not
                 if (noteId > 0)
                 {
+                    // if user entered correct note id then pass that id and user id to repository layer method
                     return await this.noteRL.RestoreFromTrash(noteId, userID);
                 }
                 else
@@ -393,12 +435,27 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       public async Task<bool> ChangeColor(int noteID, string color, string userID)
+        /// <summary>
+        /// Changes the color.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct NoteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> ChangeColor(int noteID, string color, string userID)
         {
             try
             {
-                if(noteID > 0 )
+                // ckeck whether user entered correct note id or not
+                if (noteID > 0 )
                 {
+                    // if user entered correct note id then pass that id, color and user id to repository layer method
                     return await this.noteRL.ChangeColor(noteID, color, userID);
                 }
                 else
@@ -412,12 +469,27 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       public async Task<bool> SetReminder(int noteID, DateTime dateTime, string userID)
+        /// <summary>
+        /// Sets the reminder.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct NoteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> SetReminder(int noteID, DateTime dateTime, string userID)
         {
             try
             {
-                if(noteID > 0)
+                // ckeck whether user entered correct note id or not
+                if (noteID > 0)
                 {
+                    // if user entered correct note id then pass that id, date and time value and user id to repository layer method
                     return await this.noteRL.SetReminder(noteID, dateTime, userID);
                 }
                 else
@@ -431,12 +503,26 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public async Task<bool> RemoveReminder(int noteId, string userID)
+        /// <summary>
+        /// Removes the reminder.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct NoteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> RemoveReminder(int noteId, string userID)
         {
             try
             {
-                if(noteId > 0)
+                // ckeck whether user entered correct note id or not
+                if (noteId > 0)
                 {
+                    // if user entered correct note id then pass that id and user id to repository layer method
                     return await this.noteRL.RemoveReminder(noteId, userID);
                 }
                 else
@@ -450,12 +536,27 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       public async Task<bool> ImageUpload(int noteID, string userID, IFormFile formFile)
+        /// <summary>
+        /// Images the upload.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please enter correct noteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile formFile)
         {
             try
             {
-                if(noteID > 0 )
+                // ckeck whether user entered correct note id or not
+                if (noteID > 0 )
                 {
+                    // if user entered correct note id then pass that id, user id and image to repository layer method
                     return await this.noteRL.ImageUpload(noteID, userID, formFile);
                 }
                 else
@@ -468,6 +569,5 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
-
     }
 }

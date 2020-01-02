@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace FundooRepositoryLayer.Migrations
 {
     [DbContext(typeof(AuthenticationContext))]
-    [Migration("20191231061046_demo")]
+    [Migration("20200102052052_demo")]
     partial class demo
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -93,7 +93,7 @@ namespace FundooRepositoryLayer.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("DateTime");
 
-                    b.Property<DateTime>("Reminder")
+                    b.Property<DateTime?>("Reminder")
                         .HasColumnType("DateTime");
 
                     b.Property<string>("Title")
@@ -288,6 +288,9 @@ namespace FundooRepositoryLayer.Migrations
                     b.Property<bool>("IsGoogle");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ServiceType");

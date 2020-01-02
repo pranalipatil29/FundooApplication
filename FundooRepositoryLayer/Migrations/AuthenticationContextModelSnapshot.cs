@@ -91,7 +91,7 @@ namespace FundooRepositoryLayer.Migrations
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("DateTime");
 
-                    b.Property<DateTime>("Reminder")
+                    b.Property<DateTime?>("Reminder")
                         .HasColumnType("DateTime");
 
                     b.Property<string>("Title")
@@ -286,6 +286,9 @@ namespace FundooRepositoryLayer.Migrations
                     b.Property<bool>("IsGoogle");
 
                     b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<string>("ProfilePicture")
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("ServiceType");

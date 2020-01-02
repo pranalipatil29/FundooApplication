@@ -61,7 +61,12 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns the list of note</returns>
         IList<NoteResponse> DisplayNotes(string userID);
 
-    
+        /// <summary>
+        /// Gets the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the operation result</returns>
         Task<NoteResponse> GetNote(int noteID, string userID);
 
         /// <summary>
@@ -96,18 +101,62 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns list of Pinned notes</returns>
         IList<NoteResponse> GetPinnedNotes(string userID);
 
+        /// <summary>
+        /// Moves to trash.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
         Task<bool> MoveToTrash(int noteID, string userID);
 
+        /// <summary>
+        /// Gets the notes from trash.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
         IList<NoteResponse> GetNotesFromTrash(string userID);
 
-        Task<bool> RestoreFromTrash(int noteId, string userID);
+        /// <summary>
+        /// Restores from trash.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
+        Task<NoteResponse> RestoreFromTrash(int noteId, string userID);
 
-        Task<bool> ChangeColor(int noteID, string color, string userID);
+        /// <summary>
+        /// Changes the color.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
+        Task<NoteResponse> ChangeColor(int noteID, string color, string userID);
 
-        Task<bool> SetReminder(int noteID, DateTime dateTime, string userID);
+        /// <summary>
+        /// Sets the reminder.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
+        Task<NoteResponse> SetReminder(int noteID, DateTime dateTime, string userID);
 
-        Task<bool> RemoveReminder(int noteId, string userID);
+        /// <summary>
+        /// Removes the reminder.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the operation result</returns>
+        Task<NoteResponse> RemoveReminder(int noteId, string userID);
 
-        Task<bool> ImageUpload(int noteID, string userID,IFormFile formFile);
+        /// <summary>
+        /// Images the upload.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns>returns the operation result</returns>
+        Task<NoteResponse> ImageUpload(int noteID, string userID,IFormFile formFile);
     }
 }
