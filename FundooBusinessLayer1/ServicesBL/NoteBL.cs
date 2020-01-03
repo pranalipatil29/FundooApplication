@@ -96,7 +96,8 @@ namespace FundooBusinessLayer.ServicesBL
                 if (noteID > 0)
                 {
                     // if user enter correct note id then pass that note id and user id to repository layer method to delete note
-                    return await this.noteRL.DeleteNote(noteID, userID);
+                    var result=await this.noteRL.DeleteNote(noteID, userID);
+                    return result;
                 }
                 else
                 {
@@ -213,7 +214,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// Please enter correct note id
         /// or
         /// </exception>
-        public async Task<bool> IsArchive(int noteID, bool archive, string userID)
+        public async Task<NoteResponse> IsArchive(int noteID, string userID)
         {
             try
             {
@@ -221,7 +222,7 @@ namespace FundooBusinessLayer.ServicesBL
                 if(noteID > 0)
                 {
                     // if user entered correct note id then pass that id, archive value and user id to repository layer method
-                    return await this.noteRL.IsArchive(noteID, archive, userID);
+                    return await this.noteRL.IsArchive(noteID, userID);
                 }
                 else
                 {
@@ -281,7 +282,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// Please enter correct Note ID
         /// or
         /// </exception>
-        public async Task<bool> IsPin(int noteID, bool isPin, string userID)
+        public async Task<NoteResponse> IsPin(int noteID, string userID)
         {
             try
             {
@@ -289,7 +290,7 @@ namespace FundooBusinessLayer.ServicesBL
                 if (noteID > 0)
                 {
                     // if user entered correct note id then pass that id, Pin value and user id to repository layer method
-                    return await this.noteRL.IsPin(noteID, isPin, userID);
+                    return await this.noteRL.IsPin(noteID, userID);
                 }
                 else
                 {
@@ -414,7 +415,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// Please enter correct NoteID
         /// or
         /// </exception>
-        public async Task<NoteResponse> RestoreFromTrash(int noteId, string userID)
+        public async Task<NoteResponse> RestoreNote(int noteId, string userID)
         {
             try
             {
@@ -422,7 +423,7 @@ namespace FundooBusinessLayer.ServicesBL
                 if (noteId > 0)
                 {
                     // if user entered correct note id then pass that id and user id to repository layer method
-                    return await this.noteRL.RestoreFromTrash(noteId, userID);
+                    return await this.noteRL.RestoreNote(noteId, userID);
                 }
                 else
                 {
@@ -549,7 +550,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// Please enter correct noteID
         /// or
         /// </exception>
-        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile formFile)
+        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file)
         {
             try
             {
@@ -557,7 +558,7 @@ namespace FundooBusinessLayer.ServicesBL
                 if (noteID > 0 )
                 {
                     // if user entered correct note id then pass that id, user id and image to repository layer method
-                    return await this.noteRL.ImageUpload(noteID, userID, formFile);
+                    return await this.noteRL.ImageUpload(noteID, userID, file);
                 }
                 else
                 {

@@ -32,13 +32,13 @@ namespace XUnitTestCases
     {
         AccountController accountController;
         private readonly IAccountBL accountBL ;
-        private readonly IAccountRL accountRL ;
+      //  private readonly IAccountRL accountRL ;
 
-        public AccountTestCases(IAccountRL accountRL)
+        public AccountTestCases()
         {
-            this.accountRL = accountRL;
-            accountBL = new AccountBL(this.accountRL);
-            accountController = new AccountController(accountBL);
+            var repository = new Mock<IAccountRL>();
+            this.accountBL = new AccountBL(repository.Object);
+            accountController = new AccountController(this.accountBL);
         }
 
         //[Fact]
@@ -61,38 +61,31 @@ namespace XUnitTestCases
         //    Assert.IsType<BadRequestObjectResult>(result);
         //}
 
-        [Fact]
-        public async Task TestLoginForBadRequest()
-        {
-            var repository = new Mock<IAccountRL>();
-            var business = new AccountBL(repository.Object);
-            var controller = new AccountController(business);
+        //[Fact]
+        //public async Task TestLoginForBadRequest()
+        //{
+           
+        //    LoginModel data = new LoginModel()
+        //    {
+        //        EmailId = "pranalipatil2996@gmail.com",
+        //        Password = ""
+        //    };
 
-            LoginModel data = new LoginModel()
-            {
-                EmailId = "pranalipatil2996@gmail.com",
-                Password = ""
-            };
-
-            var result = await controller.Login(data);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+        //    var result = await accountController.Login(data);
+        //    Assert.IsType<BadRequestObjectResult>(result);
+        //}
 
         [Fact]
         public async Task TestLoginForNotNull()
         {
-            var repository = new Mock<IAccountRL>();
-            var business = new AccountBL(repository.Object);
-            var controller = new AccountController(business);
-
+           
             LoginModel model = new LoginModel()
             {
                EmailId = "pranali2996@gmail.com",
                Password="Pranali@29"                
             };
 
-            // var data = business.Login(model);
-            var result = await controller.Login(model);
+            var result = await accountController.Login(model);
             Assert.NotNull(result);
         }
 
@@ -110,7 +103,7 @@ namespace XUnitTestCases
 
             controller.ModelState.AddModelError("EmailId", "Required");
             
-            var result = await controller.Login(model);
+            var result = await accountController.Login(model);
             Assert.IsType<BadRequestObjectResult>(result);
         }
 

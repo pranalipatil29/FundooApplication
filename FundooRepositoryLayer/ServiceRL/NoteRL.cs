@@ -333,60 +333,81 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Note doesn't exist
         /// or
         /// </exception>
-        public async Task<bool> IsArchive(int noteID, bool archive, string userID)
+        public async Task<NoteResponse> IsArchive(int noteID, string userID)
         {
             try
             {
                 // find required note from note table 
-                var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID && s.IsTrash == false).FirstOrDefault();
+                var data = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID && s.IsTrash == false).FirstOrDefault();
 
                 // check whether required note is found or not
-                if (note != null)
+                if (data != null)
                 {
                     // if required note is found then check note is archived or not
-                    if (!note.IsArchive && archive)
+                    if (!data.IsArchive)
                     {
                         // if note is not archived then make it archived 
-                        note.IsArchive = true;
+                        data.IsArchive = true;
+                        data.ModifiedDate = DateTime.Now;
 
                         // check whether the note is pinned or not
-                        if (note.IsPin)
+                        if (data.IsPin)
                         {
                             // make it unpinned
-                            note.IsPin = false;
+                            data.IsPin = false;
                         }
 
                         // update the changes in table
-                        this.authenticationContext.Note.Update(note);
+                        this.authenticationContext.Note.Update(data);
 
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
-                        return true;
-                    }
-                    else if (note.IsArchive && !archive)
-                    {
-                        // if note is archived then make it UnArchived 
-                        note.IsArchive = false;
 
-                        // update the changes in table
-                        this.authenticationContext.Note.Update(note);
+                        var note = new NoteResponse()
+                        {
+                            NoteID = data.NoteID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborator = data.Collaborator,
+                            Color = data.Color,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            Reminder = data.Reminder
+                        };
 
-                        // save the changes
-                        await this.authenticationContext.SaveChangesAsync();
-                        return false;
+                        // returns the note info
+                        return note;
                     }
                     else
                     {
-                        // check whether note is already archived or not
-                        if (note.IsArchive && archive)
+                        // if note is archived then make it UnArchived 
+                        data.IsArchive = false;
+                        data.ModifiedDate = DateTime.Now;
+
+                        // update the changes in table
+                        this.authenticationContext.Note.Update(data);
+
+                        // save the changes
+                        await this.authenticationContext.SaveChangesAsync();
+
+                        var note = new NoteResponse()
                         {
-                            throw new Exception("Note is already archived");
-                        }
-                        else
-                        {
-                            // if note is doesn't archived and user wants to unarchive it
-                            throw new Exception("Note doesn't archived");
-                        }
+                            NoteID = data.NoteID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborator = data.Collaborator,
+                            Color = data.Color,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            Reminder = data.Reminder
+                        };
+
+                        // returns the note info
+                        return note;
                     }
                 }
                 else
@@ -470,58 +491,80 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Note doesn't exist
         /// or
         /// </exception>
-        public async Task<bool> IsPin(int noteID, bool isPin, string userID)
+        public async Task<NoteResponse> IsPin(int noteID, string userID)
         {
             try
             {
                 // find the required note from note table
-                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
+                var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
 
                 // check whether user have required note or not
-                if (note != null)
+                if (data != null)
                 {
                     // check whether user required note is pinned or not 
-                    if (!note.IsPin && isPin)
+                    if (!data.IsPin)
                     {
                         // if user required note is not pinned then make it pinned
-                        note.IsPin = true;
+                        data.IsPin = true;
+                        data.ModifiedDate = DateTime.Now;
 
                         // check whether user entered note is archived or not
-                        if (note.IsArchive)
+                        if (data.IsArchive)
                         {
                             // if user entered note is archived then make it unArchived
-                            note.IsArchive = false;
+                            data.IsArchive = false;
                         }
 
                         // update the changes into table
-                        this.authenticationContext.Note.Update(note);
+                        this.authenticationContext.Note.Update(data);
 
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
-                        return true;
-                    }
-                    else if (note.IsPin && !isPin)
-                    {
-                        // if user required note is pinned then make it UnPinned
-                        note.IsPin = false;
+                        var note = new NoteResponse()
+                        {
+                            NoteID = data.NoteID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborator = data.Collaborator,
+                            Color = data.Color,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            Reminder = data.Reminder
+                        };
 
-                        // update the changes into table
-                        this.authenticationContext.Note.Update(note);
-
-                        // save the changes
-                        await this.authenticationContext.SaveChangesAsync();
-                        return false;
+                        // returns the note info
+                        return note;
                     }
                     else
                     {
-                        if (note.IsPin && isPin)
+                        // if user required note is pinned then make it UnPinned
+                        data.IsPin = false;
+                        data.ModifiedDate = DateTime.Now;
+
+                        // update the changes into table
+                        this.authenticationContext.Note.Update(data);
+
+                        // save the changes
+                        await this.authenticationContext.SaveChangesAsync();
+
+                        var note = new NoteResponse()
                         {
-                            throw new Exception("Note is already pinned");
-                        }
-                        else
-                        {
-                            throw new Exception("Note doesn't pinned");
-                        }
+                            NoteID = data.NoteID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborator = data.Collaborator,
+                            Color = data.Color,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            Reminder = data.Reminder
+                        };
+
+                        // returns the note info
+                        return note;
                     }
                 }
                 else
@@ -618,6 +661,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (note != null && !note.IsTrash)
                 {
                     note.IsTrash = true;
+                    note.ModifiedDate = DateTime.Now;
 
                     if (note.IsPin)
                     {
@@ -689,7 +733,7 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<NoteResponse> RestoreFromTrash(int noteID, string userID)
+        public async Task<NoteResponse> RestoreNote(int noteID, string userID)
         {
             try
             {
@@ -701,6 +745,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     // restore the note form trash
                     note.IsTrash = false;
+                    note.ModifiedDate = DateTime.Now;
 
                     // update the changes in note table
                     this.authenticationContext.Update(note);
@@ -722,7 +767,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         IsTrash = note.IsTrash,
                         Reminder = note.Reminder
                     };
-                   
+
                     // returning the note info
                     return data;
                 }
@@ -750,6 +795,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     // set the new color to note
                     note.Color = color;
+                    note.ModifiedDate = DateTime.Now;
 
                     // update the changes in note table
                     this.authenticationContext.Update(note);
@@ -802,6 +848,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         // set the new reminder
                         note.Reminder = dateTime;
+                        note.ModifiedDate = DateTime.Now;
 
                         // updaye the info in note table 
                         this.authenticationContext.Note.Update(note);
@@ -857,6 +904,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 {
                     // remove the reminder
                     note.Reminder = null;
+                    note.ModifiedDate = DateTime.Now;
 
                     // update the changes in note table
                     this.authenticationContext.Note.Update(note);
@@ -894,7 +942,7 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile formFile)
+        public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file)
         {
             try
             {
@@ -908,10 +956,11 @@ namespace FundooRepositoryLayer.ServiceRL
                     UploadImage imageUpload = new UploadImage(this.applicationSetting.APIkey, this.applicationSetting.APISecret, this.applicationSetting.CloudName);
 
                     // get the image url
-                    var url = imageUpload.Upload(formFile);
+                    var url = imageUpload.Upload(file);
 
                     // set the image to note
                     note.Image = url;
+                    note.ModifiedDate = DateTime.Now;
 
                     // update the changes in note table
                     this.authenticationContext.Note.Update(note);

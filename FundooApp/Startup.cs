@@ -71,7 +71,10 @@ namespace FundooApp
 
             services.AddTransient<ILabelBL, LabelBL>();
             services.AddTransient<ILabelRL, LabelRL>();
-            
+
+            services.AddTransient<IAdminBL, AdminBL>();
+            services.AddTransient<IAdminRL, AdminRL>();
+
             services.Configure<ApplicationSetting>(this.Configuration.GetSection("ApplicationSetting"));
 
             services.AddDbContext<AuthenticationContext>(Options =>

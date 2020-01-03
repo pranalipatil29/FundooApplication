@@ -10,12 +10,10 @@ C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\Fund
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooBusinessLayer.dll
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooCommonLayer.dll
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.dll
-C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\MSMQReceiver.dll
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooApp.pdb
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooBusinessLayer.pdb
-C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb
-C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\MSMQReceiver.pdb
+C:\Users\User\source\repos\FundooApp\XUnitTestCases\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\obj\Debug\netcoreapp2.1\XUnitTestCases.csprojAssemblyReference.cache
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\obj\Debug\netcoreapp2.1\XUnitTestCases.csproj.CoreCompileInputs.cache
 C:\Users\User\source\repos\FundooApp\XUnitTestCases\obj\Debug\netcoreapp2.1\XUnitTestCases.AssemblyInfoInputs.cache

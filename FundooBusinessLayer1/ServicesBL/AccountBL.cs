@@ -98,7 +98,7 @@ namespace FundooBusinessLayer1.ServicesBL
                 else
                 {
                     // otherwise throw exception
-                    throw new Exception("EmailId or Password Requirred");
+                    throw new Exception("EmailId and Password is Requirred");
                 }
             }
             catch (Exception exception)
@@ -233,15 +233,15 @@ namespace FundooBusinessLayer1.ServicesBL
         {
             try
             {
-                // ckeck whether emailID is exist or not
-                if (emailID != null)
+                // ckeck whether user passed correct image info or not
+                if (formFile != null)
                 {
-                    // if user entered correct note id then pass that id, user id and image to repository layer method
+                    // pass user email id and image to repository layer method
                     return await this.accountRL.ChangeProfilePicture(emailID, formFile);
                 }
                 else
                 {
-                    throw new Exception("User not found");
+                    throw new Exception("Please select correct image");
                 }
             }
             catch (Exception exception)

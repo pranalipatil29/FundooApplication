@@ -69,7 +69,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns true indicating note is Archived or false to indicate note is UnArchived </returns>
-        Task<bool> IsArchive(int noteID, bool archive, string userID);
+        Task<NoteResponse> IsArchive(int noteID, string userID);
 
         /// <summary>
         /// Gets the archived notes.
@@ -82,10 +82,9 @@ namespace FundooBusinessLayer.InterfaceBL
         /// Determines whether the specified note identifier is pin.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>  returns true indicating note is Pinned or false to indicate note is UnPinned</returns>
-        Task<bool> IsPin(int noteID, bool isPin, string userID);
+        Task<NoteResponse> IsPin(int noteID, string userID);
 
         /// <summary>
         /// Gets the pinned notes.
@@ -115,7 +114,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="noteId">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the operation result</returns>
-        Task<NoteResponse> RestoreFromTrash(int noteId, string userID);
+        Task<NoteResponse> RestoreNote(int noteId, string userID);
 
         /// <summary>
         /// Changes the color.
@@ -150,6 +149,6 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="userID">The user identifier.</param>
         /// <param name="formFile">The form file.</param>
         /// <returns> returns the operation result</returns>
-        Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile formFile);
+        Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
     }
 }

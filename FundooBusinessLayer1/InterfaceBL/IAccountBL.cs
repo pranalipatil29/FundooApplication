@@ -67,8 +67,14 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// </summary>
         /// <param name="loginResponse">The login response.</param>
         /// <returns> returns the token</returns>
-        Task<string> GenerateToken(AccountResponse loginResponse);
+        Task<string> GenerateToken(AccountResponse accountResponse);
 
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns> returns the operation result</returns>
         Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile);
     }
 }
