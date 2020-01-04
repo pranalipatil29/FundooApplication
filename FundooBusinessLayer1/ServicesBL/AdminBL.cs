@@ -22,7 +22,7 @@ namespace FundooBusinessLayer.ServicesBL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
-   
+
     public class AdminBL : IAdminBL
     {
         private readonly IAdminRL adminRL;
@@ -32,11 +32,11 @@ namespace FundooBusinessLayer.ServicesBL
             this.adminRL = adminRL;
         }
 
-      public async Task<AccountResponse> Login(LoginModel loginModel)
+        public async Task<AccountResponse> Login(LoginModel loginModel)
         {
             try
             {
-                if(loginModel != null)
+                if (loginModel != null)
                 {
                     var result = await this.adminRL.Login(loginModel);
 
@@ -47,7 +47,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("EmailID and Password is required");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -100,7 +100,7 @@ namespace FundooBusinessLayer.ServicesBL
         {
             try
             {
-               return this.adminRL.GetUserStatistics();
+                return this.adminRL.GetUserStatistics();
             }
             catch (Exception exception)
             {
@@ -115,11 +115,29 @@ namespace FundooBusinessLayer.ServicesBL
             {
                 return this.adminRL.UsersInfo();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
+        public IList<AccountResponse> SearchUser(string name)
+        {
+            try
+            {
+                if (name != null)
+                {
+                    return this.adminRL.SearchUser(name);
+                }
+                else
+                {
+                    throw new Exception("Please enter UserName");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

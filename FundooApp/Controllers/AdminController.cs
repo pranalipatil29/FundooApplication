@@ -143,7 +143,6 @@ namespace FundooApp.Controllers
             {
                 success = false;
                 message = exception.Message;
-
                 return this.BadRequest(new { success, message });
             }
         }
@@ -176,9 +175,40 @@ namespace FundooApp.Controllers
             {
                 success = false;
                 message = exception.Message;
-
                 return this.BadRequest(new { success, message });
             }
         }
+
+        [HttpGet]
+        [Route("SearchUser")]
+        public async Task<IActionResult> SearchUser(string name)
+        {
+            var message = string.Empty;
+            bool success = false;
+
+            try
+            {
+                IList<AccountResponse> result = this.adminBL.SearchUser(name);
+
+                if(result.Count > 0)
+                {
+                    success = true;
+                    return this.BadRequest(new { success, result });
+                }
+                else
+                {
+                    success = false;
+                    message = "user not found";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
+
     }
 }

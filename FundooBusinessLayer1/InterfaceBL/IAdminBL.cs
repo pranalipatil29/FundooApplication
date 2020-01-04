@@ -32,5 +32,7 @@ namespace FundooBusinessLayer.InterfaceBL
         Task<string> GenerateToken(AccountResponse accountResponse);
 
         IList<AccountResponse> UsersInfo();
+
+        IList<AccountResponse> SearchUser(string name);
     }
 }

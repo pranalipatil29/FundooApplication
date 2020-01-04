@@ -209,5 +209,41 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+        public IList<AccountResponse> SearchUser(string name)
+        {
+            try
+            {
+                var users = this.authenticationContext.UserDataTable.Where(s => (s.FirstName == name || s.LastName == name) && s.UserType == 0);
+                var list = new List<AccountResponse>();
+
+                if (users != null)
+                {
+                    foreach (var data in users)
+                    {
+                        var user = new AccountResponse()
+                        {
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            UserName = data.UserName,
+                            EmailID = data.Email,
+                            Profilepicture = data.ProfilePicture,
+                            ServiceType = data.ServiceType
+                        };
+
+                        list.Add(user);
+                    }
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
