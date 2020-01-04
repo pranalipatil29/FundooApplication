@@ -20,6 +20,7 @@ namespace FundooApp.Controllers
     using System.Threading.Tasks;
     using FundooBusinessLayer.InterfaceBL;
     using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Response;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -130,6 +131,39 @@ namespace FundooApp.Controllers
                     success = true;
                     message = "User statistics Info";
                     return this.Ok(new { success, message , users });
+                }
+                else
+                {
+                    success = false;
+                    message = "users not found";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+
+                return this.BadRequest(new { success, message });
+            }
+        }
+
+        [HttpGet]
+        [Route("UsersList")]
+        public async Task<IActionResult> GetUsersInfo()
+        {
+            var message = string.Empty;
+            bool success = false;
+
+            try
+            {
+                IList<AccountResponse> users = this.adminBL.UsersInfo();
+
+                if(users.Count > 0)
+                {
+                    success = true;
+                    message = "Users Info";
+                    return this.Ok(new { success, message, users });
                 }
                 else
                 {

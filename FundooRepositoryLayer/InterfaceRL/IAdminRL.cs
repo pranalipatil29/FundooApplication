@@ -30,5 +30,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         Dictionary<string, int> GetUserStatistics();
 
         Task<string> GenerateToken(AccountResponse accountResponse);
+
+        IList<AccountResponse> UsersInfo();
     }
 }

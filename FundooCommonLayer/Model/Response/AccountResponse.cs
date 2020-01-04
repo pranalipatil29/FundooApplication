@@ -62,5 +62,13 @@ namespace FundooCommonLayer.Model.Response
         /// The profilepicture.
         /// </value>
         public string Profilepicture { get; set; }
+
+        /// <summary>
+        /// Gets or sets the type of the service.
+        /// </summary>
+        /// <value>
+        /// The type of the service.
+        /// </value>
+        public string ServiceType { get; set; }
     }
 }

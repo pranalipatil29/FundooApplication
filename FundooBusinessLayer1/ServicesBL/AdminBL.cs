@@ -108,5 +108,18 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+
+        public IList<AccountResponse> UsersInfo()
+        {
+            try
+            {
+                return this.adminRL.UsersInfo();
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }

@@ -30,6 +30,7 @@ namespace FundooBusinessLayer.InterfaceBL
         Dictionary<string, int> GetUserStatistics();
 
         Task<string> GenerateToken(AccountResponse accountResponse);
-      
+
+        IList<AccountResponse> UsersInfo();
     }
 }

@@ -131,7 +131,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         LastName = user.LastName,
                         EmailID = user.Email,
                         UserName = user.UserName,
-                        Profilepicture= user.ProfilePicture
+                        Profilepicture= user.ProfilePicture,
+                        ServiceType =user.ServiceType
                     };
 
                     // return the user data
@@ -285,7 +286,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         LastName = user.LastName,
                         EmailID = user.Email,
                         UserName = user.UserName,
-                        Profilepicture= user.ProfilePicture
+                        Profilepicture= user.ProfilePicture,
+                        ServiceType= user.ServiceType
                     };
 
                     // returning user data

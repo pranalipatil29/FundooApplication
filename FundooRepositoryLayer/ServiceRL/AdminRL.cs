@@ -162,8 +162,8 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 var advance = this.authenticationContext.UserDataTable.Where(s => s.ServiceType == "Advance" && s.UserType == 0);
 
-                dictionary.Add("Basic", basic.Count());
-                dictionary.Add("Advance", advance.Count());
+                dictionary.Add("Basic Service", basic.Count());
+                dictionary.Add("Advance service", advance.Count());
 
                 return dictionary;
 
@@ -174,5 +174,40 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        public IList<AccountResponse> UsersInfo()
+        {
+            try
+            {
+                var users = this.authenticationContext.UserDataTable.Where(s => s.UserType == 0);
+                var list = new List<AccountResponse>();
+
+                if(users != null)
+                {
+                    foreach(var data in users)
+                    {
+                        var user = new AccountResponse()
+                        {
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            UserName = data.UserName,
+                            EmailID = data.Email,
+                            Profilepicture = data.ProfilePicture,
+                            ServiceType= data.ServiceType
+                        };
+
+                        list.Add(user);
+                    }
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
