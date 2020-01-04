@@ -27,6 +27,8 @@ namespace FundooBusinessLayer.InterfaceBL
 
         Task<AccountResponse > Login(LoginModel loginModel);
 
+        Dictionary<string, int> GetUserStatistics();
+
         Task<string> GenerateToken(AccountResponse accountResponse);
       
     }

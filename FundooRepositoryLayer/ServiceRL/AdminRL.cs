@@ -17,11 +17,13 @@ namespace FundooRepositoryLayer.ServiceRL
     using System;
     using System.Collections.Generic;
     using System.IdentityModel.Tokens.Jwt;
+    using System.Linq;
     using System.Security.Claims;
     using System.Text;
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
+    using FundooRepositoryLayer.Context;
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
@@ -35,11 +37,15 @@ namespace FundooRepositoryLayer.ServiceRL
 
         private readonly ApplicationSetting applicationSettings;
 
-        public AdminRL(UserManager<ApplicationModel> userManager, SignInManager<ApplicationModel> signInManager, IOptions<ApplicationSetting> appSettings)
+        private AuthenticationContext authenticationContext;
+
+
+        public AdminRL(UserManager<ApplicationModel> userManager, SignInManager<ApplicationModel> signInManager, IOptions<ApplicationSetting> appSettings, AuthenticationContext authenticationContext)
         {
             this.userManager = userManager;
             this.signinManager = signInManager;
             this.applicationSettings = appSettings.Value;
+            this.authenticationContext = authenticationContext;
         }
 
         public async Task<bool> Register(RegistrationModel registrationModel)
@@ -130,7 +136,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         new Claim("UserID", user.Id.ToString()),
                         new Claim("EmailID", user.Email.ToString())
                     }),
-                    Expires = DateTime.UtcNow.AddMinutes(300),
+                    Expires = DateTime.UtcNow.AddDays(1),
                     SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(this.applicationSettings.JWTSecret)), SecurityAlgorithms.HmacSha256Signature)
                 };
 
@@ -143,6 +149,28 @@ namespace FundooRepositoryLayer.ServiceRL
             else
             {
                 return null;
+            }
+        }
+
+        public Dictionary<string, int> GetUserStatistics()
+        {
+            try
+            {
+                Dictionary<string, int> dictionary = new Dictionary<string, int>();
+
+                var basic = this.authenticationContext.UserDataTable.Where(s => s.ServiceType == "Basic" && s.UserType == 0);
+
+                var advance = this.authenticationContext.UserDataTable.Where(s => s.ServiceType == "Advance" && s.UserType == 0);
+
+                dictionary.Add("Basic", basic.Count());
+                dictionary.Add("Advance", advance.Count());
+
+                return dictionary;
+
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
             }
         }
 

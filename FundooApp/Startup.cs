@@ -127,19 +127,19 @@ namespace FundooApp
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
-            services.AddAuthentication(Options =>
-            {
-                Options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
-                Options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-                Options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
-            })
+            //services.AddAuthentication(Options =>
+            //{
+            //    Options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+            //    Options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //    Options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            //})
 
-            //// Adding the AppId and AppSecret key
-            .AddFacebook(Options =>
-            {
-                Options.AppId = Configuration["ApplicationSetting:FacebookAppId"];
-                Options.AppSecret = Configuration["ApplicationSetting:FacebookAppSecret"];
-            }).AddCookie();
+            ////// Adding the AppId and AppSecret key
+            //.AddFacebook(Options =>
+            //{
+            //    Options.AppId = Configuration["ApplicationSetting:FacebookAppId"];
+            //    Options.AppSecret = Configuration["ApplicationSetting:FacebookAppSecret"];
+            //}).AddCookie();
 
             //services.AddAuthentication()
             //    .AddFacebook(Options =>

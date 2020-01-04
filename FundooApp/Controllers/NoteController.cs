@@ -22,6 +22,7 @@ namespace FundooApp.Controllers
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Request.Note;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,7 @@ namespace FundooApp.Controllers
     /// this class contains different methods to handle API calls for note
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class NoteController : ControllerBase
@@ -99,8 +101,8 @@ namespace FundooApp.Controllers
         {
             try
             {
-                string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
-                //var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+               // string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.DeleteNote(noteID, userId);
 
                 bool success = false;

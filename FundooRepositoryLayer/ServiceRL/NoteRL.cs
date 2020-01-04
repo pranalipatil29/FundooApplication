@@ -79,7 +79,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         Image = requestNote.Image,
                         IsArchive = requestNote.IsArchive,
                         IsPin = requestNote.IsPin,
-                        IsTrash = requestNote.IsTrash,
+                        IsTrash = false,
                         CreatedDate = DateTime.Now,
                         ModifiedDate = DateTime.Now
                     };

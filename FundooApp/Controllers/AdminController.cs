@@ -113,5 +113,38 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
+
+        [HttpGet]
+        [Route("UserStatistics")]
+        public async Task<IActionResult> UserStatistics()
+        {
+            var message = string.Empty;
+            bool success = false;
+
+            try
+            {
+                Dictionary<string, int> users = this.adminBL.GetUserStatistics();
+
+                if(users.Count > 0)
+                {
+                    success = true;
+                    message = "User statistics Info";
+                    return this.Ok(new { success, message , users });
+                }
+                else
+                {
+                    success = false;
+                    message = "users not found";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch(Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+
+                return this.BadRequest(new { success, message });
+            }
+        }
     }
 }

@@ -31,6 +31,7 @@ namespace FundooApp.Controllers
     /// this class contains different methods to handle API calls for account
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AccountController : ControllerBase

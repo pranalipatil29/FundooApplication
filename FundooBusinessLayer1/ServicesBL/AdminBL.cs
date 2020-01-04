@@ -96,5 +96,17 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        public Dictionary<string, int> GetUserStatistics()
+        {
+            try
+            {
+               return this.adminRL.GetUserStatistics();
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
     }
 }
