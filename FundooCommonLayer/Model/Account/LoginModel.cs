@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
+    using Microsoft.AspNetCore.Authentication;
     // Including the requried assemblies in to the program
     using System;
     using System.Collections.Generic;
@@ -41,5 +42,9 @@ namespace FundooCommonLayer.Model
         /// </value>
         [Required]
         public string Password { get; set; }
+
+        //public string ReturnUrl { get; set; }
+
+        //public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }

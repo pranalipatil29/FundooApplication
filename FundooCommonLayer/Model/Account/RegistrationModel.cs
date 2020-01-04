@@ -76,23 +76,6 @@ namespace FundooCommonLayer.Model
         public string Password { get; set; }
 
         /// <summary>
-        /// Gets or sets the type of the user.
-        /// </summary>
-        /// <value>
-        /// The type of the user.
-        /// </value>
-        [Required]
-        public int UserType { get; set; }
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance is facebook.
-        /// </summary>
-        /// <value>
-        ///   <c>true</c> if this instance is facebook; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsFacebook { get; set; }
-
-        /// <summary>
         /// Gets or sets the type of the service.
         /// </summary>
         /// <value>

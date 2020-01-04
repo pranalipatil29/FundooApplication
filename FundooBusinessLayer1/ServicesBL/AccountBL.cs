@@ -170,37 +170,6 @@ namespace FundooBusinessLayer1.ServicesBL
         }
 
         /// <summary>
-        /// Socials the login.
-        /// </summary>
-        /// <param name="registrationModel">The registration model.</param>
-        /// <returns>
-        /// returns message indicating operation is done or not
-        /// </returns>
-        /// <exception cref="Exception">
-        /// Please provide correct data
-        /// or
-        /// </exception>
-        public async Task<bool> SocialLogin(RegistrationModel registrationModel)
-        {
-            try
-            {
-                if (registrationModel != null)
-                {
-                    var result = await this.accountRL.SocialLogin(registrationModel);
-                    return true;
-                }
-                else
-                {
-                    throw new Exception("Please provide correct data");
-                }
-            }
-            catch (Exception exceptiion)
-            {
-                throw new Exception(exceptiion.Message);
-            }
-        }
-
-        /// <summary>
         /// Generates the token.
         /// </summary>
         /// <param name="loginResponse">The login response.</param>

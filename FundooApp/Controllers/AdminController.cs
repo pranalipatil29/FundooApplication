@@ -45,12 +45,38 @@ namespace FundooApp.Controllers
             this.adminBL = adminBL;
         }
 
+        [HttpPost]
+        [Route("Register")]
+        public async Task<IActionResult> Register(RegistrationModel registrationModel)
+        {
+            // storing new account info in database
+            var result = await this.adminBL.Register(registrationModel);
+            bool success = false;
+            var message = string.Empty;
+
+            // checking whether result is successfull or nor
+            if (result)
+            {
+                // if yes then return the result 
+                success = true;
+                message = "Registration Succeffully Completed";
+                return this.Ok(new { success, message });
+            }
+            else
+            {
+                success = false;
+                message = "Registration Failed";
+                return this.BadRequest(new { success, message });
+            }
+        }
+
         /// <summary>
         /// Logins the specified login model.
         /// </summary>
         /// <param name="loginModel">The login model.</param>
         /// <returns> returns the operation result</returns>
         [HttpPost]
+        [Route("Login")]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
             var message = string.Empty;

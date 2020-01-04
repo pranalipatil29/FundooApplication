@@ -53,6 +53,29 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        public async Task<bool> Register(RegistrationModel registrationModel)
+        {
+            try
+            {
+                // check whether all properties entered by user have some value or not
+                if (registrationModel != null)
+                {
+                    // return true if registaration is successfull
+                    return await this.adminRL.Register(registrationModel);
+                }
+                else
+                {
+                    // otherwise throw exception
+                    throw new Exception("Data Required");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+
         public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
             try

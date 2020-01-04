@@ -32,7 +32,6 @@ namespace FundooApp.Controllers
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
-    [Authorize]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -175,36 +174,6 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
-
-        ///// <summary>
-        ///// Socials the login.
-        ///// </summary>
-        ///// <param name="registrationModel">The registration model.</param>
-        ///// <returns> returns the values indicating whether operation is successful or not</returns>
-        //[HttpPut]
-        //[Route("SocialLogin")]
-        //////Post: /api/Account/SocialLogin
-        //public async Task<IActionResult> SocialLogin(RegistrationModel registrationModel)
-        //{
-        //    // geting the token for new password
-        //    var result = await this.accountBL.SocialLogin(registrationModel);
-        //    string message = string.Empty;
-        //    bool success = false;
-
-        //    // check whether the token is generated or not
-        //    if (result)
-        //    {
-        //        success = true;
-        //        message = "Social Login Successfully done..! ";
-        //        return this.Ok(new { success, message });
-        //    }
-        //    else
-        //    {
-        //        success = false;
-        //        message = "Login Failed";
-        //        return this.BadRequest(new { success, message });
-        //    }
-        //}
 
         /// <summary>
         /// Profiles the picture upload.

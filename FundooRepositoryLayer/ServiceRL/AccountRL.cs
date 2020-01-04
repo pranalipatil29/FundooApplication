@@ -83,7 +83,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     LastName = registrationModel.LastName,
                     UserName = registrationModel.UserName,
                     Email = registrationModel.EmailID,
-                    UserType = registrationModel.UserType,
+                    UserType = 0,
                     ServiceType = registrationModel.ServiceType
                 };
 
@@ -250,42 +250,6 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 // reset the new password
                 var result = await this.userManager.ResetPasswordAsync(user, resetToken, resetPasswordModel.Password);
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Socials the login.
-        /// </summary>
-        /// <param name="registrationModel">The registration Model.</param>
-        /// <returns> returns true or false indicating operation is successful or not</returns>
-        public async Task<bool> SocialLogin(RegistrationModel registrationModel)
-        {
-            // check whether user data already exist in the database or not
-            var user = await this.userManager.FindByEmailAsync(registrationModel.EmailID);
-
-            // if user record not exist then Register the user info
-            if (user == null)
-            {
-                // geting values for application model properties
-                var data = new ApplicationModel()
-                {
-                    FirstName = registrationModel.FirstName,
-                    LastName = registrationModel.LastName,
-                    UserName = registrationModel.UserName,
-                    Email = registrationModel.EmailID,
-                    UserType = registrationModel.UserType,
-                    IsFacebook = registrationModel.IsFacebook,
-                    ServiceType = registrationModel.ServiceType
-                };
-
-                // assigning password and info of user into table 
-                var result = await this.userManager.CreateAsync(data, registrationModel.Password);
-
                 return true;
             }
             else

@@ -23,7 +23,10 @@ namespace FundooBusinessLayer.InterfaceBL
    
     public interface IAdminBL
     {
+        Task<bool> Register(RegistrationModel registrationModel);
+
         Task<AccountResponse > Login(LoginModel loginModel);
+
         Task<string> GenerateToken(AccountResponse accountResponse);
       
     }

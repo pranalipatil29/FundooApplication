@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
+    using System.ComponentModel.DataAnnotations;
     // Including the requried assemblies in to the program
     using System.ComponentModel.DataAnnotations.Schema;
     using Microsoft.AspNetCore.Identity;

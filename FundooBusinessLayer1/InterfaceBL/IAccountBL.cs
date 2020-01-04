@@ -56,13 +56,6 @@ namespace FundooBusinessLayer1.InterfaceBL
         Task<bool> ResetPassword(ResetPasswordModel resetPasswordModel);
 
         /// <summary>
-        /// Socials the login.
-        /// </summary>
-        /// <param name="registrationModel">The registration model.</param>
-        /// <returns> returns message indicating operation is done or not</returns>
-        Task<bool> SocialLogin(RegistrationModel registrationModel);
-
-        /// <summary>
         /// Generates the token.
         /// </summary>
         /// <param name="loginResponse">The login response.</param>

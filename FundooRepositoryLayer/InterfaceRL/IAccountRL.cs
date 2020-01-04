@@ -39,13 +39,6 @@ namespace FundooRepositoryLayer.InterfaceRL
         Task<AccountResponse> LogIn(LoginModel loginModel);
 
         /// <summary>
-        /// Socials the login.
-        /// </summary>
-        /// <param name="registrationModel">The registration model.</param>
-        /// <returns>  returns true or false depending upon operation result is successful or not</returns>
-        Task<bool> SocialLogin(RegistrationModel registrationModel);
-
-        /// <summary>
         /// Forgets the password.
         /// </summary>
         /// <param name="forgetPasswordModel">The forget password model.</param>

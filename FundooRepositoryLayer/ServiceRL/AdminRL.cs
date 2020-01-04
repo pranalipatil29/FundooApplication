@@ -42,6 +42,44 @@ namespace FundooRepositoryLayer.ServiceRL
             this.applicationSettings = appSettings.Value;
         }
 
+        public async Task<bool> Register(RegistrationModel registrationModel)
+        {
+            // check whether user data already exist in the database or not
+            var user = await this.userManager.FindByEmailAsync(registrationModel.EmailID);
+
+            // if user record not exist then Register the user info
+            if (user == null)
+            {
+                // geting values for application model properties
+                var data = new ApplicationModel()
+                {
+                    FirstName = registrationModel.FirstName,
+                    LastName = registrationModel.LastName,
+                    UserName = registrationModel.UserName,
+                    Email = registrationModel.EmailID,
+                    UserType = 1,
+                    ServiceType = "Advance",
+                    ProfilePicture=null
+                };
+
+                // assigning password and info of user into table 
+                var result = await this.userManager.CreateAsync(data, registrationModel.Password);
+
+                // check whether result is successed or not
+                if (result.Succeeded)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
 
         public async Task<AccountResponse> Login(LoginModel loginModel)
         {
