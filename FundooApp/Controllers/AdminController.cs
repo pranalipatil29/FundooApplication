@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace FundooApp.Controllers
 {
+    // Including the requried assemblies in to the program
     using System;
     using System.Collections.Generic;
     using System.Linq;
@@ -22,17 +23,33 @@ namespace FundooApp.Controllers
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
+    /// <summary>
+    /// this class contains different API's for Admin
+    /// </summary>
+    /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
     {
+        /// <summary>
+        /// creating reference of business layer admin class
+        /// </summary>
         private readonly IAdminBL adminBL;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminController"/> class.
+        /// </summary>
+        /// <param name="adminBL">The admin bl.</param>
         public AdminController(IAdminBL adminBL)
         {
             this.adminBL = adminBL;
         }
 
+        /// <summary>
+        /// Logins the specified login model.
+        /// </summary>
+        /// <param name="loginModel">The login model.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel loginModel)
         {
@@ -41,15 +58,20 @@ namespace FundooApp.Controllers
 
             try
             {
+                // get the admin data from business layer method
                 var data = await this.adminBL.Login(loginModel);
 
+                // check wheather data variable holds admin info or not
                 if(data != null)
                 {
                     success = true;
                     message = "Login Successfull";
 
+                    // generate the token for admin
                     var token = await this.adminBL.GenerateToken(data);
-                    return this.Ok(new { success, message, data, token });
+
+                    // return the Ok response with admin data
+                    return this.Ok(new { success, message, token, data });
                 }
                 else
                 {

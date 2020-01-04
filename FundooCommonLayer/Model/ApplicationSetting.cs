@@ -40,5 +40,9 @@ namespace FundooCommonLayer.Model
         public string APIkey { get; set; }
 
         public string APISecret { get; set; }
+
+        public string FacebookAppId { get; set; }
+
+        public string FacebookAppSecret { get; set; }
     }
 }

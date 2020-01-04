@@ -25,6 +25,8 @@ namespace FundooApp
     using FundooRepositoryLayer.Context;
     using FundooRepositoryLayer.InterfaceRL;
     using FundooRepositoryLayer.ServiceRL;
+    using Microsoft.AspNetCore.Authentication.Cookies;
+    using Microsoft.AspNetCore.Authentication.Facebook;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -62,7 +64,7 @@ namespace FundooApp
         /// </summary>
         /// <param name="services">The services.</param>
         public void ConfigureServices(IServiceCollection services)
-        { 
+        {
             services.AddTransient<IAccountBL, AccountBL>();
             services.AddTransient<IAccountRL, AccountRL>();
 
@@ -104,7 +106,7 @@ namespace FundooApp
                     ClockSkew = TimeSpan.Zero
                 };
             });
-            
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new Info { Title = "Fundoo API", Description = "Swagger Core API" });
@@ -122,8 +124,22 @@ namespace FundooApp
                         "Bearer", new string[] { } }
                 });
             });
-           
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+
+            services.AddAuthentication(Options =>
+            {
+                Options.DefaultChallengeScheme = FacebookDefaults.AuthenticationScheme;
+                Options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+                Options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+            })
+
+            //// Adding the AppId and AppSecret key
+            .AddFacebook(Options =>
+            {
+                Options.AppId = Configuration["ApplicationSetting:FacebookAppId"];
+                Options.AppSecret = Configuration["ApplicationSetting:FacebookAppSecret"];
+            }).AddCookie();
         }
 
         /// <summary>

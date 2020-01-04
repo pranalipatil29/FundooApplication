@@ -21,6 +21,9 @@ namespace FundooApp.Controllers
     using FundooBusinessLayer1.InterfaceBL;
     using FundooCommonLayer.Model;
     using FundooRepositoryLayer.ServiceRL;
+    using Microsoft.AspNetCore.Authentication;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Cors;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +32,7 @@ namespace FundooApp.Controllers
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
     [Route("api/[controller]")]
+    [Authorize]
     [ApiController]
     public class AccountController : ControllerBase
     {
@@ -242,6 +246,14 @@ namespace FundooApp.Controllers
                 message = exception.Message;
                 return this.BadRequest(new { success, message });
             }
+        }
+
+        [EnableCors]
+        [HttpGet]
+        [Route("FacebookLogIn")]
+        public IActionResult FacebookLogIn()
+        {
+            return Challenge(new AuthenticationProperties { RedirectUri = "/" });
         }
     }
 }
