@@ -651,5 +651,37 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
+
+        [HttpGet]
+        [Route("Search")]
+        public async Task<IActionResult> Search(string key)
+        {
+            var message = string.Empty;
+            bool success = false;
+
+            try
+            {
+                IList<NoteResponse> result = this.noteBL.Search(key);
+
+                if (result.Count > 0)
+                {
+                    success = true;
+                    return this.BadRequest(new { success, result });
+                }
+                else
+                {
+                    success = false;
+                    message = "Note not found";
+                    return this.BadRequest(new { success, message });
+                }
+            }
+            catch (Exception exception)
+            {
+                success = false;
+                message = exception.Message;
+                return this.BadRequest(new { success, message });
+            }
+        }
+
     }
 }

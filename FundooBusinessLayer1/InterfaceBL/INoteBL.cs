@@ -150,5 +150,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="formFile">The form file.</param>
         /// <returns> returns the operation result</returns>
         Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
+
+        IList<NoteResponse> Search(string kay);
     }
 }

@@ -209,6 +209,5 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success, message });
             }
         }
-
     }
 }

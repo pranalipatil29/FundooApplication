@@ -570,5 +570,24 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
+        public IList<NoteResponse> Search(string key)
+        {
+            try
+            {
+                if(key != null)
+                {
+                    return this.noteRL.Search(key);
+                }
+                else
+                {
+                    throw new Exception("Key required to search");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

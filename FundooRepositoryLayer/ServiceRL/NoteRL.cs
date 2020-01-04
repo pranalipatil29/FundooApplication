@@ -997,5 +997,51 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+        public IList<NoteResponse> Search(string key)
+        {
+            try
+            {
+                var element = key;
+                var data = this.authenticationContext.Note.Where(s => s.Title.Contains(element) || s.Description.Contains(element) || s.Collaborator.Contains(element));
+                var list = new List<NoteResponse>();
+
+                if (data != null)
+                {
+                    // iterates the loop for every notes
+                    foreach (var note in data)
+                    {
+                        // get info of each note
+                        var notes = new NoteResponse()
+                        {
+                            NoteID = note.NoteID,
+                            Title = note.Title,
+                            Description = note.Description,
+                            Collaborator = note.Collaborator,
+                            Color = note.Color,
+                            Image = note.Image,
+                            IsArchive = note.IsArchive,
+                            IsPin = note.IsPin,
+                            IsTrash = note.IsTrash,
+                            Reminder = note.Reminder
+                        };
+
+                        // adding note into list
+                        list.Add(notes);
+                    }
+
+                    // returning the list of notes
+                    return list;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
