@@ -571,17 +571,46 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        public IList<NoteResponse> Search(string key)
+        /// <summary>
+        /// Searches the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>returns the list of notes or null value</returns>
+        /// <exception cref="Exception">
+        /// Key required to search
+        /// or
+        /// </exception>
+        public IList<NoteResponse> Search(string key, string userId)
         {
             try
             {
+                // check whether user entered any value or not
                 if(key != null)
                 {
-                    return this.noteRL.Search(key);
+                    return this.noteRL.Search(key, userId);
                 }
                 else
                 {
                     throw new Exception("Key required to search");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> BulkTrash(string userId)
+        {
+            try
+            {
+                if (userId != null)
+                {
+                    return await this.noteRL.BulkTrash(userId);
+                }
+                else
+                {
+                    throw new Exception("User not found");
                 }
             }
             catch(Exception exception)

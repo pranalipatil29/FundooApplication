@@ -151,6 +151,13 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns> returns the operation result</returns>
         Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
 
-        IList<NoteResponse> Search(string kay);
+        /// <summary>
+        /// Searches the specified kay.
+        /// </summary>
+        /// <param name="kay">The kay.</param>
+        /// <returns>returns the list of notes or null value</returns>
+        IList<NoteResponse> Search(string kay, string userID);
+
+        Task<bool> BulkTrash(string userId);
     }
 }

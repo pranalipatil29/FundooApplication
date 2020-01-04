@@ -159,6 +159,13 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns>returns the operation result</returns>
         Task<NoteResponse> ImageUpload(int noteID, string userID,IFormFile file);
 
-        IList<NoteResponse> Search(string key);
+        /// <summary>
+        /// Searches the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns> returns the list of notes or null value</returns>
+        IList<NoteResponse> Search(string key, string userID);
+
+        Task<bool> BulkTrash(string userID);
     }
 }

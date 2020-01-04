@@ -652,6 +652,11 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Searches the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns>returns the list of notes or bad request result</returns>
         [HttpGet]
         [Route("Search")]
         public async Task<IActionResult> Search(string key)
@@ -661,12 +666,16 @@ namespace FundooApp.Controllers
 
             try
             {
-                IList<NoteResponse> result = this.noteBL.Search(key);
+                // get the user id
+                var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
 
+                IList<NoteResponse> result = this.noteBL.Search(key, userID);
+
+                // check whether any note contains user entered key or not
                 if (result.Count > 0)
                 {
                     success = true;
-                    return this.BadRequest(new { success, result });
+                    return this.Ok(new { success, result });
                 }
                 else
                 {
@@ -683,5 +692,29 @@ namespace FundooApp.Controllers
             }
         }
 
+        [HttpPut]
+        [Route("BulkTrash")]
+        public async Task<IActionResult> BulkTrash()
+        {
+            try
+            {
+                var userId = this.HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
+
+                var result = await this.noteBL.BulkTrash(userId);
+
+                if(result)
+                {
+                    return this.Ok(new { success = true, message = "successfully deleted notes from trash" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Failed" });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
     }
 }

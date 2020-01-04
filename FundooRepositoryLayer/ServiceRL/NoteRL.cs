@@ -686,6 +686,14 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Gets the notes from trash.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public IList<NoteResponse> GetNotesFromTrash(string userID)
         {
             try
@@ -733,6 +741,13 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Restores the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the operation result</returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> RestoreNote(int noteID, string userID)
         {
             try
@@ -783,6 +798,16 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Changes the color.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="color">The color.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> ChangeColor(int noteID, string color, string userID)
         {
             try
@@ -833,6 +858,19 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Sets the reminder.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="dateTime">The date time.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Date & time are required to set reminder
+        /// or
+        /// </exception>
         public async Task<NoteResponse> SetReminder(int noteID, DateTime dateTime, string userID)
         {
             try
@@ -892,6 +930,15 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Removes the reminder.
+        /// </summary>
+        /// <param name="noteId">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> RemoveReminder(int noteId, string userID)
         {
             try
@@ -942,6 +989,16 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Images the upload.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="file"></param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file)
         {
             try
@@ -998,14 +1055,23 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public IList<NoteResponse> Search(string key)
+        /// <summary>
+        /// Searches the specified key.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns> returns the list of notes or null value</returns>
+        /// <exception cref="Exception"> exception message</exception>
+        public IList<NoteResponse> Search(string key, string userId)
         {
             try
             {
                 var element = key;
-                var data = this.authenticationContext.Note.Where(s => s.Title.Contains(element) || s.Description.Contains(element) || s.Collaborator.Contains(element));
+
+                // find the notes which contains user entered key element
+                var data = this.authenticationContext.Note.Where(s => ((s.Title.Contains(element) || s.Description.Contains(element) || s.Collaborator.Contains(element)) && s.IsTrash == false) && s.UserID == userId);
                 var list = new List<NoteResponse>();
 
+                // check whether any note contain user entered key
                 if (data != null)
                 {
                     // iterates the loop for every notes
@@ -1038,7 +1104,34 @@ namespace FundooRepositoryLayer.ServiceRL
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<bool> BulkTrash(string userId)
+        {
+            try
+            {
+                var data = this.authenticationContext.Note.Where(s => s.UserID == userId && s.IsTrash);
+
+                if (data != null)
+                {
+                    foreach (var note in data)
+                    {
+                        this.authenticationContext.Note.Remove(note);
+                    }
+
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

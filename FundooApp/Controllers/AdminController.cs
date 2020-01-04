@@ -115,6 +115,10 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Users the statistics.
+        /// </summary>
+        /// <returns>returns the list of users or bad request result</returns>
         [HttpGet]
         [Route("UserStatistics")]
         public async Task<IActionResult> UserStatistics()
@@ -147,6 +151,10 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Gets the users information.
+        /// </summary>
+        /// <returns>returns the count of users which uses basic or advance services or bad request result</returns>
         [HttpGet]
         [Route("UsersList")]
         public async Task<IActionResult> GetUsersInfo()
@@ -158,7 +166,7 @@ namespace FundooApp.Controllers
             {
                 IList<AccountResponse> users = this.adminBL.UsersInfo();
 
-                if(users.Count > 0)
+                if (users.Count > 0)
                 {
                     success = true;
                     message = "Users Info";
@@ -179,6 +187,11 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Searches the user.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns>returns the list of users or bad request result</returns>
         [HttpGet]
         [Route("SearchUser")]
         public async Task<IActionResult> SearchUser(string name)
@@ -188,12 +201,14 @@ namespace FundooApp.Controllers
 
             try
             {
+                // get the list of users which have admin entered name
                 IList<AccountResponse> result = this.adminBL.SearchUser(name);
 
+                // check wheather any user having admin entered name or not
                 if(result.Count > 0)
                 {
                     success = true;
-                    return this.BadRequest(new { success, result });
+                    return this.Ok(new { success, result });
                 }
                 else
                 {
