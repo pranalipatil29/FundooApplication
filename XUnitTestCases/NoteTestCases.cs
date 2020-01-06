@@ -30,43 +30,43 @@ namespace XUnitTestCases
 
     public class NotesTestCases
     {
-        NoteController noteController;
-        INoteBL noteBL;
-       // private readonly INoteRL noteRL;
+    //    NoteController noteController;
+    //    INoteBL noteBL;
+    //   // private readonly INoteRL noteRL;
 
 
-        public NotesTestCases()
-        {
-            var repository = new Mock<INoteRL>();
+    //    public NotesTestCases()
+    //    {
+    //        var repository = new Mock<INoteRL>();
 
-            this.noteBL = new NoteBL(repository.Object);
-            noteController = new NoteController(this.noteBL);
-        }
+    //        this.noteBL = new NoteBL(repository.Object);
+    //        noteController = new NoteController(this.noteBL);
+    //    }
 
-        [Fact]
-        public async Task TestNoteCreationForBadRequest()
-        {
-            //  var repository = new Mock<INoteRL>().Object;
+        //[Fact]
+        //public async Task TestNoteCreationForBadRequest()
+        //{
+        //    //  var repository = new Mock<INoteRL>().Object;
 
-            var data = new NoteRequest()
-            {
+        //    var data = new NoteRequest()
+        //    {
 
-                Collaborator="ujklj",
-                Color = "red",
-                Description = "note1",
-                Image = "jhd",
-                IsArchive = false,
-                IsPin = true,
-                IsTrash = false,
-                Reminder = DateTime.Now
+        //        Collaborator="ujklj",
+        //        Color = "red",
+        //        Description = "note1",
+        //        Image = "jhd",
+        //        IsArchive = false,
+        //        IsPin = true,
+        //        IsTrash = false,
+        //        Reminder = DateTime.Now
 
-            };
+        //    };
 
-            noteController.ModelState.AddModelError("Title", "Required");
+        //    noteController.ModelState.AddModelError("Title", "Required");
 
-            var result = await noteController.CreateNote(data);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+        //    var result = await noteController.CreateNote(data);
+        //    Assert.IsType<BadRequestObjectResult>(result);
+        //}
 
         //[Fact]
         //public async Task TestNoteCreationForOkRequest()
@@ -108,8 +108,11 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestDeleteNote()
         {
+            var repository = new Mock<INoteRL>();
+            var business = new NoteBL(repository.Object);
+            var noteController = new NoteController(business);
 
-            var result = await noteController.DeleteNote(1005);
+            var result = await noteController.DeleteNote(9);
             Assert.IsType<OkObjectResult>(result);
         }       
     }

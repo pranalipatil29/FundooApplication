@@ -1057,6 +1057,57 @@ namespace FundooRepositoryLayer.ServiceRL
         }
 
         /// <summary>
+        /// Removes the image.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info or null value</returns>
+        /// <exception cref="Exception">
+        /// Note not Found
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> RemoveImage(int noteID, string userID)
+        {
+            try
+            {
+                // get the note data from note table
+                var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID && s.IsTrash == false).FirstOrDefault();
+
+                // check wheather note is found or not
+                if (note != null)
+                {
+                    note.Image = null;
+                    this.authenticationContext.Note.Update(note);
+                    await this.authenticationContext.SaveChangesAsync();
+
+                    var data = new NoteResponse()
+                    {
+                        NoteID = note.NoteID,
+                        Title = note.Title,
+                        Collaborator = note.Collaborator,
+                        Description = note.Description,
+                        Reminder = note.Reminder,
+                        Color = note.Color,
+                        Image = note.Image,
+                        IsArchive = note.IsArchive,
+                        IsPin = note.IsPin,
+                        IsTrash = note.IsTrash
+                    };
+
+                    return data;
+                }
+                else
+                {
+                    throw new Exception("Note not Found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        /// <summary>
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -1216,7 +1267,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// This email ID not found
         /// or
         /// </exception>
-        public async Task<bool> ShareWith(int noteID,string emailID, string userID)
+        public async Task<bool> ShareWith(int noteID, string emailID, string userID)
         {
             try
             {
@@ -1227,40 +1278,40 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 if (note != null)
                 {
-                      // get the user info from user table through user entered email ID
-                        var data = this.authenticationContext.UserDataTable.Where(s => s.Email == emailID).FirstOrDefault();
+                    // get the user info from user table through user entered email ID
+                    var data = this.authenticationContext.UserDataTable.Where(s => s.Email == emailID).FirstOrDefault();
 
-                        // get the existed collaborator info form Collaborator table for user entered emailID
-                        var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == noteID && s.Collaborator == emailID)).FirstOrDefault();
+                    // get the existed collaborator info form Collaborator table for user entered emailID
+                    var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == noteID && s.Collaborator == emailID)).FirstOrDefault();
 
-                        // check wheather user is present in user table or not
-                        if (data != null)
+                    // check wheather user is present in user table or not
+                    if (data != null)
+                    {
+                        // check wheather note is already shared with user entered email ID or not
+                        if (existedCollaborator == null)
                         {
-                            // check wheather note is already shared with user entered email ID or not
-                            if (existedCollaborator == null)
+                            var collaborator = new CollaboratorModel()
                             {
-                                var collaborator = new CollaboratorModel()
-                                {
-                                    NoteID = noteID,
-                                    UserID = userId,
-                                    Collaborator = emailID,
-                                    CreatedDate = DateTime.Now,
-                                    ModifiedDate = DateTime.Now
-                                };
+                                NoteID = noteID,
+                                UserID = userId,
+                                Collaborator = emailID,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            };
 
-                                this.authenticationContext.Collaborators.Add(collaborator);
-                                await this.authenticationContext.SaveChangesAsync();
-                                return true;
-                            }
-                            else
-                            {
-                                throw new Exception("This email already exists");
-                            }
+                            this.authenticationContext.Collaborators.Add(collaborator);
+                            await this.authenticationContext.SaveChangesAsync();
+                            return true;
                         }
                         else
                         {
-                            throw new Exception("This email ID not found ");
+                            throw new Exception("This email already exists");
                         }
+                    }
+                    else
+                    {
+                        throw new Exception("This email ID not found ");
+                    }
                 }
                 else
                 {
@@ -1288,7 +1339,7 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 // get the note info which have user specified collaborator form collaborators table
                 var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.Collaborator == emailID && s.NoteID == noteID).FirstOrDefault();
-                
+
                 // check wheather note is found or not
                 if (note != null)
                 {
@@ -1305,10 +1356,12 @@ namespace FundooRepositoryLayer.ServiceRL
                     return false;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
+
+       
     }
 }

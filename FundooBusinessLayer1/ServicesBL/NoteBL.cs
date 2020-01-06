@@ -574,6 +574,38 @@ namespace FundooBusinessLayer.ServicesBL
         }
 
         /// <summary>
+        /// Removes the image.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the note info or null value</returns>
+        /// <exception cref="Exception">
+        /// Please enter correct NoteID
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> RemoveImage(int noteID, string userID)
+        {
+            try
+            {
+                // ckeck whether user entered correct note id or not
+                if (noteID > 0)
+                {
+                    return await this.noteRL.RemoveImage(noteID, userID);
+                }
+                else
+                {
+                    // if user entered wrong note id throw the exception
+                    throw new Exception("Please enter correct NoteID");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+
+        /// <summary>
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>

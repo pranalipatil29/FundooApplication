@@ -101,8 +101,8 @@ namespace FundooApp.Controllers
         {
             try
             {
-               // string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
-                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+                string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
+               // var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.DeleteNote(noteID, userId);
 
                 bool success = false;
@@ -653,6 +653,39 @@ namespace FundooApp.Controllers
         }
 
         /// <summary>
+        /// Deletes the image.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <returns> returns the operation result</returns>
+        [HttpDelete]
+        [Route("{noteID}/Image")]
+        public async Task<IActionResult> DeleteImage(int noteID)
+        {
+            try
+            {
+                // get the user id
+                var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                // get the note data
+                var data = await this.noteBL.RemoveImage(noteID, userID);
+
+                // check whether data is null or not
+                if (data != null)
+                {
+                    return this.Ok(new { success = true, message = "Successfully Deleted image from note", data });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Failed to delete image" });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
+
+        /// <summary>
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
@@ -751,6 +784,7 @@ namespace FundooApp.Controllers
                 }
                 else
                 {
+                    // if conatactList does not contain any contact info return message
                     return this.BadRequest(new { success = false, message = "Contact not Found" });
                 }
             }
@@ -760,16 +794,25 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Shares the with.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPost]
         [Route("{noteID}/ShareWith")]
         public async Task<IActionResult> ShareWith(int noteID, CollaboratorRequest collaboratorRequest)
         {
             try
             {
+                // get the user id
                 var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
+                // get the result of operation
                 var result = await this.noteBL.ShareWith(noteID, collaboratorRequest.emailID, userId);
 
+                // check wheather operation is done or not
                 if (result)
                 {
                     return Ok(new { success = true, message = "Successfully Shared note" });
@@ -785,16 +828,25 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Deletes the collaborator.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <returns> returns the operation result</returns>
         [HttpDelete]
         [Route("{noteID}/Collaborator")]
         public async Task<IActionResult> DeleteCollaborator(int noteID, CollaboratorRequest collaboratorRequest)
         {
             try
             {
+                // get the user ID
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
+                // get the result of Delete Collaborator operation
                 var result = await this.noteBL.DeleteCollaborator(noteID, collaboratorRequest.emailID, userID);
 
+                // check wheather result is true or false
                 if(result)
                 {
                     return this.Ok(new { success = true, message = "Successfully Deleted Collaborator" });

@@ -22,6 +22,7 @@ namespace FundooApp.Controllers
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 

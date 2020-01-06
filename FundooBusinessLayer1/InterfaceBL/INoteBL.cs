@@ -189,5 +189,13 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns true or false depending upon operation result</returns>
         Task<bool> DeleteCollaborator(int noteID, string emailID, string userID);
+
+        /// <summary>
+        /// Removes the image.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info or null value</returns>
+        Task<NoteResponse> RemoveImage(int noteID, string userID);
     }
 }

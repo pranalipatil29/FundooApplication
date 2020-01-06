@@ -122,7 +122,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 var userPassword = await this.userManager.CheckPasswordAsync(user, loginModel.Password);
 
                 // check whether user data is null or not or user password is correct 
-                if (user != null && userPassword)
+                if (user != null && userPassword && user.UserType == 0)
                 {
                     // get the required user data 
                     var data = new AccountResponse()

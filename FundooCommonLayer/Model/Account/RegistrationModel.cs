@@ -22,15 +22,6 @@ namespace FundooCommonLayer.Model
     public class RegistrationModel
     {
         /// <summary>
-        /// Gets or sets the identifier.
-        /// </summary>
-        /// <value>
-        /// The identifier.
-        /// </value>
-        [Key]
-        public string Id { get; set; }
-
-        /// <summary>
         /// Gets or sets the first name.
         /// </summary>
         /// <value>
