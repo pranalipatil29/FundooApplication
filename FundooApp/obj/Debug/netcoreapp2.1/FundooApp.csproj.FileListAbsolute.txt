@@ -1,3 +1,9 @@
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csprojAssemblyReference.cache
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.RazorAssemblyInfo.cache
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.RazorAssemblyInfo.cs
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.AssemblyInfo.cs
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.deps.json
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.runtimeconfig.json
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooApp.runtimeconfig.dev.json
@@ -9,12 +15,6 @@ C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooRep
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooBusinessLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooApp\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csprojAssemblyReference.cache
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csproj.CoreCompileInputs.cache
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.RazorAssemblyInfo.cache
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.RazorAssemblyInfo.cs
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.AssemblyInfoInputs.cache
-C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.AssemblyInfo.cs
 C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.RazorTargetAssemblyInfo.cache
 C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.csproj.CopyComplete
 C:\Users\User\source\repos\FundooApp\FundooApp\obj\Debug\netcoreapp2.1\FundooApp.dll

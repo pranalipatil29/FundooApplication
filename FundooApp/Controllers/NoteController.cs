@@ -759,5 +759,30 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
         }
+
+        [HttpPost]
+        [Route("ShareWith")]
+        public async Task<IActionResult> ShareWith(CollaboratorRequest collaboratorRequest)
+        {
+            try
+            {
+                var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var result = await this.noteBL.ShareWith(collaboratorRequest, userId);
+
+                if (result)
+                {
+                    return Ok(new { success = true, message = "Successfully Shared note" });
+                }
+                else
+                {
+                    return BadRequest(new { success = true, message = "Failed" });                
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
     }
 }

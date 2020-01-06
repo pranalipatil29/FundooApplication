@@ -65,7 +65,7 @@ namespace FundooRepositoryLayer.Context
         /// The note label.
         /// </value>
         public DbSet<NoteLabelModel> NoteLabel { get; set; }
-
-       
+     
+        public DbSet<CollaboratorModel> Collaborators { get; set; } 
     }
 }

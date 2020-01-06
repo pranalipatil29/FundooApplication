@@ -669,23 +669,23 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-        //public async Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
-        //{
-        //    try
-        //    {
-        //        if (userID != null)
-        //        {
-        //            return await this.noteRL.ShareWith(collaboratorRequest, userID);
-        //        }
-        //        else
-        //        {
-        //            throw new Exception("User not Found");
-        //        }
-        //    }
-        //    catch (Exception exception)
-        //    {
-        //        throw new Exception(exception.Message);
-        //    }
-        //}
+        public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+        {
+            try
+            {
+                if (userID != null)
+                {
+                    return await this.noteRL.ShareWith(collaboratorRequest, userID);
+                }
+                else
+                {
+                    throw new Exception("User not Found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

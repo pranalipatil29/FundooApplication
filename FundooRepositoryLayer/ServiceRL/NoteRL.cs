@@ -1177,7 +1177,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     if (contacts != null)
                     {
                         // iterarates the loop for each contact
-                        foreach(var person in contacts)
+                        foreach (var person in contacts)
                         {
                             // add the person name and email ID in dictionary class object
                             ContactList.Add(person.Email);
@@ -1198,39 +1198,74 @@ namespace FundooRepositoryLayer.ServiceRL
                     throw new Exception("Key required to search Person");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
-    //    public async Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
-    //    {
-    //        try
-    //        {
-    //            var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == collaboratorRequest.noteID).FirstOrDefault();
+        public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+        {
+            try
+            {
+                string userId = userID;
 
-    //            if(note != null)
-    //            {
-    //                if(collaboratorRequest.emailID != null)
-    //                {
-    //                    var data = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
+                // get the note info of user entered note id
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == collaboratorRequest.noteID && s.IsTrash == false).FirstOrDefault();
 
-    //                }
-    //                else
-    //                {
+                if (note != null)
+                {
+                    if (collaboratorRequest.emailID != null)
+                    {
+                        // get the user info from user table through user entered email ID
+                        var data = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
 
-    //                }
-    //            }
-    //            else
-    //            {
-    //                throw new Exception("Note not found");
-    //            }
-    //        }
-    //        catch(Exception exception)
-    //        {
-    //            throw new Exception(exception.Message);
-    //        }
-    //    }
+                        // get the existed collaborator info form Collaborator table for user entered emailID
+                        var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == collaboratorRequest.noteID && s.Collaborator == collaboratorRequest.emailID)).FirstOrDefault();
+
+                        // check wheather emailID is present in user table or not
+                        if (data != null)
+                        {
+                            // check wheather note is already shared with user entered email ID or not
+                            if (existedCollaborator == null)
+                            {
+                                var collaborator = new CollaboratorModel()
+                                {
+                                    NoteID = collaboratorRequest.noteID,
+                                    UserID = userId,
+                                    Collaborator = collaboratorRequest.emailID,
+                                    CreatedDate = DateTime.Now,
+                                    ModifiedDate = DateTime.Now
+                                };
+
+                                this.authenticationContext.Collaborators.Add(collaborator);
+                                await this.authenticationContext.SaveChangesAsync();
+                                return true;
+                            }
+                            else
+                            {
+                                throw new Exception("This email already exists");
+                            }
+                        }
+                        else
+                        {
+                            throw new Exception("This email ID not found ");
+                        }
+                    }
+                    else
+                    {
+                        return false;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Note not found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

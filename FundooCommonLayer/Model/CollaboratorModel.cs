@@ -29,7 +29,7 @@ namespace FundooCommonLayer.Model
         public int NoteID { get; set; }
 
         [ForeignKey("RegistrationModel")]
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         [Column (TypeName ="nvarchar(150)")]
         public string Collaborator { get; set; }

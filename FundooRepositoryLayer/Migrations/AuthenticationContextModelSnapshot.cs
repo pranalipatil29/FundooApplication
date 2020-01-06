@@ -19,6 +19,30 @@ namespace FundooRepositoryLayer.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("FundooCommonLayer.Model.CollaboratorModel", b =>
+                {
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Collaborator")
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("DateTime");
+
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("DateTime");
+
+                    b.Property<int>("NoteID");
+
+                    b.Property<string>("UserID");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("Collaborators");
+                });
+
             modelBuilder.Entity("FundooCommonLayer.Model.LabelModel", b =>
                 {
                     b.Property<int>("LabelID")

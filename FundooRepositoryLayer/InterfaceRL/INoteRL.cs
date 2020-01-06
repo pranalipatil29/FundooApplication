@@ -182,6 +182,6 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns>returns the list of contacts or null value</returns>
         List<string> GetContacts(string emailID, string userID);
 
-       // Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
+        Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
     }
 }
