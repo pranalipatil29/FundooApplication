@@ -1204,6 +1204,18 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Shares the with.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns true or false depending upon operation result</returns>
+        /// <exception cref="Exception">
+        /// This email already exists
+        /// or
+        /// This email ID not found
+        /// or
+        /// </exception>
         public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
         {
             try
@@ -1221,7 +1233,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         // get the existed collaborator info form Collaborator table for user entered emailID
                         var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == collaboratorRequest.noteID && s.Collaborator == collaboratorRequest.emailID)).FirstOrDefault();
 
-                        // check wheather emailID is present in user table or not
+                        // check wheather user is present in user table or not
                         if (data != null)
                         {
                             // check wheather note is already shared with user entered email ID or not
@@ -1256,6 +1268,44 @@ namespace FundooRepositoryLayer.ServiceRL
                 }
             }
             catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Deletes the collaborator.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns true or false depending upon operation result
+        /// </returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
+        {
+            try
+            {
+                // get the note info which have user specified collaborator form collaborators table
+                var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.Collaborator == collaboratorRequest.emailID && s.NoteID == collaboratorRequest.noteID).FirstOrDefault();
+                
+                // check wheather note is found or not
+                if (note != null)
+                {
+                    // if note is found in collaborators table then delete the collaborator for specified note
+                    this.authenticationContext.Collaborators.Remove(note);
+
+                    // save the changes in database
+                    await this.authenticationContext.SaveChangesAsync();
+                    return true;
+                }
+                else
+                {
+                    // if note not found then return false
+                    return false;
+                }
+            }
+            catch(Exception exception)
             {
                 throw new Exception(exception.Message);
             }

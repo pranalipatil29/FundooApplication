@@ -652,7 +652,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // check wheather the user id contains any null value or not
-                if (userID != null)
+                if (emailID != null)
                 {
                     // return the list of persons which contains the user entered key
                     return this.noteRL.GetContacts(emailID, userID);
@@ -660,7 +660,7 @@ namespace FundooBusinessLayer.ServicesBL
                 else
                 {
                     // if user id contains null value then throw the exception
-                    throw new Exception("User not found");
+                    throw new Exception("EmailID is required");
                 }
             }
             catch (Exception exception)
@@ -669,11 +669,23 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Shares the with.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns true or false depending upon operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// NoteId and email id is required
+        /// or
+        /// </exception>
         public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
         {
             try
             {
-                if (collaboratorRequest.emailID != null)
+                if (collaboratorRequest.emailID != null && collaboratorRequest.noteID > 0)
                 {
                     return await this.noteRL.ShareWith(collaboratorRequest, userID);
                 }
@@ -688,19 +700,37 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       //public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
-       // {
-       //     try
-       //     {
-       //         if(userID != null)
-       //         {
-
-       //         }
-       //     }
-       //     catch(Exception exception)
-       //     {
-       //         throw new Exception(exception.Message);
-       //     }
-       // }
+        /// <summary>
+        /// Deletes the collaborator.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns true or false depending upon operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// NoteId and email id is required
+        /// or
+        /// </exception>
+        public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
+        {
+            try
+            {
+                // check wheather user entered any null value or not
+                if (collaboratorRequest.emailID != null && collaboratorRequest.noteID > 0)
+                {
+                    return await this.noteRL.DeleteCollaborator(collaboratorRequest, userID);
+                }
+                else
+                {
+                    // if user entered any null value then throw the exception
+                    throw new Exception("NoteId and email id is required");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

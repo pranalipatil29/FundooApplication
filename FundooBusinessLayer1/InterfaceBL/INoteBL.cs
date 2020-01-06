@@ -174,8 +174,20 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns>returns the list of contacts or null value</returns>
         List<string> GetContacts(string emailID, string userID);
 
-       Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
+        /// <summary>
+        /// Shares the with.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns true or false depending upon operation result</returns>
+        Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
 
-     //   Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID);
+        /// <summary>
+        /// Deletes the collaborator.
+        /// </summary>
+        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns true or false depending upon operation result</returns>
+        Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID);
     }
 }

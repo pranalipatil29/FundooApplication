@@ -784,5 +784,30 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
         }
+
+        [HttpDelete]
+        [Route("Collaborator")]
+        public async Task<IActionResult> DeleteCollaborator(CollaboratorRequest collaboratorRequest)
+        {
+            try
+            {
+                var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var result = await this.noteBL.DeleteCollaborator(collaboratorRequest, userID);
+
+                if(result)
+                {
+                    return this.Ok(new { success = true, message = "Successfully Deleted Collaborator" });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Failed to delete collaborator" });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
     }
 }
