@@ -776,7 +776,7 @@ namespace FundooApp.Controllers
                 }
                 else
                 {
-                    return BadRequest(new { success = true, message = "Failed" });                
+                    return BadRequest(new { success = false, message = "Failed" });                
                 }
             }
             catch(Exception exception)

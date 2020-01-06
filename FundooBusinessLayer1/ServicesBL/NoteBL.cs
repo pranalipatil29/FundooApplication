@@ -673,13 +673,13 @@ namespace FundooBusinessLayer.ServicesBL
         {
             try
             {
-                if (userID != null)
+                if (collaboratorRequest.emailID != null)
                 {
                     return await this.noteRL.ShareWith(collaboratorRequest, userID);
                 }
                 else
                 {
-                    throw new Exception("User not Found");
+                    throw new Exception("NoteId and email id is required");
                 }
             }
             catch (Exception exception)
@@ -687,5 +687,20 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
+       //public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
+       // {
+       //     try
+       //     {
+       //         if(userID != null)
+       //         {
+
+       //         }
+       //     }
+       //     catch(Exception exception)
+       //     {
+       //         throw new Exception(exception.Message);
+       //     }
+       // }
     }
 }

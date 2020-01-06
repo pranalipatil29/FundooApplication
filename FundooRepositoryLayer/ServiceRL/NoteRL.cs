@@ -1215,9 +1215,7 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 if (note != null)
                 {
-                    if (collaboratorRequest.emailID != null)
-                    {
-                        // get the user info from user table through user entered email ID
+                      // get the user info from user table through user entered email ID
                         var data = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
 
                         // get the existed collaborator info form Collaborator table for user entered emailID
@@ -1251,15 +1249,10 @@ namespace FundooRepositoryLayer.ServiceRL
                         {
                             throw new Exception("This email ID not found ");
                         }
-                    }
-                    else
-                    {
-                        return false;
-                    }
                 }
                 else
                 {
-                    throw new Exception("Note not found");
+                    return false;
                 }
             }
             catch (Exception exception)

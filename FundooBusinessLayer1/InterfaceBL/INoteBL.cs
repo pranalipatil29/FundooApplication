@@ -175,5 +175,7 @@ namespace FundooBusinessLayer.InterfaceBL
         List<string> GetContacts(string emailID, string userID);
 
        Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
+
+     //   Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID);
     }
 }
