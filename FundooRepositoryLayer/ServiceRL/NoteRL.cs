@@ -1216,22 +1216,22 @@ namespace FundooRepositoryLayer.ServiceRL
         /// This email ID not found
         /// or
         /// </exception>
-        public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+        public async Task<bool> ShareWith(int noteID,string emailID, string userID)
         {
             try
             {
                 string userId = userID;
 
                 // get the note info of user entered note id
-                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == collaboratorRequest.noteID && s.IsTrash == false).FirstOrDefault();
+                var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
 
                 if (note != null)
                 {
                       // get the user info from user table through user entered email ID
-                        var data = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
+                        var data = this.authenticationContext.UserDataTable.Where(s => s.Email == emailID).FirstOrDefault();
 
                         // get the existed collaborator info form Collaborator table for user entered emailID
-                        var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == collaboratorRequest.noteID && s.Collaborator == collaboratorRequest.emailID)).FirstOrDefault();
+                        var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == noteID && s.Collaborator == emailID)).FirstOrDefault();
 
                         // check wheather user is present in user table or not
                         if (data != null)
@@ -1241,9 +1241,9 @@ namespace FundooRepositoryLayer.ServiceRL
                             {
                                 var collaborator = new CollaboratorModel()
                                 {
-                                    NoteID = collaboratorRequest.noteID,
+                                    NoteID = noteID,
                                     UserID = userId,
-                                    Collaborator = collaboratorRequest.emailID,
+                                    Collaborator = emailID,
                                     CreatedDate = DateTime.Now,
                                     ModifiedDate = DateTime.Now
                                 };
@@ -1282,12 +1282,12 @@ namespace FundooRepositoryLayer.ServiceRL
         /// returns true or false depending upon operation result
         /// </returns>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
+        public async Task<bool> DeleteCollaborator(int noteID, string emailID, string userID)
         {
             try
             {
                 // get the note info which have user specified collaborator form collaborators table
-                var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.Collaborator == collaboratorRequest.emailID && s.NoteID == collaboratorRequest.noteID).FirstOrDefault();
+                var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.Collaborator == emailID && s.NoteID == noteID).FirstOrDefault();
                 
                 // check wheather note is found or not
                 if (note != null)

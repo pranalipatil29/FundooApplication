@@ -681,13 +681,13 @@ namespace FundooBusinessLayer.ServicesBL
         /// NoteId and email id is required
         /// or
         /// </exception>
-        public async Task<bool> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+        public async Task<bool> ShareWith(int noteID,string emailID, string userID)
         {
             try
             {
-                if (collaboratorRequest.emailID != null && collaboratorRequest.noteID > 0)
+                if (emailID != null && noteID > 0)
                 {
-                    return await this.noteRL.ShareWith(collaboratorRequest, userID);
+                    return await this.noteRL.ShareWith(noteID, emailID, userID);
                 }
                 else
                 {
@@ -712,14 +712,14 @@ namespace FundooBusinessLayer.ServicesBL
         /// NoteId and email id is required
         /// or
         /// </exception>
-        public async Task<bool> DeleteCollaborator(CollaboratorRequest collaboratorRequest, string userID)
+        public async Task<bool> DeleteCollaborator(int noteID, string emailID, string userID)
         {
             try
             {
                 // check wheather user entered any null value or not
-                if (collaboratorRequest.emailID != null && collaboratorRequest.noteID > 0)
+                if (emailID != null && noteID > 0)
                 {
-                    return await this.noteRL.DeleteCollaborator(collaboratorRequest, userID);
+                    return await this.noteRL.DeleteCollaborator(noteID, emailID, userID);
                 }
                 else
                 {

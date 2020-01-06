@@ -24,12 +24,6 @@ namespace FundooCommonLayer.Model.Request.Note
     /// </summary>
     public class CollaboratorRequest
     {
-        /// <summary>
-        /// The note identifier
-        /// </summary>
-        [Required]
-        public int noteID;
-
          /// <summary>
         /// The email identifier
         /// </summary>

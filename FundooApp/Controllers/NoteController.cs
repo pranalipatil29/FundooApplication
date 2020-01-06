@@ -761,14 +761,14 @@ namespace FundooApp.Controllers
         }
 
         [HttpPost]
-        [Route("ShareWith")]
-        public async Task<IActionResult> ShareWith(CollaboratorRequest collaboratorRequest)
+        [Route("{noteID}/ShareWith")]
+        public async Task<IActionResult> ShareWith(int noteID, CollaboratorRequest collaboratorRequest)
         {
             try
             {
                 var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                var result = await this.noteBL.ShareWith(collaboratorRequest, userId);
+                var result = await this.noteBL.ShareWith(noteID, collaboratorRequest.emailID, userId);
 
                 if (result)
                 {
@@ -786,14 +786,14 @@ namespace FundooApp.Controllers
         }
 
         [HttpDelete]
-        [Route("Collaborator")]
-        public async Task<IActionResult> DeleteCollaborator(CollaboratorRequest collaboratorRequest)
+        [Route("{noteID}/Collaborator")]
+        public async Task<IActionResult> DeleteCollaborator(int noteID, CollaboratorRequest collaboratorRequest)
         {
             try
             {
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                var result = await this.noteBL.DeleteCollaborator(collaboratorRequest, userID);
+                var result = await this.noteBL.DeleteCollaborator(noteID, collaboratorRequest.emailID, userID);
 
                 if(result)
                 {
