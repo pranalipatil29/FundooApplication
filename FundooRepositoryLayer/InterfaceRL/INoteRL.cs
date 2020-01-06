@@ -22,6 +22,7 @@ namespace FundooRepositoryLayer.InterfaceRL
     using FundooCommonLayer.Model.Response;
     using System;
     using Microsoft.AspNetCore.Http;
+    using FundooCommonLayer.Model.Request.Note;
 
 
     /// <summary>
@@ -157,7 +158,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="userID">The user identifier.</param>
         /// <param name="formFile">The form file.</param>
         /// <returns>returns the operation result</returns>
-        Task<NoteResponse> ImageUpload(int noteID, string userID,IFormFile file);
+        Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
 
         /// <summary>
         /// Searches the specified key.
@@ -179,7 +180,8 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="key">The key.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns the list of contacts or null value</returns>
-        Dictionary<string, string> GetContacts(string key, string userID);
+        List<string> GetContacts(string emailID, string userID);
 
+       // Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
     }
 }

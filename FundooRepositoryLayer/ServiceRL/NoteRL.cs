@@ -20,6 +20,7 @@ namespace FundooRepositoryLayer.ServiceRL
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
+    using FundooCommonLayer.Model.Request.Note;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.Context;
     using FundooRepositoryLayer.ImageUpload;
@@ -1159,7 +1160,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Key required to search Person
         /// or
         /// </exception>
-        public Dictionary<string, string> GetContacts(string key, string userID)
+        public List<string> GetContacts(string key, string userID)
         {
             try
             {
@@ -1167,10 +1168,10 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (key != null)
                 {
                     // if user entered any key then find the contacts which contains user entered key value
-                    var contacts = this.authenticationContext.UserDataTable.Where(s => (s.Id != userID && (s.FirstName.Contains(key) || s.LastName.Contains(key) || s.Email.Contains(key))));
+                    var contacts = this.authenticationContext.UserDataTable.Where(s => s.Id != userID && s.Email.Contains(key));
 
                     // creating the dictionary class object to hold person name and email ID
-                    Dictionary<string, string> ContactList = new Dictionary<string, string>();
+                    List<string> ContactList = new List<string>();
 
                     // check whether any contact is found or not
                     if (contacts != null)
@@ -1179,7 +1180,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         foreach(var person in contacts)
                         {
                             // add the person name and email ID in dictionary class object
-                            ContactList.Add(person.FirstName + person.LastName, person.Email);
+                            ContactList.Add(person.Email);
                         }
 
                         // return the list
@@ -1202,5 +1203,34 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+    //    public async Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+    //    {
+    //        try
+    //        {
+    //            var note = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == collaboratorRequest.noteID).FirstOrDefault();
+
+    //            if(note != null)
+    //            {
+    //                if(collaboratorRequest.emailID != null)
+    //                {
+    //                    var person = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
+
+    //                }
+    //                else
+    //                {
+
+    //                }
+    //            }
+    //            else
+    //            {
+    //                throw new Exception("Note not found");
+    //            }
+    //        }
+    //        catch(Exception exception)
+    //        {
+    //            throw new Exception(exception.Message);
+    //        }
+    //    }
     }
 }

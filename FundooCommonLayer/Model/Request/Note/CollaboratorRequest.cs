@@ -30,12 +30,7 @@ namespace FundooCommonLayer.Model.Request.Note
         [Required]
         public int noteID;
 
-        /// <summary>
-        /// The name
-        /// </summary>
-        public string name;
-
-        /// <summary>
+         /// <summary>
         /// The email identifier
         /// </summary>
         public string emailID;

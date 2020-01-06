@@ -20,6 +20,7 @@ namespace FundooBusinessLayer.ServicesBL
     using FundooBusinessLayer.InterfaceBL;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
+    using FundooCommonLayer.Model.Request.Note;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Http;
@@ -96,7 +97,7 @@ namespace FundooBusinessLayer.ServicesBL
                 if (noteID > 0)
                 {
                     // if user enter correct note id then pass that note id and user id to repository layer method to delete note
-                    var result=await this.noteRL.DeleteNote(noteID, userID);
+                    var result = await this.noteRL.DeleteNote(noteID, userID);
                     return result;
                 }
                 else
@@ -138,7 +139,7 @@ namespace FundooBusinessLayer.ServicesBL
                 {
                     // if user enter wrong note id then throw exception
                     throw new Exception("Please enter correct Note ID");
-                }                    
+                }
             }
             catch (Exception exception)
             {
@@ -219,7 +220,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // ckeck whether user entered correct note id or not
-                if(noteID > 0)
+                if (noteID > 0)
                 {
                     // if user entered correct note id then pass that id, archive value and user id to repository layer method
                     return await this.noteRL.IsArchive(noteID, userID);
@@ -230,7 +231,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct note id");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -263,7 +264,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("User not found");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -298,7 +299,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct Note ID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -331,7 +332,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("User not found");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -364,7 +365,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct Note Id");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -397,7 +398,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("User not found");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -430,7 +431,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct NoteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -454,7 +455,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // ckeck whether user entered correct note id or not
-                if (noteID > 0 )
+                if (noteID > 0)
                 {
                     // if user entered correct note id then pass that id, color and user id to repository layer method
                     return await this.noteRL.ChangeColor(noteID, color, userID);
@@ -464,7 +465,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct NoteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -498,7 +499,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct NoteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -531,7 +532,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct NoteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -555,7 +556,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // ckeck whether user entered correct note id or not
-                if (noteID > 0 )
+                if (noteID > 0)
                 {
                     // if user entered correct note id then pass that id, user id and image to repository layer method
                     return await this.noteRL.ImageUpload(noteID, userID, file);
@@ -566,7 +567,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct noteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -586,7 +587,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // check whether user entered any value or not
-                if(key != null)
+                if (key != null)
                 {
                     // get the result of search opertion and return it
                     return this.noteRL.Search(key, userId);
@@ -597,7 +598,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Key required to search");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -630,7 +631,7 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("User not found");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -646,15 +647,15 @@ namespace FundooBusinessLayer.ServicesBL
         /// User not found
         /// or
         /// </exception>
-        public Dictionary<string, string> GetContacts(string key, string userID)
+        public List<string> GetContacts(string emailID, string userID)
         {
             try
             {
                 // check wheather the user id contains any null value or not
-                if(userID != null)
+                if (userID != null)
                 {
                     // return the list of persons which contains the user entered key
-                    return this.noteRL.GetContacts(key, userID);
+                    return this.noteRL.GetContacts(emailID, userID);
                 }
                 else
                 {
@@ -662,11 +663,29 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("User not found");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
+        //public async Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID)
+        //{
+        //    try
+        //    {
+        //        if (userID != null)
+        //        {
+        //            return await this.noteRL.ShareWith(collaboratorRequest, userID);
+        //        }
+        //        else
+        //        {
+        //            throw new Exception("User not Found");
+        //        }
+        //    }
+        //    catch (Exception exception)
+        //    {
+        //        throw new Exception(exception.Message);
+        //    }
+        //}
     }
 }

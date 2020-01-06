@@ -172,8 +172,8 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="key">The key.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns the list of contacts or null value</returns>
-        Dictionary<string, string> GetContacts(string key, string userID);
+        List<string> GetContacts(string emailID, string userID);
 
-      //  Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
+      // Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
     }
 }

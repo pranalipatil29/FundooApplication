@@ -741,7 +741,7 @@ namespace FundooApp.Controllers
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the list of Contacts which contains key entered by user
-                Dictionary<string,string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
+               List<string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
 
                 // check wheather any record of person is found or not
                 if (contactList.Count > 0)
