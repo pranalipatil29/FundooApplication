@@ -636,16 +636,29 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-       public Dictionary<string, string> GetContacts(string key, string userID)
+        /// <summary>
+        /// Gets the contacts.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the list of contacts or null value</returns>
+        /// <exception cref="Exception">
+        /// User not found
+        /// or
+        /// </exception>
+        public Dictionary<string, string> GetContacts(string key, string userID)
         {
             try
             {
+                // check wheather the user id contains any null value or not
                 if(userID != null)
                 {
+                    // return the list of persons which contains the user entered key
                     return this.noteRL.GetContacts(key, userID);
                 }
                 else
                 {
+                    // if user id contains null value then throw the exception
                     throw new Exception("User not found");
                 }
             }

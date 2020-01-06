@@ -554,7 +554,7 @@ namespace FundooApp.Controllers
                 {
                     success = true;
                     message = "Reminder Added ";
-                    return this.Ok(new { success, message ,data});
+                    return this.Ok(new { success, message, data});
                 }
                 else
                 {
@@ -657,9 +657,9 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <param name="key">The key.</param>
         /// <returns>returns the list of notes or bad request result</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("Search")]
-        public async Task<IActionResult> Search(string key)
+        public async Task<IActionResult> Search(keyRequest requestedKey)
         {
             var message = string.Empty;
             bool success = false;
@@ -669,7 +669,7 @@ namespace FundooApp.Controllers
                 // get the user id
                 var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
 
-                IList<NoteResponse> result = this.noteBL.Search(key, userID);
+                IList<NoteResponse> result = this.noteBL.Search(requestedKey.key, userID);
 
                 // check whether any note contains user entered key or not
                 if (result.Count > 0)
@@ -726,18 +726,27 @@ namespace FundooApp.Controllers
             }
         }
 
-        [HttpGet]
-        [Route("Collaborators")]
-        public async Task<IActionResult> GetContacts(string key)
+        /// <summary>
+        /// Gets the contacts.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("SearchPerson")]
+        public async Task<IActionResult> GetContacts(keyRequest requestedKey)
         {
             try
             {
+                // get the user ID
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
-                Dictionary<string,string> contactList = this.noteBL.GetContacts(key, userID);
+                // get the list of Contacts which contains key entered by user
+                Dictionary<string,string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
 
+                // check wheather any record of person is found or not
                 if (contactList.Count > 0)
                 {
+                    // return the list of person contact
                     return this.Ok(new { success = true, contactList });
                 }
                 else

@@ -166,8 +166,19 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns the list of notes or null value</returns>
         IList<NoteResponse> Search(string key, string userID);
 
+        /// <summary>
+        /// Bulks the trash.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns true or false depending upon operation result</returns>
         Task<bool> BulkTrash(string userID);
 
+        /// <summary>
+        /// Gets the contacts.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the list of contacts or null value</returns>
         Dictionary<string, string> GetContacts(string key, string userID);
 
     }

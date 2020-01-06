@@ -1149,31 +1149,51 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Gets the contacts.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the list of contacts or null value</returns>
+        /// <exception cref="Exception">
+        /// Key required to search Person
+        /// or
+        /// </exception>
         public Dictionary<string, string> GetContacts(string key, string userID)
         {
             try
             {
+                // check whether user entered any key or not
                 if (key != null)
                 {
+                    // if user entered any key then find the contacts which contains user entered key value
                     var contacts = this.authenticationContext.UserDataTable.Where(s => (s.Id != userID && (s.FirstName.Contains(key) || s.LastName.Contains(key) || s.Email.Contains(key))));
 
+                    // creating the dictionary class object to hold person name and email ID
                     Dictionary<string, string> ContactList = new Dictionary<string, string>();
 
+                    // check whether any contact is found or not
                     if (contacts != null)
                     {
+                        // iterarates the loop for each contact
                         foreach(var person in contacts)
                         {
+                            // add the person name and email ID in dictionary class object
                             ContactList.Add(person.FirstName + person.LastName, person.Email);
                         }
+
+                        // return the list
                         return ContactList;
                     }
                     else
                     {
+                        // if user entered key is not found for any record then return null
                         return null;
                     }
                 }
                 else
                 {
+                    // if uesr doesn't entered any key value then throw the exception
                     throw new Exception("Key required to search Person");
                 }
             }

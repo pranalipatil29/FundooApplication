@@ -20,6 +20,7 @@ namespace FundooBusinessLayer.InterfaceBL
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
+    using FundooCommonLayer.Model.Request.Note;
     using FundooCommonLayer.Model.Response;
     using Microsoft.AspNetCore.Http;
 
@@ -165,6 +166,14 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> BulkTrash(string userId);
 
+        /// <summary>
+        /// Gets the contacts.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the list of contacts or null value</returns>
         Dictionary<string, string> GetContacts(string key, string userID);
+
+      //  Task<NoteResponse> ShareWith(CollaboratorRequest collaboratorRequest, string userID);
     }
 }
