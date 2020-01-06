@@ -20,6 +20,7 @@ namespace FundooApp.Controllers
     using System.Threading.Tasks;
     using FundooBusinessLayer.InterfaceBL;
     using FundooCommonLayer.Model;
+    using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
@@ -192,9 +193,9 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <param name="name">The name.</param>
         /// <returns>returns the list of users or bad request result</returns>
-        [HttpGet]
+        [HttpPost]
         [Route("SearchUser")]
-        public async Task<IActionResult> SearchUser(string name)
+        public async Task<IActionResult> SearchUser(SearchkeyRequest searchkeyRequest)
         {
             var message = string.Empty;
             bool success = false;
@@ -202,7 +203,7 @@ namespace FundooApp.Controllers
             try
             {
                 // get the list of users which have admin entered name
-                IList<AccountResponse> result = this.adminBL.SearchUser(name);
+                IList<AccountResponse> result = this.adminBL.SearchUser(searchkeyRequest.key);
 
                 // check wheather any user having admin entered name or not
                 if(result.Count > 0)

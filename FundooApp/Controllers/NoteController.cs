@@ -659,7 +659,7 @@ namespace FundooApp.Controllers
         /// <returns>returns the list of notes or bad request result</returns>
         [HttpPost]
         [Route("Search")]
-        public async Task<IActionResult> Search(keyRequest requestedKey)
+        public async Task<IActionResult> Search(SearchkeyRequest requestedKey)
         {
             var message = string.Empty;
             bool success = false;
@@ -733,7 +733,7 @@ namespace FundooApp.Controllers
         /// <returns></returns>
         [HttpPost]
         [Route("SearchPerson")]
-        public async Task<IActionResult> GetContacts(keyRequest requestedKey)
+        public async Task<IActionResult> GetContacts(SearchkeyRequest requestedKey)
         {
             try
             {

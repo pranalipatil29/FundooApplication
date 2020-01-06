@@ -1214,7 +1214,7 @@ namespace FundooRepositoryLayer.ServiceRL
     //            {
     //                if(collaboratorRequest.emailID != null)
     //                {
-    //                    var person = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
+    //                    var data = this.authenticationContext.UserDataTable.Where(s => s.Email == collaboratorRequest.emailID).FirstOrDefault();
 
     //                }
     //                else

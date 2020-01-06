@@ -210,11 +210,11 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        public IList<AccountResponse> SearchUser(string name)
+        public IList<AccountResponse> SearchUser(string key)
         {
             try
             {
-                var users = this.authenticationContext.UserDataTable.Where(s => (s.FirstName == name || s.LastName == name) && s.UserType == 0);
+                var users = this.authenticationContext.UserDataTable.Where(s => (s.FirstName.Contains(key) || s.LastName.Contains(key)) && s.UserType == 0);
                 var list = new List<AccountResponse>();
 
                 if (users != null)
