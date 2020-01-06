@@ -1110,28 +1110,74 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Bulks the trash.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns> returns the true or false depending upon operation result</returns>
+        /// <exception cref="Exception"></exception>
         public async Task<bool> BulkTrash(string userId)
         {
             try
             {
+                // get the note data of user
                 var data = this.authenticationContext.Note.Where(s => s.UserID == userId && s.IsTrash);
 
+                // check wheather user have notes in trash or not
                 if (data != null)
                 {
+                    // itearates the loop for all notes in trash
                     foreach (var note in data)
                     {
+                        // delete the note from trash
                         this.authenticationContext.Note.Remove(note);
                     }
 
+                    // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
                 else
                 {
+                    // if user doesn't have any note in trash return false
                     return false;
                 }
             }
             catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public Dictionary<string, string> GetContacts(string key, string userID)
+        {
+            try
+            {
+                if (key != null)
+                {
+                    var contacts = this.authenticationContext.UserDataTable.Where(s => (s.Id != userID && (s.FirstName.Contains(key) || s.LastName.Contains(key) || s.Email.Contains(key))));
+
+                    Dictionary<string, string> ContactList = new Dictionary<string, string>();
+
+                    if (contacts != null)
+                    {
+                        foreach(var person in contacts)
+                        {
+                            ContactList.Add(person.FirstName + person.LastName, person.Email);
+                        }
+                        return ContactList;
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                }
+                else
+                {
+                    throw new Exception("Key required to search Person");
+                }
+            }
+            catch(Exception exception)
             {
                 throw new Exception(exception.Message);
             }

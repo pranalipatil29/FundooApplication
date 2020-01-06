@@ -22,6 +22,7 @@ namespace FundooApp.Controllers
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Mvc;
 
@@ -29,6 +30,7 @@ namespace FundooApp.Controllers
     /// this class handles http request and response for labels
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class LabelController : ControllerBase

@@ -692,23 +692,57 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Bulks the trash.
+        /// </summary>
+        /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("BulkTrash")]
         public async Task<IActionResult> BulkTrash()
         {
             try
             {
+                // get the user ID 
                 var userId = this.HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
 
+                // Perform the operation and get the operation result
                 var result = await this.noteBL.BulkTrash(userId);
 
+                // check wheather the result variable contains true value or not
                 if(result)
                 {
-                    return this.Ok(new { success = true, message = "successfully deleted notes from trash" });
+                    // if result variable contains true value means opeartion is done successfully
+                    return this.Ok(new { success = true, message = "Successfully deleted notes from trash" });
                 }
                 else
                 {
+                    // return message indicating opeartion is failed
                     return this.BadRequest(new { success = false, message = "Failed" });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
+
+        [HttpGet]
+        [Route("Collaborators")]
+        public async Task<IActionResult> GetContacts(string key)
+        {
+            try
+            {
+                var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                Dictionary<string,string> contactList = this.noteBL.GetContacts(key, userID);
+
+                if (contactList.Count > 0)
+                {
+                    return this.Ok(new { success = true, contactList });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Contact not Found" });
                 }
             }
             catch(Exception exception)

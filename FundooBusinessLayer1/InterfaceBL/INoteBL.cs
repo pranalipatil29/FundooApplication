@@ -158,6 +158,13 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns>returns the list of notes or null value</returns>
         IList<NoteResponse> Search(string kay, string userID);
 
+        /// <summary>
+        /// Bulks the trash.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> BulkTrash(string userId);
+
+        Dictionary<string, string> GetContacts(string key, string userID);
     }
 }

@@ -562,6 +562,7 @@ namespace FundooBusinessLayer.ServicesBL
                 }
                 else
                 {
+                    // if user entered wrong note id throw the exception
                     throw new Exception("Please enter correct noteID");
                 }
             }
@@ -587,10 +588,12 @@ namespace FundooBusinessLayer.ServicesBL
                 // check whether user entered any value or not
                 if(key != null)
                 {
+                    // get the result of search opertion and return it
                     return this.noteRL.Search(key, userId);
                 }
                 else
                 {
+                    // if user not entered any key throw the exception
                     throw new Exception("Key required to search");
                 }
             }
@@ -600,13 +603,46 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Bulks the trash.
+        /// </summary>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns>
+        /// returns true or false depending upon operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// User not found
+        /// or
+        /// </exception>
         public async Task<bool> BulkTrash(string userId)
         {
             try
             {
+                // check wheather user id is null or not 
                 if (userId != null)
                 {
+                    // if user id found then perform the operation and return the result of operation
                     return await this.noteRL.BulkTrash(userId);
+                }
+                else
+                {
+                    // if user not found then throw the exception
+                    throw new Exception("User not found");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+       public Dictionary<string, string> GetContacts(string key, string userID)
+        {
+            try
+            {
+                if(userID != null)
+                {
+                    return this.noteRL.GetContacts(key, userID);
                 }
                 else
                 {
@@ -618,5 +654,6 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
     }
 }

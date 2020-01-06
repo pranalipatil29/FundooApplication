@@ -167,5 +167,8 @@ namespace FundooRepositoryLayer.InterfaceRL
         IList<NoteResponse> Search(string key, string userID);
 
         Task<bool> BulkTrash(string userID);
+
+        Dictionary<string, string> GetContacts(string key, string userID);
+
     }
 }
