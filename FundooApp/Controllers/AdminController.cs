@@ -30,6 +30,7 @@ namespace FundooApp.Controllers
     /// this class contains different API's for Admin
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase

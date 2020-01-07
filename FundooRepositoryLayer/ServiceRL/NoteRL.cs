@@ -69,9 +69,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (requestNote != null)
                 {
                     // set the user entered values
-                    var data = new NoteModel()
+                    var data = new NoteRequest()
                     {
-                        UserID = userID,
                         Title = requestNote.Title,
                         Description = requestNote.Description,
                         Reminder = requestNote.Reminder,
@@ -81,12 +80,30 @@ namespace FundooRepositoryLayer.ServiceRL
                         IsArchive = requestNote.IsArchive,
                         IsPin = requestNote.IsPin,
                         IsTrash = false,
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now
+                       
                     };
-
+                    var count = 0;
+                    if(data.Collaborator != null)
+                    {
+                        count++;
+                    }
+                    var noteInfo = new NoteModel()
+                    {
+                        UserID =userID,
+                        Title=data.Title,
+                        Description=data.Description,
+                        Collaborators=count,
+                        Color=data.Color,
+                        Reminder=data.Reminder,
+                        Image=data.Image,
+                        IsArchive=data.IsArchive,
+                        IsPin=data.IsPin,
+                        IsTrash= data.IsTrash,
+                        CreatedDate=DateTime.Now,
+                        ModifiedDate=DateTime.Now
+                    };
                     // add new note in tabel
-                    this.authenticationContext.Note.Add(data);
+                    this.authenticationContext.Note.Add(noteInfo);
                     await this.authenticationContext.SaveChangesAsync();
                     return true;
                 }
@@ -171,11 +188,12 @@ namespace FundooRepositoryLayer.ServiceRL
                         note.Description = noteRequest.Description;
                     }
 
-                    // check whether user entered value for collaborator or not
-                    if (noteRequest.Collaborator != null && noteRequest.Collaborator != string.Empty)
-                    {
-                        note.Collaborator = noteRequest.Collaborator;
-                    }
+                    //// check whether user entered value for collaborator or not
+                    //if (noteRequest.Collaborator != null && noteRequest.Collaborator != string.Empty)
+                    //{ 
+                    //  
+                    //    note.Collaborators = noteRequest.Collaborator;
+                    //}
 
                     // check whether user entered value for color or not
                     if (noteRequest.Color != null && noteRequest.Color != string.Empty)
@@ -251,13 +269,15 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for each note
                     foreach (var note in data)
                     {
+                        var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
                         // get the required values of note
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorsList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -290,15 +310,17 @@ namespace FundooRepositoryLayer.ServiceRL
                 // get all notes of user
                 var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsArchive == false && s.IsTrash == false).FirstOrDefault();
 
-                // check whether user have notes or not
+               // check whether user have notes or not
                 if (data != null)
                 {
+                    var list = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     var note = new NoteResponse()
                     {
                         NoteID = data.NoteID,
                         Title = data.Title,
                         Description = data.Description,
-                        Collaborator = data.Collaborator,
+                        Collaborator = list.Count(),
                         Color = data.Color,
                         Image = data.Image,
                         IsArchive = data.IsArchive,
@@ -344,6 +366,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether required note is found or not
                 if (data != null)
                 {
+                    var list = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // if required note is found then check note is archived or not
                     if (!data.IsArchive)
                     {
@@ -369,7 +393,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             NoteID = data.NoteID,
                             Title = data.Title,
                             Description = data.Description,
-                            Collaborator = data.Collaborator,
+                            Collaborator = list.Count(),
                             Color = data.Color,
                             Image = data.Image,
                             IsArchive = data.IsArchive,
@@ -398,7 +422,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             NoteID = data.NoteID,
                             Title = data.Title,
                             Description = data.Description,
-                            Collaborator = data.Collaborator,
+                            Collaborator = list.Count(),
                             Color = data.Color,
                             Image = data.Image,
                             IsArchive = data.IsArchive,
@@ -445,13 +469,15 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for each note
                     foreach (var note in data)
                     {
+                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
                         // get the required values of note
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -502,6 +528,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether user have required note or not
                 if (data != null)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // check whether user required note is pinned or not 
                     if (!data.IsPin)
                     {
@@ -526,7 +554,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             NoteID = data.NoteID,
                             Title = data.Title,
                             Description = data.Description,
-                            Collaborator = data.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = data.Color,
                             Image = data.Image,
                             IsArchive = data.IsArchive,
@@ -555,7 +583,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             NoteID = data.NoteID,
                             Title = data.Title,
                             Description = data.Description,
-                            Collaborator = data.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = data.Color,
                             Image = data.Image,
                             IsArchive = data.IsArchive,
@@ -602,13 +630,15 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for all notes
                     foreach (var note in data)
                     {
+                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
                         // get the required note info
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -709,13 +739,15 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for every notes
                     foreach (var note in data)
                     {
+                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
                         // get info of each note
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -759,6 +791,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether required note is exist or not
                 if (note != null && note.IsTrash)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // restore the note form trash
                     note.IsTrash = false;
                     note.ModifiedDate = DateTime.Now;
@@ -775,7 +809,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         NoteID = note.NoteID,
                         Title = note.Title,
                         Description = note.Description,
-                        Collaborator = note.Collaborator,
+                        Collaborator = collaboratorList.Count(),
                         Color = note.Color,
                         Image = note.Image,
                         IsArchive = note.IsArchive,
@@ -819,6 +853,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // set the new color to note
                     note.Color = color;
                     note.ModifiedDate = DateTime.Now;
@@ -835,7 +871,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         NoteID = note.NoteID,
                         Title = note.Title,
                         Description = note.Description,
-                        Collaborator = note.Collaborator,
+                        Collaborator = collaboratorList.Count(),
                         Color = note.Color,
                         Image = note.Image,
                         IsArchive = note.IsArchive,
@@ -882,6 +918,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // check whether user entered date and time are greater than current time
                     if (dateTime != null && dateTime > DateTime.Now)
                     {
@@ -901,7 +939,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -950,6 +988,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteId);
+
                     // remove the reminder
                     note.Reminder = null;
                     note.ModifiedDate = DateTime.Now;
@@ -966,7 +1006,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         NoteID = note.NoteID,
                         Title = note.Title,
                         Description = note.Description,
-                        Collaborator = note.Collaborator,
+                        Collaborator = collaboratorList.Count(),
                         Color = note.Color,
                         Image = note.Image,
                         IsArchive = note.IsArchive,
@@ -1010,6 +1050,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // chcek whether required note is exist or not
                 if (note != null && note.IsTrash == false)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     // send the API key,API secret key and cloud name to Upload Image class constructor
                     UploadImage imageUpload = new UploadImage(this.applicationSetting.APIkey, this.applicationSetting.APISecret, this.applicationSetting.CloudName);
 
@@ -1032,7 +1074,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         NoteID = note.NoteID,
                         Title = note.Title,
                         Description = note.Description,
-                        Collaborator = note.Collaborator,
+                        Collaborator = collaboratorList.Count(),
                         Color = note.Color,
                         Image = note.Image,
                         IsArchive = note.IsArchive,
@@ -1076,6 +1118,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check wheather note is found or not
                 if (note != null)
                 {
+                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+
                     note.Image = null;
                     this.authenticationContext.Note.Update(note);
                     await this.authenticationContext.SaveChangesAsync();
@@ -1084,7 +1128,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         NoteID = note.NoteID,
                         Title = note.Title,
-                        Collaborator = note.Collaborator,
+                        Collaborator = collaboratorList.Count(),
                         Description = note.Description,
                         Reminder = note.Reminder,
                         Color = note.Color,
@@ -1120,7 +1164,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 var element = key;
 
                 // find the notes which contains user entered key element
-                var data = this.authenticationContext.Note.Where(s => ((s.Title.Contains(element) || s.Description.Contains(element) || s.Collaborator.Contains(element)) && s.IsTrash == false) && s.UserID == userId);
+                var data = this.authenticationContext.Note.Where(s => ((s.Title.Contains(element) || s.Description.Contains(element)) && s.IsTrash == false) && s.UserID == userId);
                 var list = new List<NoteResponse>();
 
                 // check whether any note contain user entered key
@@ -1129,13 +1173,15 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for every notes
                     foreach (var note in data)
                     {
+                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userId && s.NoteID == note.NoteID);
+
                         // get info of each note
                         var notes = new NoteResponse()
                         {
                             NoteID = note.NoteID,
                             Title = note.Title,
                             Description = note.Description,
-                            Collaborator = note.Collaborator,
+                            Collaborator = collaboratorList.Count(),
                             Color = note.Color,
                             Image = note.Image,
                             IsArchive = note.IsArchive,
@@ -1211,7 +1257,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Key required to search Person
         /// or
         /// </exception>
-        public List<string> GetContacts(string key, string userID)
+        public Dictionary<string, string> GetContacts(string key, string userID)
         {
             try
             {
@@ -1222,7 +1268,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     var contacts = this.authenticationContext.UserDataTable.Where(s => s.Id != userID && s.Email.Contains(key));
 
                     // creating the dictionary class object to hold person name and email ID
-                    List<string> ContactList = new List<string>();
+                    Dictionary<string,string> ContactList = new Dictionary<string, string>();
 
                     // check whether any contact is found or not
                     if (contacts != null)
@@ -1231,7 +1277,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         foreach (var person in contacts)
                         {
                             // add the person name and email ID in dictionary class object
-                            ContactList.Add(person.Email);
+                            ContactList.Add(person.Id, person.Email);
                         }
 
                         // return the list
@@ -1267,7 +1313,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// This email ID not found
         /// or
         /// </exception>
-        public async Task<bool> ShareWith(int noteID, string emailID, string userID)
+        public async Task<bool> ShareWith(int noteID, string id, string userID)
         {
             try
             {
@@ -1279,10 +1325,10 @@ namespace FundooRepositoryLayer.ServiceRL
                 if (note != null)
                 {
                     // get the user info from user table through user entered email ID
-                    var data = this.authenticationContext.UserDataTable.Where(s => s.Email == emailID).FirstOrDefault();
+                    var data = this.authenticationContext.UserDataTable.Where(s => s.Email == id || s.Id == id).FirstOrDefault();
 
                     // get the existed collaborator info form Collaborator table for user entered emailID
-                    var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.NoteID == noteID && s.Collaborator == emailID)).FirstOrDefault();
+                    var existedCollaborator = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID && (s.CollaboratorID == id || s.EmailID == id)).FirstOrDefault();
 
                     // check wheather user is present in user table or not
                     if (data != null)
@@ -1294,13 +1340,19 @@ namespace FundooRepositoryLayer.ServiceRL
                             {
                                 NoteID = noteID,
                                 UserID = userId,
-                                Collaborator = emailID,
+                                CollaboratorID = data.Id,
+                                EmailID= data.Email,
                                 CreatedDate = DateTime.Now,
                                 ModifiedDate = DateTime.Now
                             };
 
                             this.authenticationContext.Collaborators.Add(collaborator);
                             await this.authenticationContext.SaveChangesAsync();
+
+                            note.Collaborators = note.Collaborators + 1;
+                            this.authenticationContext.Note.Update(note);
+                            await this.authenticationContext.SaveChangesAsync();
+                            
                             return true;
                         }
                         else
@@ -1333,27 +1385,41 @@ namespace FundooRepositoryLayer.ServiceRL
         /// returns true or false depending upon operation result
         /// </returns>
         /// <exception cref="Exception"></exception>
-        public async Task<bool> DeleteCollaborator(int noteID, string emailID, string userID)
+        public async Task<bool> DeleteCollaborator(int noteID, string id, string userID)
         {
             try
             {
-                // get the note info which have user specified collaborator form collaborators table
-                var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.Collaborator == emailID && s.NoteID == noteID).FirstOrDefault();
+                var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
 
-                // check wheather note is found or not
-                if (note != null)
+                if(noteData != null)
                 {
-                    // if note is found in collaborators table then delete the collaborator for specified note
-                    this.authenticationContext.Collaborators.Remove(note);
+                    // get the note info which have user specified collaborator form collaborators table
+                    var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.CollaboratorID == id || s.EmailID == id) && s.NoteID == noteID).FirstOrDefault();
 
-                    // save the changes in database
-                    await this.authenticationContext.SaveChangesAsync();
-                    return true;
+                    // check wheather note is found or not
+                    if (note != null)
+                    {
+                        // if note is found in collaborators table then delete the collaborator for specified note
+                        this.authenticationContext.Collaborators.Remove(note);
+                        
+                        // save the changes in database
+                        await this.authenticationContext.SaveChangesAsync();
+
+                        noteData.Collaborators = noteData.Collaborators - 1;
+                        this.authenticationContext.Note.Update(noteData);
+                        await this.authenticationContext.SaveChangesAsync();
+
+                        return true;
+                    }
+                    else
+                    {
+                        // if note not found then return false
+                        return false;
+                    }
                 }
-                else
+               else
                 {
-                    // if note not found then return false
-                    return false;
+                    throw new Exception("Note not found");
                 }
             }
             catch (Exception exception)

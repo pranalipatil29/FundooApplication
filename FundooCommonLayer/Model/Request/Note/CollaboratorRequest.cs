@@ -27,6 +27,6 @@ namespace FundooCommonLayer.Model.Request.Note
          /// <summary>
         /// The email identifier
         /// </summary>
-        public string emailID;
+        public string ID;
     }
 }

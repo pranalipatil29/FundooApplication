@@ -257,7 +257,7 @@ namespace FundooApp.Controllers
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var data = await this.noteBL.IsArchive(noteID, userID);
 
-                if (data != null)
+                if (data.IsArchive)
                 {
                     success = true;
                     message = "Note Archived";
@@ -331,7 +331,7 @@ namespace FundooApp.Controllers
                 var userID = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var data = await this.noteBL.IsPin(noteID, userID);
 
-                if (data != null)
+                if (data.IsPin)
                 {
                     success = true;
                     message = "Note Pinned";
@@ -356,7 +356,7 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns> returns the result of operation</returns>
         [HttpGet]
-        [Route("Pinned")]
+        [Route("Pin")]
         public async Task<IActionResult> GetPinnedNotes()
         {
             try
@@ -560,7 +560,7 @@ namespace FundooApp.Controllers
                 {
                     success = false;
                     message = "Note doesn't exist";
-                    return this.Ok(new { success, message });
+                    return this.BadRequest(new { success, message });
                 }
             }
             catch(Exception exception)
@@ -578,7 +578,7 @@ namespace FundooApp.Controllers
         /// <returns> returns the operation result</returns>
         [HttpDelete]
         [Route("{noteID}/Reminder")]
-        public async Task<IActionResult> RemoveReminder(int noteID)
+        public async Task<IActionResult> Reminder(int noteID)
         {
             bool success = false;
             var message = string.Empty;
@@ -598,7 +598,7 @@ namespace FundooApp.Controllers
                 {
                     success = false;
                     message = "Note doesn't exist";
-                    return this.Ok(new { success, message });
+                    return this.BadRequest(new { success, message });
                 }
             }
             catch(Exception exception)
@@ -641,7 +641,7 @@ namespace FundooApp.Controllers
                     // if data contains null value that means process of image uploading is failed
                     success = false;
                     message = "Failed to upload image";
-                    return this.Ok(new { success, message });
+                    return this.BadRequest(new { success, message });
                 }
             }
             catch(Exception exception)
@@ -774,7 +774,7 @@ namespace FundooApp.Controllers
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the list of Contacts which contains key entered by user
-               List<string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
+               Dictionary<string,string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
 
                 // check wheather any record of person is found or not
                 if (contactList.Count > 0)
@@ -810,7 +810,7 @@ namespace FundooApp.Controllers
                 var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the result of operation
-                var result = await this.noteBL.ShareWith(noteID, collaboratorRequest.emailID, userId);
+                var result = await this.noteBL.ShareWith(noteID, collaboratorRequest.ID, userId);
 
                 // check wheather operation is done or not
                 if (result)
@@ -844,7 +844,7 @@ namespace FundooApp.Controllers
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the result of Delete Collaborator operation
-                var result = await this.noteBL.DeleteCollaborator(noteID, collaboratorRequest.emailID, userID);
+                var result = await this.noteBL.DeleteCollaborator(noteID, collaboratorRequest.ID, userID);
 
                 // check wheather result is true or false
                 if(result)
@@ -853,7 +853,7 @@ namespace FundooApp.Controllers
                 }
                 else
                 {
-                    return this.BadRequest(new { success = false, message = "Failed to delete collaborator" });
+                    return this.BadRequest(new { success = false, message = "Failed to delete Collaborator" });
                 }
             }
             catch(Exception exception)

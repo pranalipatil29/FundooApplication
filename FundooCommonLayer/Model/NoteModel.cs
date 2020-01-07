@@ -74,8 +74,7 @@ namespace FundooCommonLayer.Model
         /// <value>
         /// The collaborator.
         /// </value>
-        [Column(TypeName = "nvarchar(150)")]
-        public string Collaborator { get; set; }
+        public int Collaborators { get; set; }
 
         /// <summary>
         /// Gets or sets the color.

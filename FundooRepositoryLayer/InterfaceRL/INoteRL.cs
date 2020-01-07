@@ -180,7 +180,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="key">The key.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns the list of contacts or null value</returns>
-        List<string> GetContacts(string emailID, string userID);
+        Dictionary<string,string> GetContacts(string emailID, string userID);
 
         /// <summary>
         /// Shares the with.
@@ -188,7 +188,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="collaboratorRequest">The collaborator request.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns true or false depending upon operation result</returns>
-        Task<bool> ShareWith(int noteOID, string emailID, string userID);
+        Task<bool> ShareWith(int noteOID, string id, string userID);
 
         /// <summary>
         /// Deletes the collaborator.
@@ -196,7 +196,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="collaboratorRequest">The collaborator request.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns true or false depending upon operation result</returns>
-        Task<bool> DeleteCollaborator(int noteID, string emailID, string userID);
+        Task<bool> DeleteCollaborator(int noteID, string id, string userID);
 
         /// <summary>
         /// Removes the image.

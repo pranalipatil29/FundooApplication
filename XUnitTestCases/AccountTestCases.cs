@@ -30,16 +30,16 @@ namespace XUnitTestCases
 
     public class AccountTestCases
     {
-        AccountController accountController;
-        private readonly IAccountBL accountBL ;
-      //  private readonly IAccountRL accountRL ;
+      //  AccountController accountController;
+      //  private readonly IAccountBL accountBL ;
+      ////  private readonly IAccountRL accountRL ;
 
-        public AccountTestCases()
-        {
-            var repository = new Mock<IAccountRL>();
-            this.accountBL = new AccountBL(repository.Object);
-            accountController = new AccountController(this.accountBL);
-        }
+      //  public AccountTestCases()
+      //  {
+      //      var repository = new Mock<IAccountRL>();
+      //      this.accountBL = new AccountBL(repository.Object);
+      //      accountController = new AccountController(this.accountBL);
+      //  }
 
         //[Fact]
         //public async Task TestRegistrationForBadRequest()
@@ -76,36 +76,39 @@ namespace XUnitTestCases
         //}
 
         [Fact]
-        public async Task TestLoginForNotNull()
+        public async Task TestLoginForSuccess()
         {
-           
-            LoginModel model = new LoginModel()
+            var repository = new Mock<IAccountRL>();
+            var business = new AccountBL(repository.Object);
+            var accountController = new AccountController(business);
+
+            var model = new LoginModel()
             {
                EmailId = "pranali2996@gmail.com",
                Password="Pranali@29"                
             };
 
             var result = await accountController.Login(model);
-            Assert.NotNull(result);
+            Assert.IsType<OkObjectResult>(result);
         }
 
-        [Fact]
-        public async Task TestLoginForEmailID()
-        {
-            var repository = new Mock<IAccountRL>();
-            var business = new AccountBL(repository.Object);
-            var controller = new AccountController(business);
+        //[Fact]
+        //public async Task TestLoginForEmailID()
+        //{
+        //    var repository = new Mock<IAccountRL>();
+        //    var business = new AccountBL(repository.Object);
+        //    var controller = new AccountController(business);
 
-            LoginModel model = new LoginModel()
-            {
-               Password = "Pranali@29"
-            };
+        //    LoginModel model = new LoginModel()
+        //    {
+        //       Password = "Pranali@29"
+        //    };
 
-            controller.ModelState.AddModelError("EmailId", "Required");
+        //    controller.ModelState.AddModelError("EmailId", "Required");
             
-            var result = await accountController.Login(model);
-            Assert.IsType<BadRequestObjectResult>(result);
-        }
+        //    var result = await accountController.Login(model);
+        //    Assert.IsType<BadRequestObjectResult>(result);
+        //}
 
     }
 }

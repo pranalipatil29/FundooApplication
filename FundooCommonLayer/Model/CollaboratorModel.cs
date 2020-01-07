@@ -32,7 +32,10 @@ namespace FundooCommonLayer.Model
         public string UserID { get; set; }
 
         [Column (TypeName ="nvarchar(150)")]
-        public string Collaborator { get; set; }
+        public string CollaboratorID { get; set; }
+
+        [Column(TypeName = "nvarchar(150)")]
+        public string EmailID { get; set; }
 
         [Column(TypeName = "DateTime")]
         public DateTime CreatedDate { get; set; }

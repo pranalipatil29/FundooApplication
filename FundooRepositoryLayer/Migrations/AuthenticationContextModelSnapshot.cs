@@ -25,11 +25,14 @@ namespace FundooRepositoryLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Collaborator")
+                    b.Property<string>("CollaboratorID")
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("CreatedDate")
                         .HasColumnType("DateTime");
+
+                    b.Property<string>("EmailID")
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<DateTime>("ModifiedDate")
                         .HasColumnType("DateTime");
@@ -91,8 +94,7 @@ namespace FundooRepositoryLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Collaborator")
-                        .HasColumnType("nvarchar(150)");
+                    b.Property<int>("Collaborators");
 
                     b.Property<string>("Color")
                         .HasColumnType("nvarchar(150)");

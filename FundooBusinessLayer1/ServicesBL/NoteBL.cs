@@ -679,20 +679,20 @@ namespace FundooBusinessLayer.ServicesBL
         /// User not found
         /// or
         /// </exception>
-        public List<string> GetContacts(string emailID, string userID)
+        public Dictionary<string,string> GetContacts(string key, string userID)
         {
             try
             {
                 // check wheather the user id contains any null value or not
-                if (emailID != null)
+                if (key != null)
                 {
                     // return the list of persons which contains the user entered key
-                    return this.noteRL.GetContacts(emailID, userID);
+                    return this.noteRL.GetContacts(key, userID);
                 }
                 else
                 {
                     // if user id contains null value then throw the exception
-                    throw new Exception("EmailID is required");
+                    throw new Exception("EmailID or UserId is required");
                 }
             }
             catch (Exception exception)
@@ -713,17 +713,17 @@ namespace FundooBusinessLayer.ServicesBL
         /// NoteId and email id is required
         /// or
         /// </exception>
-        public async Task<bool> ShareWith(int noteID,string emailID, string userID)
+        public async Task<bool> ShareWith(int noteID, string id, string userID)
         {
             try
             {
-                if (emailID != null && noteID > 0)
+                if (id != null && noteID > 0)
                 {
-                    return await this.noteRL.ShareWith(noteID, emailID, userID);
+                    return await this.noteRL.ShareWith(noteID, id, userID);
                 }
                 else
                 {
-                    throw new Exception("NoteId and email id is required");
+                    throw new Exception("NoteId and user id is required");
                 }
             }
             catch (Exception exception)
@@ -744,19 +744,19 @@ namespace FundooBusinessLayer.ServicesBL
         /// NoteId and email id is required
         /// or
         /// </exception>
-        public async Task<bool> DeleteCollaborator(int noteID, string emailID, string userID)
+        public async Task<bool> DeleteCollaborator(int noteID, string id, string userID)
         {
             try
             {
                 // check wheather user entered any null value or not
-                if (emailID != null && noteID > 0)
+                if (id != null && noteID > 0)
                 {
-                    return await this.noteRL.DeleteCollaborator(noteID, emailID, userID);
+                    return await this.noteRL.DeleteCollaborator(noteID, id, userID);
                 }
                 else
                 {
                     // if user entered any null value then throw the exception
-                    throw new Exception("NoteId and email id is required");
+                    throw new Exception("NoteId and user id is required");
                 }
             }
             catch (Exception exception)

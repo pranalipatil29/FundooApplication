@@ -1,7 +1,3 @@
-C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.csprojAssemblyReference.cache
-C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.csproj.CoreCompileInputs.cache
-C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.AssemblyInfoInputs.cache
-C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.AssemblyInfo.cs
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.deps.json
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.runtimeconfig.json
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.runtimeconfig.dev.json
@@ -9,6 +5,10 @@ C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooCommonLayer.dll
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\bin\Debug\netcoreapp2.1\FundooCommonLayer.pdb
+C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.csprojAssemblyReference.cache
+C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.csproj.CoreCompileInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.AssemblyInfoInputs.cache
+C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.AssemblyInfo.cs
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.csproj.CopyComplete
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.dll
 C:\Users\User\source\repos\FundooApp\FundooRepositoryLayer\obj\Debug\netcoreapp2.1\FundooRepositoryLayer.pdb

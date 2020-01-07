@@ -61,7 +61,7 @@ namespace FundooCommonLayer.Model.Response
         /// <value>
         /// The collaborator.
         /// </value>
-        public string Collaborator { get; set; }
+        public int Collaborator { get; set; }
 
         /// <summary>
         /// Gets or sets the color.
