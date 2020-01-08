@@ -101,8 +101,8 @@ namespace FundooApp.Controllers
         {
             try
             {
-                string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
-               // var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+              //  string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
+                var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.DeleteNote(noteID, userId);
 
                 bool success = false;

@@ -80,36 +80,84 @@ namespace FundooRepositoryLayer.ServiceRL
                         IsArchive = requestNote.IsArchive,
                         IsPin = requestNote.IsPin,
                         IsTrash = false,
-                       
                     };
-                    var count = 0;
-                    if(data.Collaborator != null)
+
+                    // check wheather user added any collaborator or not
+                    if (data.Collaborator != null)
                     {
-                        var newCollaborator = new CollaboratorRequest()
+                        // if user added collaborator then first save the note info into Note table
+                        var noteInfo = new NoteModel()
                         {
-                            ID = requestNote.Collaborator
+                            UserID = userID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborators = 1,
+                            Color = data.Color,
+                            Reminder = data.Reminder,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now
                         };
 
-                        count++;
+                        // add new note in tabel
+                        this.authenticationContext.Note.Add(noteInfo);
+                       await this.authenticationContext.SaveChangesAsync();
+                       
+                        // get the collaborator info from User table
+                        var user = this.authenticationContext.UserDataTable.Where(s => s.Email == data.Collaborator).FirstOrDefault();
+
+                        // check wheather user entered collaborator is present in User table or not
+                        if (user != null)
+                        {
+                            // if collaborator is present in User table then add the info into collaborator table
+                            var collaborator = new CollaboratorModel()
+                            {
+                                NoteID = noteInfo.NoteID,
+                                UserID = noteInfo.UserID,
+                                CollaboratorID = user.Id,
+                                EmailID = data.Collaborator,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            };
+
+                            // adding the collaborator and in collaborator table
+                            this.authenticationContext.Collaborators.Add(collaborator);
+
+                            // save the changes into database
+                            await this.authenticationContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            // if user entered emailId for collaborator not found then throw exception
+                            throw new Exception(" Email ID not found for Collaborator");
+                        }
+                       
                     }
-                    var noteInfo = new NoteModel()
+                    else
                     {
-                        UserID = userID,
-                        Title = data.Title,
-                        Description = data.Description,
-                        Collaborators = count,
-                        Color = data.Color,
-                        Reminder = data.Reminder,
-                        Image = data.Image,
-                        IsArchive = data.IsArchive,
-                        IsPin = data.IsPin,
-                        IsTrash = data.IsTrash,
-                        CreatedDate = DateTime.Now,
-                        ModifiedDate = DateTime.Now
-                    };
-                    // add new note in tabel
-                    this.authenticationContext.Note.Add(noteInfo);
-                    await this.authenticationContext.SaveChangesAsync();
+                        var noteInfo = new NoteModel()
+                        {
+                            UserID = userID,
+                            Title = data.Title,
+                            Description = data.Description,
+                            Collaborators = 0,
+                            Color = data.Color,
+                            Reminder = data.Reminder,
+                            Image = data.Image,
+                            IsArchive = data.IsArchive,
+                            IsPin = data.IsPin,
+                            IsTrash = data.IsTrash,
+                            CreatedDate = DateTime.Now,
+                            ModifiedDate = DateTime.Now
+                        };
+
+                        // add new note in tabel
+                        this.authenticationContext.Note.Add(noteInfo);
+                        await this.authenticationContext.SaveChangesAsync();
+                    }
                     return true;
                 }
                 else
@@ -196,7 +244,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     // check whether user entered value for collaborator or not
                     if (noteRequest.Collaborator != null && noteRequest.Collaborator != string.Empty)
                     {
-                       var result = await this.ShareWith(note.NoteID, noteRequest.Collaborator, userID);             
+                        var result = await this.ShareWith(note.NoteID, noteRequest.Collaborator, userID);
                     }
 
                     // check whether user entered value for color or not
@@ -314,7 +362,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 // get all notes of user
                 var data = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsArchive == false && s.IsTrash == false).FirstOrDefault();
 
-               // check whether user have notes or not
+                // check whether user have notes or not
                 if (data != null)
                 {
                     var list = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
@@ -1274,7 +1322,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     var contacts = this.authenticationContext.UserDataTable.Where(s => s.Id != userID && s.Email.Contains(key));
 
                     // creating the dictionary class object to hold person name and email ID
-                    Dictionary<string,string> ContactList = new Dictionary<string, string>();
+                    Dictionary<string, string> ContactList = new Dictionary<string, string>();
 
                     // check whether any contact is found or not
                     if (contacts != null)
@@ -1348,7 +1396,7 @@ namespace FundooRepositoryLayer.ServiceRL
                                 NoteID = noteID,
                                 UserID = userId,
                                 CollaboratorID = data.Id,
-                                EmailID= data.Email,
+                                EmailID = data.Email,
                                 CreatedDate = DateTime.Now,
                                 ModifiedDate = DateTime.Now
                             };
@@ -1359,7 +1407,7 @@ namespace FundooRepositoryLayer.ServiceRL
                             this.authenticationContext.Note.Update(note);
 
                             await this.authenticationContext.SaveChangesAsync();
-                            
+
                             return true;
                         }
                         else
@@ -1402,7 +1450,7 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
 
-                if(noteData != null)
+                if (noteData != null)
                 {
                     // get the note info which have user specified collaborator form collaborators table
                     var note = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && (s.CollaboratorID == id || s.EmailID == id) && s.NoteID == noteID).FirstOrDefault();
@@ -1412,7 +1460,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         // if note is found in collaborators table then delete the collaborator for specified note
                         this.authenticationContext.Collaborators.Remove(note);
-                                                                
+
                         noteData.Collaborators = noteData.Collaborators - 1;
                         this.authenticationContext.Note.Update(noteData);
 
@@ -1427,7 +1475,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         return false;
                     }
                 }
-               else
+                else
                 {
                     throw new Exception("Note not found");
                 }
@@ -1436,6 +1484,6 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 throw new Exception(exception.Message);
             }
-        }      
+        }
     }
 }
