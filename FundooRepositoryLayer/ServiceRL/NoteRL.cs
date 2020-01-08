@@ -191,6 +191,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 // get required note for user
                 var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
 
+                
                 // check whether user have required note or not
                 if (note != null && note.IsTrash)
                 {
@@ -325,38 +326,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for each note
                     foreach (var note in data)
                     {
-                       // creating a list for holding collaborators info for esch note
-                       var collaborators = new List<CollaboratorRsponse>();
-
-                        // get the collaborators for each note
-                        var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
-
-                        foreach( var coll in collaboratorsList)
-                        {
-                            var collaboratorData = new CollaboratorRsponse()
-                            {
-                                CollaboratorID = coll.CollaboratorID,
-                                EmailID = coll.EmailID,
-                            };
-
-                            collaborators.Add(collaboratorData);
-                        }
-                        
-                        // get the required values of note
-                        var notes = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorsList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder,
-                           Collaborators = collaborators
-                        };
+                        NoteResponse notes = this.GetNoteResponse(userID, note);
 
                         list.Add(notes);
                     }
@@ -375,6 +345,43 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        private NoteResponse GetNoteResponse(string userID, NoteModel note)
+        {
+            // creating a list for holding collaborators info for esch note
+            var collaborators = new List<CollaboratorRsponse>();
+
+            // get the collaborators for each note
+            var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
+            foreach (var coll in collaboratorsList)
+            {
+                var collaboratorData = new CollaboratorRsponse()
+                {
+                    CollaboratorID = coll.CollaboratorID,
+                    EmailID = coll.EmailID,
+                };
+
+                collaborators.Add(collaboratorData);
+            }
+
+            // get the required values of note
+            var notes = new NoteResponse()
+            {
+                NoteID = note.NoteID,
+                Title = note.Title,
+                Description = note.Description,
+                Collaborator = collaboratorsList.Count(),
+                Color = note.Color,
+                Image = note.Image,
+                IsArchive = note.IsArchive,
+                IsPin = note.IsPin,
+                IsTrash = note.IsTrash,
+                Reminder = note.Reminder,
+                Collaborators = collaborators
+            };
+            return notes;
+        }
+
         public async Task<NoteResponse> GetNote(int noteID, string userID)
         {
             try
@@ -385,40 +392,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether user have notes or not
                 if (data != null)
                 {
-                    // creating a list for holding collaborators info for note
-                    var collaborators = new List<CollaboratorRsponse>();
-
-                    // get the collaborators for each note
-                    var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == data.NoteID);
-
-                    foreach (var coll in collaboratorsList)
-                    {
-                        var collaboratorData = new CollaboratorRsponse()
-                        {
-                            CollaboratorID = coll.CollaboratorID,
-                            EmailID = coll.EmailID,
-                        };
-
-                        collaborators.Add(collaboratorData);
-                    }
-
-                    // get the note info
-                    var note = new NoteResponse()
-                    {
-                        NoteID = data.NoteID,
-                        Title = data.Title,
-                        Description = data.Description,
-                        Collaborator = collaboratorsList.Count(),
-                        Color = data.Color,
-                        Image = data.Image,
-                        IsArchive = data.IsArchive,
-                        IsPin = data.IsPin,
-                        IsTrash = data.IsTrash,
-                        Reminder = data.Reminder,
-                        Collaborators = collaborators.ToList()
-                    };
-
-                    // returns the note info
+                    NoteResponse note = this.GetNoteResponse(userID, data);
                     return note;
                 }
                 else
@@ -449,7 +423,7 @@ namespace FundooRepositoryLayer.ServiceRL
         {
             try
             {
-                // find required note from note table 
+                // get required note info from note table 
                 var data = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID && s.IsTrash == false).FirstOrDefault();
 
                 // check whether required note is found or not
@@ -477,19 +451,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
 
-                        var note = new NoteResponse()
-                        {
-                            NoteID = data.NoteID,
-                            Title = data.Title,
-                            Description = data.Description,
-                            Collaborator = list.Count(),
-                            Color = data.Color,
-                            Image = data.Image,
-                            IsArchive = data.IsArchive,
-                            IsPin = data.IsPin,
-                            IsTrash = data.IsTrash,
-                            Reminder = data.Reminder
-                        };
+                        NoteResponse note = this.GetNoteResponse(userID, data);
 
                         // returns the note info
                         return note;
@@ -506,19 +468,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
 
-                        var note = new NoteResponse()
-                        {
-                            NoteID = data.NoteID,
-                            Title = data.Title,
-                            Description = data.Description,
-                            Collaborator = list.Count(),
-                            Color = data.Color,
-                            Image = data.Image,
-                            IsArchive = data.IsArchive,
-                            IsPin = data.IsPin,
-                            IsTrash = data.IsTrash,
-                            Reminder = data.Reminder
-                        };
+                        NoteResponse note = this.GetNoteResponse(userID, data);
 
                         // returns the note info
                         return note;
@@ -558,23 +508,9 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for each note
                     foreach (var note in data)
                     {
-                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
-
-                        // get the required values of note
-                        var notes = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
-                        };
-
+                        // get note info
+                        NoteResponse notes = this.GetNoteResponse(userID, note);
+                       
                         // add note into list
                         list.Add(notes);
                     }
@@ -638,19 +574,9 @@ namespace FundooRepositoryLayer.ServiceRL
 
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
-                        var note = new NoteResponse()
-                        {
-                            NoteID = data.NoteID,
-                            Title = data.Title,
-                            Description = data.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = data.Color,
-                            Image = data.Image,
-                            IsArchive = data.IsArchive,
-                            IsPin = data.IsPin,
-                            IsTrash = data.IsTrash,
-                            Reminder = data.Reminder
-                        };
+                       
+                        // get note info
+                        NoteResponse note = this.GetNoteResponse(userID, data);
 
                         // returns the note info
                         return note;
@@ -667,19 +593,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
 
-                        var note = new NoteResponse()
-                        {
-                            NoteID = data.NoteID,
-                            Title = data.Title,
-                            Description = data.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = data.Color,
-                            Image = data.Image,
-                            IsArchive = data.IsArchive,
-                            IsPin = data.IsPin,
-                            IsTrash = data.IsTrash,
-                            Reminder = data.Reminder
-                        };
+                        // get note info
+                        NoteResponse note = this.GetNoteResponse(userID, data);
 
                         // returns the note info
                         return note;
@@ -721,20 +636,8 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
 
-                        // get the required note info
-                        var notes = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
-                        };
+                        // get note info
+                        NoteResponse notes = this.GetNoteResponse(userID, note);
 
                         // add note into list
                         list.Add(notes);
@@ -831,19 +734,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
 
                         // get info of each note
-                        var notes = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
-                        };
+                        // get note info
+                        NoteResponse notes = this.GetNoteResponse(userID, note);
 
                         // adding note into list
                         list.Add(notes);
@@ -892,23 +784,11 @@ namespace FundooRepositoryLayer.ServiceRL
                     // saving the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
 
-                    // get the note info
-                    var data = new NoteResponse()
-                    {
-                        NoteID = note.NoteID,
-                        Title = note.Title,
-                        Description = note.Description,
-                        Collaborator = collaboratorList.Count(),
-                        Color = note.Color,
-                        Image = note.Image,
-                        IsArchive = note.IsArchive,
-                        IsPin = note.IsPin,
-                        IsTrash = note.IsTrash,
-                        Reminder = note.Reminder
-                    };
+                    // get note info
+                    NoteResponse notes = this.GetNoteResponse(userID, note);
 
                     // returning the note info
-                    return data;
+                    return notes;
                 }
                 else
                 {
@@ -954,20 +834,9 @@ namespace FundooRepositoryLayer.ServiceRL
                     // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
 
-                    // get the note info
-                    var data = new NoteResponse()
-                    {
-                        NoteID = note.NoteID,
-                        Title = note.Title,
-                        Description = note.Description,
-                        Collaborator = collaboratorList.Count(),
-                        Color = note.Color,
-                        Image = note.Image,
-                        IsArchive = note.IsArchive,
-                        IsPin = note.IsPin,
-                        IsTrash = note.IsTrash,
-                        Reminder = note.Reminder
-                    };
+                    // get note info
+                    NoteResponse data = this.GetNoteResponse(userID, note);
+
 
                     // returning the note info
                     return data;
@@ -1022,20 +891,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         // save the changes in note table
                         await this.authenticationContext.SaveChangesAsync();
 
-                        // get the note info
-                        var data = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
-                        };
+                        // get note info
+                        NoteResponse data = this.GetNoteResponse(userID, note);
 
                         // returning the note info
                         return data;
@@ -1089,20 +946,8 @@ namespace FundooRepositoryLayer.ServiceRL
                     // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
 
-                    // get the note info
-                    var data = new NoteResponse()
-                    {
-                        NoteID = note.NoteID,
-                        Title = note.Title,
-                        Description = note.Description,
-                        Collaborator = collaboratorList.Count(),
-                        Color = note.Color,
-                        Image = note.Image,
-                        IsArchive = note.IsArchive,
-                        IsPin = note.IsPin,
-                        IsTrash = note.IsTrash,
-                        Reminder = note.Reminder
-                    };
+                    // get note info
+                    NoteResponse data = this.GetNoteResponse(userID, note);
 
                     // returning the note info
                     return data;
@@ -1156,21 +1001,9 @@ namespace FundooRepositoryLayer.ServiceRL
 
                     // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
+                    // get note info
+                    NoteResponse data = this.GetNoteResponse(userID, note);
 
-                    // get the note info
-                    var data = new NoteResponse()
-                    {
-                        NoteID = note.NoteID,
-                        Title = note.Title,
-                        Description = note.Description,
-                        Collaborator = collaboratorList.Count(),
-                        Color = note.Color,
-                        Image = note.Image,
-                        IsArchive = note.IsArchive,
-                        IsPin = note.IsPin,
-                        IsTrash = note.IsTrash,
-                        Reminder = note.Reminder
-                    };
 
                     // returning the note info
                     return data;
@@ -1207,25 +1040,17 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check wheather note is found or not
                 if (note != null)
                 {
-                    var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
-
+                    // store null value for image
                     note.Image = null;
-                    this.authenticationContext.Note.Update(note);
-                    await this.authenticationContext.SaveChangesAsync();
 
-                    var data = new NoteResponse()
-                    {
-                        NoteID = note.NoteID,
-                        Title = note.Title,
-                        Collaborator = collaboratorList.Count(),
-                        Description = note.Description,
-                        Reminder = note.Reminder,
-                        Color = note.Color,
-                        Image = note.Image,
-                        IsArchive = note.IsArchive,
-                        IsPin = note.IsPin,
-                        IsTrash = note.IsTrash
-                    };
+                    // update the changes in note table
+                    this.authenticationContext.Note.Update(note);
+
+                    // save the changes in databse
+                    await this.authenticationContext.SaveChangesAsync();
+                 
+                    // get note info
+                    NoteResponse data = this.GetNoteResponse(userID, note);
 
                     return data;
                 }
@@ -1262,22 +1087,8 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for every notes
                     foreach (var note in data)
                     {
-                        var collaboratorList = this.authenticationContext.Collaborators.Where(s => s.UserID == userId && s.NoteID == note.NoteID);
-
-                        // get info of each note
-                        var notes = new NoteResponse()
-                        {
-                            NoteID = note.NoteID,
-                            Title = note.Title,
-                            Description = note.Description,
-                            Collaborator = collaboratorList.Count(),
-                            Color = note.Color,
-                            Image = note.Image,
-                            IsArchive = note.IsArchive,
-                            IsPin = note.IsPin,
-                            IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
-                        };
+                        // get note info
+                        NoteResponse notes = this.GetNoteResponse(userId, note);
 
                         // adding note into list
                         list.Add(notes);
@@ -1522,5 +1333,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 throw new Exception(exception.Message);
             }
         }
+
+     
     }
 }

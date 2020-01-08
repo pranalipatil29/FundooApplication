@@ -267,7 +267,7 @@ namespace FundooApp.Controllers
                 {
                     success = true;
                     message = "Note UnArchived";
-                    return this.Ok(new { success, message });
+                    return this.Ok(new { success, message, data });
                 }
             }
             catch (Exception exception)

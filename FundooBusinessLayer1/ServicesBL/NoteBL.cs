@@ -180,6 +180,16 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Gets the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the Note info</returns>
+        /// <exception cref="Exception">
+        /// User not found
+        /// or
+        /// </exception>
         public async Task<NoteResponse> GetNote(int noteID, string userID)
         {
             try
@@ -768,5 +778,7 @@ namespace FundooBusinessLayer.ServicesBL
                 throw new Exception(exception.Message);
             }
         }
+
+      
     }
 }

@@ -104,6 +104,12 @@ namespace FundooCommonLayer.Model.Response
         /// </value>
         public string Image { get; set; }
 
+        /// <summary>
+        /// Gets or sets the collaborators.
+        /// </summary>
+        /// <value>
+        /// The collaborators.
+        /// </value>
         public List<CollaboratorRsponse> Collaborators { get; set; }
     }
 }
