@@ -30,7 +30,7 @@ namespace FundooApp.Controllers
     /// this class contains different API's for Admin
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
-    [AllowAnonymous]
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -43,16 +43,23 @@ namespace FundooApp.Controllers
         /// <summary>
         /// Initializes a new instance of the <see cref="AdminController"/> class.
         /// </summary>
-        /// <param name="adminBL">The admin bl.</param>
+        /// <param name="adminBL">The reference of business layer Admin interface.</param>
         public AdminController(IAdminBL adminBL)
         {
             this.adminBL = adminBL;
         }
 
+        /// <summary>
+        /// Registers the specified registration model.
+        /// </summary>
+        /// <param name="registrationModel">The registration model.</param>
+        /// <returns>returns the operation result</returns>
         [HttpPost]
         [Route("Register")]
         public async Task<IActionResult> Register(RegistrationModel registrationModel)
         {
+            var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserId").Value;
+
             // storing new account info in database
             var result = await this.adminBL.Register(registrationModel);
             bool success = false;
@@ -92,7 +99,7 @@ namespace FundooApp.Controllers
                 var data = await this.adminBL.Login(loginModel);
 
                 // check wheather data variable holds admin info or not
-                if(data != null)
+                if (data != null)
                 {
                     success = true;
                     message = "Login Successfull";
@@ -110,7 +117,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -133,11 +140,11 @@ namespace FundooApp.Controllers
             {
                 Dictionary<string, int> users = this.adminBL.GetUserStatistics();
 
-                if(users.Count > 0)
+                if (users.Count > 0)
                 {
                     success = true;
                     message = "User statistics Info";
-                    return this.Ok(new { success, message , users });
+                    return this.Ok(new { success, message, users });
                 }
                 else
                 {
@@ -146,7 +153,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -182,7 +189,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -193,7 +200,7 @@ namespace FundooApp.Controllers
         /// <summary>
         /// Searches the user.
         /// </summary>
-        /// <param name="name">The name.</param>
+        /// <param name="searchkeyRequest">The search key request.</param>
         /// <returns>returns the list of users or bad request result</returns>
         [HttpPost]
         [Route("SearchUser")]
@@ -205,10 +212,10 @@ namespace FundooApp.Controllers
             try
             {
                 // get the list of users which have admin entered name
-                IList<AccountResponse> result = this.adminBL.SearchUser(searchkeyRequest.key);
+                IList<AccountResponse> result = this.adminBL.SearchUser(searchkeyRequest.Key);
 
                 // check wheather any user having admin entered name or not
-                if(result.Count > 0)
+                if (result.Count > 0)
                 {
                     success = true;
                     return this.Ok(new { success, result });
@@ -220,7 +227,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;

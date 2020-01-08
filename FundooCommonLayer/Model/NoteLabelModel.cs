@@ -13,8 +13,8 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
-    using System;
     // Including the requried assemblies in to the program
+    using System;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 

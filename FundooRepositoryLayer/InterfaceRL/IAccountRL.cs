@@ -55,16 +55,16 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <summary>
         /// Generates the token.
         /// </summary>
-        /// <param name="loginResponse">The login response.</param>
+        /// <param name="accountResponse">The login response.</param>
         /// <returns> returns the token</returns>
         Task<string> GenerateToken(AccountResponse accountResponse);
 
         /// <summary>
         /// Images the upload.
         /// </summary>
-        /// <param name="userID">The user identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="emailID">The user identifier.</param>
+        /// <param name="file">The file.</param>
         /// <returns> returns the operation result</returns>
-        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile);
+        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile file);
     }
 }

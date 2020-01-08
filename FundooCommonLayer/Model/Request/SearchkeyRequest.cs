@@ -1,8 +1,8 @@
 ﻿// ******************************************************************************
-//  <copyright file="keyRequest.cs" company="Bridgelabz">
+//  <copyright file="SearchkeyRequest.cs" company="Bridgelabz">
 //    Copyright © 2019 Company
 //
-//     Execution:  keyRequest.cs
+//     Execution:  SearchkeyRequest.cs
 //  
 //     Purpose:  Request for key tobe search
 //     @author  Pranali Patil
@@ -25,9 +25,12 @@ namespace FundooCommonLayer.Model.Request
     public class SearchkeyRequest
     {
         /// <summary>
-        /// The key
+        /// Gets or sets the key.
         /// </summary>
+        /// <value>
+        /// The key.
+        /// </value>
         [Required]
-        public string key;
+        public string Key { get; set; }
     }
 }

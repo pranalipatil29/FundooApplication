@@ -23,23 +23,45 @@ namespace FundooBusinessLayer.ServicesBL
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
 
+    /// <summary>
+    /// this class implements all the methods in business layer Admin interface 
+    /// </summary>
+    /// <seealso cref="FundooBusinessLayer.InterfaceBL.IAdminBL" />
     public class AdminBL : IAdminBL
     {
+        /// <summary>
+        /// creating reference of repository layer Admin interface
+        /// </summary>
         private readonly IAdminRL adminRL;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminBL"/> class.
+        /// </summary>
+        /// <param name="adminRL">The reference of repository layer admin interface.</param>
         public AdminBL(IAdminRL adminRL)
         {
             this.adminRL = adminRL;
         }
 
+        /// <summary>
+        /// Logins the specified login model.
+        /// </summary>
+        /// <param name="loginModel">The login model.</param>
+        /// <returns>
+        /// returns the user info if user gets logged in
+        /// </returns>
+        /// <exception cref="Exception">
+        /// EmailID and Password is required
+        /// or
+        /// </exception>
         public async Task<AccountResponse> Login(LoginModel loginModel)
         {
             try
             {
+                // check user entered all the required values or not
                 if (loginModel != null)
                 {
                     var result = await this.adminRL.Login(loginModel);
-
                     return result;
                 }
                 else
@@ -53,6 +75,17 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Registers the specified registration model.
+        /// </summary>
+        /// <param name="registrationModel">The registration model.</param>
+        /// <returns>
+        /// returns the true or false based on operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Data Required
+        /// or
+        /// </exception>
         public async Task<bool> Register(RegistrationModel registrationModel)
         {
             try
@@ -75,11 +108,22 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="accountResponse">The account response.</param>
+        /// <returns>
+        /// returns the token
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Invalid token
+        /// or
+        /// </exception>
         public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
             try
             {
+                // check wheather account response is null or not
                 if (accountResponse != null)
                 {
                     var result = await this.adminRL.GenerateToken(accountResponse);
@@ -96,6 +140,13 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Gets the user statistics.
+        /// </summary>
+        /// <returns>
+        /// returns the Count of users which uses Basic and advance services
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public Dictionary<string, int> GetUserStatistics()
         {
             try
@@ -108,7 +159,13 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-
+        /// <summary>
+        /// Users the information.
+        /// </summary>
+        /// <returns>
+        /// returns the list of users info
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public IList<AccountResponse> UsersInfo()
         {
             try
@@ -121,10 +178,20 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Searches the user.
+        /// </summary>
+        /// <param name="name">The name.</param>
+        /// <returns> returns the list of users</returns>
+        /// <exception cref="Exception">
+        /// Please enter UserName
+        /// or
+        /// </exception>
         public IList<AccountResponse> SearchUser(string name)
         {
             try
             {
+                // check wheather user entered key is null or not
                 if (name != null)
                 {
                     return this.adminRL.SearchUser(name);

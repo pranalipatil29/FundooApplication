@@ -20,12 +20,15 @@ namespace FundooRepositoryLayer.ImageUpload
     using FundooCommonLayer.Model;
     using Microsoft.AspNetCore.Http;
 
+    /// <summary>
+    /// this class contains methods to upload image in Cloudinary
+    /// </summary>
     public class UploadImage
     {
         /// <summary>
         /// creating variables to store value of API key, API secret key and Cloud name
         /// </summary>
-        private string apiKey,apiSecretKey,cloudName;
+        private string apiKey, apiSecretKey, cloudName;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="UploadImage"/> class.
@@ -45,7 +48,7 @@ namespace FundooRepositoryLayer.ImageUpload
         /// </summary>
         /// <param name="formFile">The form file.</param>
         /// <returns> returns the url of image</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public string Upload(IFormFile formFile)
         {
             try
@@ -76,7 +79,7 @@ namespace FundooRepositoryLayer.ImageUpload
                 // returning the image url
                 return result.Uri.ToString();
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

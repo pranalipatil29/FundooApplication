@@ -13,12 +13,12 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
-    using Microsoft.AspNetCore.Authentication;
     // Including the requried assemblies in to the program
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.Text;
+    using Microsoft.AspNetCore.Authentication; 
 
     /// <summary>
     /// this class is used to define properties for login model
@@ -43,8 +43,8 @@ namespace FundooCommonLayer.Model
         [Required]
         public string Password { get; set; }
 
-        //public string ReturnUrl { get; set; }
+        // public string ReturnUrl { get; set; }
 
-        //public IList<AuthenticationScheme> ExternalLogins { get; set; }
+        // public IList<AuthenticationScheme> ExternalLogins { get; set; }
     }
 }

@@ -28,18 +28,40 @@ namespace FundooRepositoryLayer.ServiceRL
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
- 
-    public class AdminRL :IAdminRL
+
+    /// <summary>
+    /// this class is used to implement the repository layer Admin interface
+    /// </summary>
+    /// <seealso cref="FundooRepositoryLayer.InterfaceRL.IAdminRL" />
+    public class AdminRL : IAdminRL
     {
+        /// <summary>
+        /// The reference of user manager
+        /// </summary>
         private readonly UserManager<ApplicationModel> userManager;
 
+        /// <summary>
+        /// The reference of sign-in manager
+        /// </summary>
         private readonly SignInManager<ApplicationModel> signinManager;
 
+        /// <summary>
+        /// creating reference of application settings
+        /// </summary>
         private readonly ApplicationSetting applicationSettings;
 
+        /// <summary>
+        /// creating reference of authentication context
+        /// </summary>
         private AuthenticationContext authenticationContext;
 
-
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminRL"/> class.
+        /// </summary>
+        /// <param name="userManager">The user manager.</param>
+        /// <param name="signInManager">The sign in manager.</param>
+        /// <param name="appSettings">The application settings.</param>
+        /// <param name="authenticationContext">The authentication context.</param>
         public AdminRL(UserManager<ApplicationModel> userManager, SignInManager<ApplicationModel> signInManager, IOptions<ApplicationSetting> appSettings, AuthenticationContext authenticationContext)
         {
             this.userManager = userManager;
@@ -48,6 +70,13 @@ namespace FundooRepositoryLayer.ServiceRL
             this.authenticationContext = authenticationContext;
         }
 
+        /// <summary>
+        /// Registers the specified registration model.
+        /// </summary>
+        /// <param name="registrationModel">The registration model.</param>
+        /// <returns>
+        /// returns the true or false based on operation result
+        /// </returns>
         public async Task<bool> Register(RegistrationModel registrationModel)
         {
             // check whether user data already exist in the database or not
@@ -65,7 +94,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     Email = registrationModel.EmailID,
                     UserType = 1,
                     ServiceType = "Advance",
-                    ProfilePicture=null
+                    ProfilePicture = null
                 };
 
                 // assigning password and info of user into table 
@@ -83,19 +112,31 @@ namespace FundooRepositoryLayer.ServiceRL
             }
             else
             {
-                return false;
+                // if user record is present in database then throw exception
+                throw new Exception("User record is Already Registered");
             }
         }
 
+        /// <summary>
+        /// Logins the specified login model.
+        /// </summary>
+        /// <param name="loginModel">The login model.</param>
+        /// <returns>
+        /// returns the user info if user gets logged in
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<AccountResponse> Login(LoginModel loginModel)
         {
             try
             {
+                // find the user info from user table
                 var user = await this.userManager.FindByEmailAsync(loginModel.EmailId);
 
-                var userPassword =await this.userManager.CheckPasswordAsync(user, loginModel.Password);
+                // check the password entered by user is correct or not
+                var userPassword = await this.userManager.CheckPasswordAsync(user, loginModel.Password);
 
-                if(user != null && userPassword && user.UserType == 1)
+                // check wheather user is present in database and password is correct or not
+                if (user != null && userPassword && user.UserType == 1)
                 {
                     // get the required user data 
                     var data = new AccountResponse()
@@ -115,12 +156,19 @@ namespace FundooRepositoryLayer.ServiceRL
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
+        /// <summary>
+        /// Generates the token.
+        /// </summary>
+        /// <param name="accountResponse">The account response.</param>
+        /// <returns>
+        /// returns the token
+        /// </returns>
         public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
             var user = await this.userManager.FindByEmailAsync(accountResponse.EmailID);
@@ -143,7 +191,8 @@ namespace FundooRepositoryLayer.ServiceRL
                 var tokenHandler = new JwtSecurityTokenHandler();
                 var securityToken = tokenHandler.CreateToken(tokenDescriptor);
                 var token = tokenHandler.WriteToken(securityToken);
-
+    
+                // return the token value
                 return token;
             }
             else
@@ -152,21 +201,32 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Gets the user statistics.
+        /// </summary>
+        /// <returns>
+        /// returns the Count of users which uses Basic and advance services
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public Dictionary<string, int> GetUserStatistics()
         {
             try
             {
+                // create the dictionary object to hold the count of basic and Advance service type users
                 Dictionary<string, int> dictionary = new Dictionary<string, int>();
 
+                // get the users which have Basic type service from user table
                 var basic = this.authenticationContext.UserDataTable.Where(s => s.ServiceType == "Basic" && s.UserType == 0);
 
+                // get the users which have Advance type service from user Table
                 var advance = this.authenticationContext.UserDataTable.Where(s => s.ServiceType == "Advance" && s.UserType == 0);
 
+                // add the count of users into dictionary
                 dictionary.Add("Basic Service", basic.Count());
                 dictionary.Add("Advance service", advance.Count());
 
+                // return the dictionary object
                 return dictionary;
-
             }
             catch (Exception exception)
             {
@@ -174,53 +234,28 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Users the information.
+        /// </summary>
+        /// <returns>
+        /// returns the list of users info
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public IList<AccountResponse> UsersInfo()
         {
             try
             {
+                // get the users info from user table
                 var users = this.authenticationContext.UserDataTable.Where(s => s.UserType == 0);
                 var list = new List<AccountResponse>();
 
-                if(users != null)
-                {
-                    foreach(var data in users)
-                    {
-                        var user = new AccountResponse()
-                        {
-                            FirstName = data.FirstName,
-                            LastName = data.LastName,
-                            UserName = data.UserName,
-                            EmailID = data.Email,
-                            Profilepicture = data.ProfilePicture,
-                            ServiceType= data.ServiceType
-                        };
-
-                        list.Add(user);
-                    }
-                    return list;
-                }
-                else
-                {
-                    return null;
-                }
-            }
-            catch(Exception exception)
-            {
-                throw new Exception(exception.Message);
-            }
-        }
-
-        public IList<AccountResponse> SearchUser(string key)
-        {
-            try
-            {
-                var users = this.authenticationContext.UserDataTable.Where(s => (s.FirstName.Contains(key) || s.LastName.Contains(key)) && s.UserType == 0);
-                var list = new List<AccountResponse>();
-
+                // check wheather user table contains any user record or not
                 if (users != null)
                 {
+                    // iterate the loop for all users
                     foreach (var data in users)
                     {
+                         // get the user info
                         var user = new AccountResponse()
                         {
                             FirstName = data.FirstName,
@@ -231,16 +266,70 @@ namespace FundooRepositoryLayer.ServiceRL
                             ServiceType = data.ServiceType
                         };
 
+                        // add the user info into list
                         list.Add(user);
                     }
+
+                    // return the list which holds info of users
                     return list;
                 }
                 else
                 {
+                    // if user table doesn't contain any user record then return null
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Searches the user.
+        /// </summary>
+        /// <param name="key">The key.</param>
+        /// <returns> returns the list of users info </returns>
+        /// <exception cref="Exception"> exception message</exception>
+        public IList<AccountResponse> SearchUser(string key)
+        {
+            try
+            {
+                // find the user which name or email ID contains admin entered key
+                var users = this.authenticationContext.UserDataTable.Where(s => (s.FirstName.Contains(key) || s.LastName.Contains(key) || s.Email.Contains(key)) && s.UserType == 0);
+                var list = new List<AccountResponse>();
+
+                // check wheather any record is found or not
+                if (users != null)
+                {
+                    // iterates the loop for all users
+                    foreach (var data in users)
+                    {
+                        // get the user info
+                        var user = new AccountResponse()
+                        {
+                            FirstName = data.FirstName,
+                            LastName = data.LastName,
+                            UserName = data.UserName,
+                            EmailID = data.Email,
+                            Profilepicture = data.ProfilePicture,
+                            ServiceType = data.ServiceType
+                        };
+
+                        // add the user info into list
+                        list.Add(user);
+                    }
+
+                    // return the list of user info
+                    return list;
+                }
+                else
+                {
+                    // if no record found for admin entered key then return null
+                    return null;
+                }
+            }
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

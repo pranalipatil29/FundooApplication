@@ -30,85 +30,190 @@ namespace XUnitTestCases
 
     public class AccountTestCases
     {
-      //  AccountController accountController;
-      //  private readonly IAccountBL accountBL ;
-      ////  private readonly IAccountRL accountRL ;
+        AccountController accountController;
+        private readonly IAccountBL accountBL;
 
-      //  public AccountTestCases()
-      //  {
-      //      var repository = new Mock<IAccountRL>();
-      //      this.accountBL = new AccountBL(repository.Object);
-      //      accountController = new AccountController(this.accountBL);
-      //  }
+        public AccountTestCases()
+        {
+            var repository = new Mock<IAccountRL>();
+            this.accountBL = new AccountBL(repository.Object);
+            accountController = new AccountController(this.accountBL);
+        }
 
-        //[Fact]
-        //public async Task TestRegistrationForBadRequest()
-        //{
-        //    //var repository =new Mock<IAccountRL>();
+        /// <summary>
+        /// Tests the registration for bad request.
+        /// </summary>
+        [Fact]
+        public async Task TestRegistrationForBadRequest()
+        {
+            //var repository =new Mock<IAccountRL>();
 
-        //    RegistrationModel data = new RegistrationModel()
-        //    {
-        //        FirstName = "Pranali",
-        //        LastName = "Patil",
-        //        UserName = "pranali",
-        //        EmailID = "pranali@2996@gmail.com",
-        //        UserType = 0,
-        //        ServiceType = "Adavance",
-        //        Password="Pranali@29"
-        //    };
+            RegistrationModel data = new RegistrationModel()
+            {
+                FirstName = "Abc",
+                LastName = "Abc",
+                UserName = "abc",
+                EmailID = "abcgmail.com",
+                ServiceType = "Basic",
+                Password = ""
+            };
 
-        //    var result = await accountController.Register(data);
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+            var result = await accountController.Register(data);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
 
-        //[Fact]
-        //public async Task TestLoginForBadRequest()
-        //{
-           
-        //    LoginModel data = new LoginModel()
-        //    {
-        //        EmailId = "pranalipatil2996@gmail.com",
-        //        Password = ""
-        //    };
+        /// <summary>
+        /// Tests the login for bad request.
+        /// </summary>
+        [Fact]
+        public async Task TestLoginForBadRequest()
+        {
+            LoginModel data = new LoginModel()
+            {
+                EmailId = "pranalipatil2996@gmail.com",
+                Password = ""
+            };
 
-        //    var result = await accountController.Login(data);
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+            var result = await accountController.Login(data);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
 
+        /// <summary>
+        /// Tests the login for success.
+        /// </summary>
         [Fact]
         public async Task TestLoginForSuccess()
         {
-            var repository = new Mock<IAccountRL>();
-            var business = new AccountBL(repository.Object);
-            var accountController = new AccountController(business);
-
-            var model = new LoginModel()
+           var model = new LoginModel()
             {
                EmailId = "pranali2996@gmail.com",
-               Password="Pranali@29"                
+               Password = "Pranali@29"                
             };
 
             var result = await accountController.Login(model);
             Assert.IsType<OkObjectResult>(result);
         }
 
-        //[Fact]
-        //public async Task TestLoginForEmailID()
-        //{
-        //    var repository = new Mock<IAccountRL>();
-        //    var business = new AccountBL(repository.Object);
-        //    var controller = new AccountController(business);
+        /// <summary>
+        /// Tests the login for email identifier.
+        /// </summary>
+        [Fact]
+        public async Task TestLoginForEmailID()
+        {
+           LoginModel model = new LoginModel()
+            {
+                Password = "Pranali@29"
+            };
 
-        //    LoginModel model = new LoginModel()
-        //    {
-        //       Password = "Pranali@29"
-        //    };
+            accountController.ModelState.AddModelError("EmailId", "Required");
+            var result = await accountController.Login(model);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
 
-        //    controller.ModelState.AddModelError("EmailId", "Required");
-            
-        //    var result = await accountController.Login(model);
-        //    Assert.IsType<BadRequestObjectResult>(result);
-        //}
+        /// <summary>
+        /// Tests the login for password.
+        /// </summary>
+        [Fact]
+        public async Task TestLoginForPassword()
+        {
+            LoginModel model = new LoginModel()
+            {
+                EmailId ="pranalipatil2996@gmail.com"            
+            };
 
+            accountController.ModelState.AddModelError("Password", "Required");
+            var result = await accountController.Login(model);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests the forget password for bad request.
+        /// </summary>
+        [Fact]
+        public async Task TestForgetPasswordForBadRequest()
+        {
+            ForgetPasswordModel model = new ForgetPasswordModel()
+            {
+                EmailID = "pranalipatilgmail.com"
+            };
+
+            var result = await accountController.ForgetPassword(model);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests the forget password for success.
+        /// </summary>
+        [Fact]
+        public async Task TestForgetPasswordForSuccess()
+        {
+            ForgetPasswordModel model = new ForgetPasswordModel()
+            {
+                EmailID = "pranalipatil2996@gmail.com"
+            };
+
+            var result = await accountController.ForgetPassword(model);
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests the forget password for null request.
+        /// </summary>
+        [Fact]
+        public async Task TestForgetPasswordForNullRequest()
+        {
+            ForgetPasswordModel model = new ForgetPasswordModel()
+            {
+               
+            };
+
+            var result = await this.accountBL.ForgetPassword(model);
+            Assert.False(result);
+        }
+
+        /// <summary>
+        /// Tests the reset password for bad request.
+        /// </summary>
+        [Fact]
+        public async Task TestResetPasswordForBadRequest()
+        {
+            ResetPasswordModel model = new ResetPasswordModel()
+            {
+                Password = "p"
+            };
+
+            var result = await accountController.ResetPassword(model);
+            Assert.IsType<BadRequestObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests the reset password for success.
+        /// </summary>
+        [Fact]
+        public async Task TestResetPasswordForSuccess()
+        {
+            ResetPasswordModel model = new ResetPasswordModel()
+            {
+                Password = "Pranali@123"
+            };
+
+            var result = await accountController.ResetPassword(model);
+            Assert.IsType<OkObjectResult>(result);
+        }
+
+        /// <summary>
+        /// Tests the reset password for null request.
+        /// </summary>
+        [Fact]
+        public async Task TestResetPasswordForNullRequest()
+        {
+            ResetPasswordModel model = new ResetPasswordModel()
+            {
+               
+            };
+
+            var result = await this.accountBL.ResetPassword(model);
+            Assert.False(result);
+        }
     }
 }

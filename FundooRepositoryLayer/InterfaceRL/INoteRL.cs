@@ -14,16 +14,13 @@
 namespace FundooRepositoryLayer.InterfaceRL
 {
     // Including the requried assemblies in to the program
-    using System.IO;
+    using System;
     using System.Collections.Generic;
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Response;
-    using System;
     using Microsoft.AspNetCore.Http;
-    using FundooCommonLayer.Model.Request.Note;
-
 
     /// <summary>
     /// creating note interface for repository layer
@@ -74,7 +71,6 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// Determines whether the specified note identifier is archive.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>  returns true indicating note is Archived or false to indicate note is UnArchived</returns>
         Task<NoteResponse> IsArchive(int noteID, string userID);
@@ -90,7 +86,6 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// Determines whether the specified note identifier is pin.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns true indicating note is Pinned or false to indicate note is UnPinned</returns>
         Task<NoteResponse> IsPin(int noteID, string userID);
@@ -156,7 +151,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="file">The form file.</param>
         /// <returns>returns the operation result</returns>
         Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
 
@@ -164,7 +159,8 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <returns> returns the list of notes or null value</returns>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>returns the list of notes or null value</returns>
         IList<NoteResponse> Search(string key, string userID);
 
         /// <summary>
@@ -180,7 +176,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="key">The key tobe searched.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the list of contacts or null value</returns>
-        Dictionary<string,string> GetContacts(string key, string userID);
+        Dictionary<string, string> GetContacts(string key, string userID);
 
         /// <summary>
         /// Shares the with.
@@ -189,7 +185,7 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns true or false depending upon operation result</returns>
-        Task<bool> ShareWith(int noteOID, string id, string userID);
+        Task<bool> ShareWith(int noteID, string id, string userID);
 
         /// <summary>
         /// Deletes the collaborator.
@@ -217,6 +213,13 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns> returns the note info</returns>
         Task<NoteResponse> AddLabel(int labelID, int noteID, string userID);
 
+        /// <summary>
+        /// Removes the label.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns note info or null value</returns>
         Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID);
     }
 }

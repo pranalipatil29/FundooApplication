@@ -13,8 +13,8 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
-    using System.ComponentModel.DataAnnotations;
     // Including the requried assemblies in to the program
+    using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
     using Microsoft.AspNetCore.Identity;
 
@@ -76,7 +76,13 @@ namespace FundooCommonLayer.Model
         [ForeignKey("ServiceModel")]
         public string ServiceType { get; set; }
 
-        [Column (TypeName ="nvarchar(150)")]
+        /// <summary>
+        /// Gets or sets the profile picture.
+        /// </summary>
+        /// <value>
+        /// The profile picture.
+        /// </value>
+        [Column(TypeName = "nvarchar(150)")]
         public string ProfilePicture { get; set; }
     }
 }

@@ -38,21 +38,24 @@ namespace FundooRepositoryLayer.ServiceRL
     public class NoteRL : INoteRL
     {
         /// <summary>
+        /// The application setting
+        /// </summary>
+        private readonly ApplicationSetting applicationSetting;
+
+        /// <summary>
         /// creating reference of authentication context class
         /// </summary>
         private AuthenticationContext authenticationContext;
-
-        private readonly ApplicationSetting applicationSetting;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="NoteRL"/> class.
         /// </summary>
         /// <param name="authenticationContext">The authentication context.</param>
+        /// <param name="applSetting">The application setting.</param>
         public NoteRL(AuthenticationContext authenticationContext, IOptions<ApplicationSetting> applSetting)
         {
             this.applicationSetting = applSetting.Value;
             this.authenticationContext = authenticationContext;
-
         }
 
         /// <summary>
@@ -190,7 +193,6 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 // get required note for user
                 var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
-
 
                 // check whether user have required note or not
                 if (note != null && note.IsTrash)
@@ -345,7 +347,15 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-
+        /// <summary>
+        /// Gets the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> GetNote(int noteID, string userID)
         {
             try
@@ -374,7 +384,6 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Determines whether the specified note identifier is archive.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true indicating note is Archived or false to indicate note is UnArchived
@@ -498,7 +507,6 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Determines whether the specified note identifier is pin.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true indicating note is Pinned or false to indicate note is UnPinned
@@ -612,7 +620,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 }
                 else
                 {
-                    /// if user does not have any pinned note then return null
+                    // if user does not have any pinned note then return null
                     return null;
                 }
             }
@@ -626,9 +634,8 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Determines whether the specified note identifier is trash.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isTrash">if set to <c>true</c> [is trash].</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns> returns true or false indicating operation result</returns>
         /// <exception cref="Exception">
         /// Note is already in trash
         /// or
@@ -801,7 +808,6 @@ namespace FundooRepositoryLayer.ServiceRL
                     // get note info
                     NoteResponse data = this.GetNoteResponse(userID, note);
 
-
                     // returning the note info
                     return data;
                 }
@@ -933,7 +939,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <param name="file"></param>
+        /// <param name="file"> The file </param>
         /// <returns>
         /// returns the operation result
         /// </returns>
@@ -965,9 +971,9 @@ namespace FundooRepositoryLayer.ServiceRL
 
                     // save the changes in note table
                     await this.authenticationContext.SaveChangesAsync();
+                   
                     // get note info
                     NoteResponse data = this.GetNoteResponse(userID, note);
-
 
                     // returning the note info
                     return data;
@@ -1033,6 +1039,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
+        /// <param name="userId">The user identifier.</param>
         /// <returns> returns the list of notes or null value</returns>
         /// <exception cref="Exception"> exception message</exception>
         public IList<NoteResponse> Search(string key, string userId)
@@ -1077,7 +1084,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// </summary>
         /// <param name="userId">The user identifier.</param>
         /// <returns> returns the true or false depending upon operation result</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<bool> BulkTrash(string userId)
         {
             try
@@ -1134,7 +1141,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     var contacts = this.authenticationContext.UserDataTable.Where(s => s.Id != userID && s.Email.Contains(key));
 
                     // creating the dictionary class object to hold person name and email ID
-                    Dictionary<string, string> ContactList = new Dictionary<string, string>();
+                    Dictionary<string, string> contactList = new Dictionary<string, string>();
 
                     // check whether any contact is found or not
                     if (contacts != null)
@@ -1143,11 +1150,11 @@ namespace FundooRepositoryLayer.ServiceRL
                         foreach (var person in contacts)
                         {
                             // add the person name and email ID in dictionary class object
-                            ContactList.Add(person.Id, person.Email);
+                            contactList.Add(person.Id, person.Email);
                         }
 
                         // return the list
-                        return ContactList;
+                        return contactList;
                     }
                     else
                     {
@@ -1173,7 +1180,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <param name="noteID">The note identifier.</param>
         /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns></returns>
+        /// <returns> returns true or false indicating operation result</returns>
         /// <exception cref="Exception">
         /// This email already exists
         /// or
@@ -1299,75 +1306,6 @@ namespace FundooRepositoryLayer.ServiceRL
         }
 
         /// <summary>
-        /// Gets the note response.
-        /// </summary>
-        /// <param name="userID">The user identifier.</param>
-        /// <param name="note">The note.</param>
-        /// <returns> returns the note info </returns>
-        private NoteResponse GetNoteResponse(string userID, NoteModel note)
-        {
-            // creating a list for holding collaborators info for esch note
-            var collaborators = new List<CollaboratorRsponse>();
-
-            // get the collaborators for each note
-            var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
-
-            // get labels for Note
-            var labelList = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
-
-            // creating list for label
-            var labels = new List<LabelResponse>();
-
-            // iterate the loop for each collaborator for note
-            foreach (var coll in collaboratorsList)
-            {
-                // get the collaborator info
-                var collaboratorData = new CollaboratorRsponse()
-                {
-                    CollaboratorID = coll.CollaboratorID,
-                    EmailID = coll.EmailID,
-                };
-
-                // add the collaborator info into collaborator list
-                collaborators.Add(collaboratorData);
-            }
-
-            // iteartes the loop for each label for note
-            foreach (var data in labelList)
-            {
-                // get the label info
-                var label = new LabelResponse()
-                {
-                    ID = data.LabelID,
-                    Label = data.Label,
-                };
-
-                // add the label info into label list
-                labels.Add(label);
-            }
-
-            // get the required values of note
-            var notes = new NoteResponse()
-            {
-                NoteID = note.NoteID,
-                Title = note.Title,
-                Description = note.Description,
-                Collaborator = collaboratorsList.Count(),
-                Color = note.Color,
-                Image = note.Image,
-                IsArchive = note.IsArchive,
-                IsPin = note.IsPin,
-                IsTrash = note.IsTrash,
-                Reminder = note.Reminder,
-                Collaborators = collaborators,
-                Labels = labels
-            };
-
-            // return the note info
-            return notes;
-        }
-
-        /// <summary>
         /// Adds the label.
         /// </summary>
         /// <param name="labelID">The label identifier.</param>
@@ -1451,6 +1389,21 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Removes the label.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns>
+        /// returns note info or null value
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Note doesn't have label
+        /// or
+        /// Label not found
+        /// or
+        /// </exception>
         public async Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID)
         {
             try
@@ -1463,8 +1416,7 @@ namespace FundooRepositoryLayer.ServiceRL
 
                 // check wheather user have label or not
                 if (noteData != null)
-                {
-                   
+                {                   
                     // get data from Note-label table for selected label and note
                     var noteLabelData = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.LabelID == labelID && s.NoteID == noteID).FirstOrDefault();
 
@@ -1473,8 +1425,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         // check wheather user have label for selected note or not
                         if (noteLabelData != null)
-                        {
-                            
+                        {                         
                             // Remove entry in Note-Lable table
                             this.authenticationContext.NoteLabel.Remove(noteLabelData);
 
@@ -1505,10 +1456,79 @@ namespace FundooRepositoryLayer.ServiceRL
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
+        }
+
+        /// <summary>
+        /// Gets the note response.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="note">The note.</param>
+        /// <returns> returns the note info </returns>
+        private NoteResponse GetNoteResponse(string userID, NoteModel note)
+        {
+            // creating a list for holding collaborators info for esch note
+            var collaborators = new List<CollaboratorRsponse>();
+
+            // get the collaborators for each note
+            var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
+            // get labels for Note
+            var labelList = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
+            // creating list for label
+            var labels = new List<LabelResponse>();
+
+            // iterate the loop for each collaborator for note
+            foreach (var coll in collaboratorsList)
+            {
+                // get the collaborator info
+                var collaboratorData = new CollaboratorRsponse()
+                {
+                    CollaboratorID = coll.CollaboratorID,
+                    EmailID = coll.EmailID,
+                };
+
+                // add the collaborator info into collaborator list
+                collaborators.Add(collaboratorData);
+            }
+
+            // iteartes the loop for each label for note
+            foreach (var data in labelList)
+            {
+                // get the label info
+                var label = new LabelResponse()
+                {
+                    ID = data.LabelID,
+                    Label = data.Label,
+                };
+
+                // add the label info into label list
+                labels.Add(label);
+            }
+
+            // get the required values of note
+            var notes = new NoteResponse()
+            {
+                NoteID = note.NoteID,
+                Title = note.Title,
+                Description = note.Description,
+                Collaborator = collaboratorsList.Count(),
+                Color = note.Color,
+                Image = note.Image,
+                IsArchive = note.IsArchive,
+                IsPin = note.IsPin,
+                IsTrash = note.IsTrash,
+                Reminder = note.Reminder,
+                Collaborators = collaborators,
+                Labels = labels
+            };
+
+            // return the note info
+            return notes;
         }
     }
 }

@@ -55,8 +55,6 @@ namespace FundooApp.Controllers
         /// <param name="labelRequest">The label request.</param>
         /// <returns>returns the result</returns>
         [HttpPost]
-        // [Route("CreateLabel")]
-        ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> CreateLabel(LabelRequest labelRequest)
         {
             try
@@ -96,8 +94,6 @@ namespace FundooApp.Controllers
         /// <param name="labelID">The label identifier.</param>
         /// <returns>returns the result</returns>
         [HttpPut]
-        //[Route("UpdateLabel")]
-        ////Post: /api/Note/CreateLabel
         public async Task<IActionResult> UpdateLabel(LabelRequest labelRequest, int labelID)
         {
             try
@@ -175,8 +171,6 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns>returns the result</returns>
         [HttpGet]
-        //[Route("DisplayLabels")]
-        ////Post: /api/Note/DisplayNotes
         public async Task<IActionResult> DisplayLabels()
         {
             try

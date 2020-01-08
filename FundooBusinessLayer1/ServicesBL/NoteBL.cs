@@ -216,7 +216,6 @@ namespace FundooBusinessLayer.ServicesBL
         /// Determines whether the specified note identifier is archive.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true indicating note is Archived or false to indicate note is UnArchived
@@ -284,7 +283,6 @@ namespace FundooBusinessLayer.ServicesBL
         /// Determines whether the specified note identifier is pin.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true indicating note is Pinned or false to indicate note is UnPinned
@@ -553,7 +551,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="file">The form file.</param>
         /// <returns>
         /// returns the operation result
         /// </returns>
@@ -608,18 +606,18 @@ namespace FundooBusinessLayer.ServicesBL
                     throw new Exception("Please enter correct NoteID");
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
         }
 
-
         /// <summary>
         /// Searches the specified key.
         /// </summary>
         /// <param name="key">The key.</param>
-        /// <returns>returns the list of notes or null value</returns>
+        /// <param name="userId">The user identifier.</param>
+        /// <returns> returns the Note list</returns>
         /// <exception cref="Exception">
         /// Key required to search
         /// or
@@ -691,7 +689,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// EmailID or UserId is required
         /// or
         /// </exception>
-        public Dictionary<string,string> GetContacts(string key, string userID)
+        public Dictionary<string, string> GetContacts(string key, string userID)
         {
             try
             {
@@ -795,7 +793,7 @@ namespace FundooBusinessLayer.ServicesBL
             try
             {
                 // check wheather user entered correct label id and note id
-                if(noteID > 0 && labelID > 0)
+                if (noteID > 0 && labelID > 0)
                 {
                     return await this.noteRL.AddLabel(labelID, noteID, userID);
                 }
@@ -804,7 +802,7 @@ namespace FundooBusinessLayer.ServicesBL
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }
@@ -817,13 +815,13 @@ namespace FundooBusinessLayer.ServicesBL
         /// <param name="labelID">The label identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the note info or null value</returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID)
         {
             try
             {
                 // check wheather uer entered correct note ID and Label ID
-                if(noteID > 0 && labelID > 0)
+                if (noteID > 0 && labelID > 0)
                 {
                     return await this.noteRL.RemoveLabel(noteID, labelID, userID);
                 }
@@ -832,7 +830,7 @@ namespace FundooBusinessLayer.ServicesBL
                     return null; 
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 throw new Exception(exception.Message);
             }

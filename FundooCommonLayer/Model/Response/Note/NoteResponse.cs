@@ -13,11 +13,11 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model.Response
 {
-    using FundooCommonLayer.Model.Response.Note;
     // Including the requried assemblies in to the program
     using System;
     using System.Collections.Generic;
     using System.Text;
+    using FundooCommonLayer.Model.Response.Note;
 
     /// <summary>
     /// this class contains properties of note
@@ -112,6 +112,12 @@ namespace FundooCommonLayer.Model.Response
         /// </value>
         public List<CollaboratorRsponse> Collaborators { get; set; }
 
+        /// <summary>
+        /// Gets or sets the labels.
+        /// </summary>
+        /// <value>
+        /// The labels.
+        /// </value>
         public List<LabelResponse> Labels { get; set; }
     }
 }

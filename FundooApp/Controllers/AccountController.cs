@@ -194,7 +194,7 @@ namespace FundooApp.Controllers
                 var emailID = HttpContext.User.Claims.First(s => s.Type == "EmailID").Value;
 
                 // pass the email ID and image to business layer method of account
-                var data = await this.accountBL.ChangeProfilePicture( emailID, formFile);
+                var data = await this.accountBL.ChangeProfilePicture(emailID, formFile);
 
                 // check whether data is null or not
                 if (data != null)
@@ -218,12 +218,16 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Facebooks the log in.
+        /// </summary>
+        /// <returns> redirect to the facebook login page</returns>
         [EnableCors]
         [HttpGet]
         [Route("FacebookLogIn")]
         public IActionResult FacebookLogIn()
         {
-            return Challenge(new AuthenticationProperties { RedirectUri = "/" });
+            return this.Challenge(new AuthenticationProperties { RedirectUri = "/" });
         }
     }
 }

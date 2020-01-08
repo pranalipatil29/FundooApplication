@@ -1,10 +1,10 @@
 ﻿// ******************************************************************************
-//  <copyright file="LoginResponse.cs" company="Bridgelabz">
+//  <copyright file="AccountResponse.cs" company="Bridgelabz">
 //    Copyright © 2019 Company
 //
-//     Execution:  LoginResponse.cs
+//     Execution:  AccountResponse.cs
 //  
-//     Purpose:  Defining properties for handling login response
+//     Purpose:  Defining properties for handling account response
 //     @author  Pranali Patil
 //     @version 1.0
 //     @since   18-12-2019
@@ -56,10 +56,10 @@ namespace FundooCommonLayer.Model.Response
         public string EmailID { get; set; }
 
         /// <summary>
-        /// Gets or sets the profilepicture.
+        /// Gets or sets the profile picture.
         /// </summary>
         /// <value>
-        /// The profilepicture.
+        /// The profile picture.
         /// </value>
         public string Profilepicture { get; set; }
 

@@ -131,8 +131,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         LastName = user.LastName,
                         EmailID = user.Email,
                         UserName = user.UserName,
-                        Profilepicture= user.ProfilePicture,
-                        ServiceType =user.ServiceType
+                        Profilepicture = user.ProfilePicture,
+                        ServiceType = user.ServiceType
                     };
 
                     // return the user data
@@ -143,16 +143,16 @@ namespace FundooRepositoryLayer.ServiceRL
                     return null;
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
-                throw new Exception(exception.Message) ;
+                throw new Exception(exception.Message);
             }           
         }
 
         /// <summary>
         /// Generates the token.
         /// </summary>
-        /// <param name="loginResponse">The login response.</param>
+        /// <param name="accountResponse">The login response.</param>
         /// <returns> returns the token</returns>
         public async Task<string> GenerateToken(AccountResponse accountResponse)
         {
@@ -259,6 +259,13 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns> returns the user info or null value</returns>
+        /// <exception cref="Exception"> exception message</exception>
         public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile)
         {
             try
@@ -286,8 +293,8 @@ namespace FundooRepositoryLayer.ServiceRL
                         LastName = user.LastName,
                         EmailID = user.Email,
                         UserName = user.UserName,
-                        Profilepicture= user.ProfilePicture,
-                        ServiceType= user.ServiceType
+                        Profilepicture = user.ProfilePicture,
+                        ServiceType = user.ServiceType
                     };
 
                     // returning user data

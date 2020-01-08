@@ -172,7 +172,7 @@ namespace FundooBusinessLayer1.ServicesBL
         /// <summary>
         /// Generates the token.
         /// </summary>
-        /// <param name="loginResponse">The login response.</param>
+        /// <param name="accountResponse">The login response.</param>
         /// <returns> returns the token</returns>
         /// <exception cref="Exception">
         /// invalid token
@@ -198,6 +198,18 @@ namespace FundooBusinessLayer1.ServicesBL
             }
         }
 
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please select correct image
+        /// or
+        /// </exception>
         public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile)
         {
             try

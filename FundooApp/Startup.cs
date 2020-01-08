@@ -140,8 +140,6 @@ namespace FundooApp
             //    Options.AppId = Configuration["ApplicationSetting:FacebookAppId"];
             //    Options.AppSecret = Configuration["ApplicationSetting:FacebookAppSecret"];
             //}).AddCookie();
-
-
         }
 
         /// <summary>

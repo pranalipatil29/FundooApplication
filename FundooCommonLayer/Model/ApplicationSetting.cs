@@ -34,15 +34,44 @@ namespace FundooCommonLayer.Model
         /// </value>
         public string ClientURL { get; set; }
 
-
+        /// <summary>
+        /// Gets or sets the name of the cloud.
+        /// </summary>
+        /// <value>
+        /// The name of the cloud.
+        /// </value>
         public string CloudName { get; set; }
 
+        /// <summary>
+        /// Gets or sets the API key.
+        /// </summary>
+        /// <value>
+        /// The API key.
+        /// </value>
         public string APIkey { get; set; }
 
+        /// <summary>
+        /// Gets or sets the API secret.
+        /// </summary>
+        /// <value>
+        /// The API secret.
+        /// </value>
         public string APISecret { get; set; }
 
+        /// <summary>
+        /// Gets or sets the facebook application identifier.
+        /// </summary>
+        /// <value>
+        /// The facebook application identifier.
+        /// </value>
         public string FacebookAppId { get; set; }
 
+        /// <summary>
+        /// Gets or sets the facebook application secret.
+        /// </summary>
+        /// <value>
+        /// The facebook application secret.
+        /// </value>
         public string FacebookAppSecret { get; set; }
     }
 }

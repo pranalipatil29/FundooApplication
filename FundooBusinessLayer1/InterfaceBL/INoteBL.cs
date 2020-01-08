@@ -34,7 +34,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// </summary>
         /// <param name="requestNote">The request note.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns>returns message indicating operation is succcessful or not</returns>
+        /// <returns>returns message indicating operation is successful or not</returns>
         Task<bool> CreateNote(NoteRequest requestNote, string userID);
 
         /// <summary>
@@ -44,6 +44,12 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns> returns the list of note</returns>
         IList<NoteResponse> DisplayNotes(string userID);
 
+        /// <summary>
+        /// Gets the note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info or null value</returns>
         Task<NoteResponse> GetNote(int noteID, string userID);
 
         /// <summary>
@@ -67,7 +73,6 @@ namespace FundooBusinessLayer.InterfaceBL
         /// Determines whether the specified note identifier is archive.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns true indicating note is Archived or false to indicate note is UnArchived </returns>
         Task<NoteResponse> IsArchive(int noteID, string userID);
@@ -148,7 +153,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="file">The form file.</param>
         /// <returns> returns the operation result</returns>
         Task<NoteResponse> ImageUpload(int noteID, string userID, IFormFile file);
 
@@ -156,6 +161,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// Searches the specified kay.
         /// </summary>
         /// <param name="kay">The kay.</param>
+        /// <param name="userID">The user identifier.</param>
         /// <returns>returns the list of notes or null value</returns>
         IList<NoteResponse> Search(string kay, string userID);
 
@@ -172,7 +178,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="key">The key tobe searched.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the list of contacts or null value</returns>
-        Dictionary<string,string> GetContacts(string key, string userID);
+        Dictionary<string, string> GetContacts(string key, string userID);
 
         /// <summary>
         /// Shares the with.
@@ -209,6 +215,13 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <returns> returns the note info</returns>
         Task<NoteResponse> AddLabel(int labelID, int noteID, string userID);
 
+        /// <summary>
+        /// Removes the label.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info or null value</returns>
         Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID);
     } 
 }

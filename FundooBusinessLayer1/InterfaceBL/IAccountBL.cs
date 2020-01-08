@@ -58,7 +58,7 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// <summary>
         /// Generates the token.
         /// </summary>
-        /// <param name="loginResponse">The login response.</param>
+        /// <param name="accountResponse">The login response.</param>
         /// <returns> returns the token</returns>
         Task<string> GenerateToken(AccountResponse accountResponse);
 

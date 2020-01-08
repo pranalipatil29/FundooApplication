@@ -55,8 +55,6 @@ namespace FundooApp.Controllers
         /// <param name="noteRequest">The note request.</param>
         /// <returns> returns the message indicating operation is done or not</returns>
         [HttpPost]
-       // [Route("CreateNote")]
-        ////Post: /api/Note/CreateNote
         public async Task<IActionResult> CreateNote(NoteRequest noteRequest)
         {
             try
@@ -101,7 +99,6 @@ namespace FundooApp.Controllers
         {
             try
             {
-              //  string userId = "e6ac5ba3-a6d4-400a-bf42-10d7e410ab7a";
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var result = await this.noteBL.DeleteNote(noteID, userId);
 
@@ -171,8 +168,6 @@ namespace FundooApp.Controllers
         /// </summary>
         /// <returns> returns the list of notes</returns>
         [HttpGet]
-       // [Route("DisplayNotes")]
-        ////Post: /api/Note/DisplayNotes
         public async Task<IActionResult> DisplayNotes()
         {
             try
@@ -216,7 +211,7 @@ namespace FundooApp.Controllers
             try
             {
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
-                var data = await this.noteBL.GetNote(noteID,userId);
+                var data = await this.noteBL.GetNote(noteID, userId);
                 bool success = false;
                 var message = string.Empty;
 
@@ -238,12 +233,11 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { exception.Message });
             }
         }
-
+        
         /// <summary>
         /// Archives the specified note identifier.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="archive">if set to <c>true</c> [archive].</param>
         /// <returns> returns the result of operation</returns>
         [HttpPut]
         [Route("{noteID}/Archive")]
@@ -317,7 +311,6 @@ namespace FundooApp.Controllers
         /// Determines whether the specified note identifier is pin.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="isPin">if set to <c>true</c> [is pin].</param>
         /// <returns> returns the result of operation</returns>
         [HttpPut]
         [Route("{noteID}/Pin")]
@@ -510,7 +503,7 @@ namespace FundooApp.Controllers
                 var userId = HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
                 var data = await this.noteBL.ChangeColor(noteID, changeColorRequest.Color, userId);
 
-                if(data != null)
+                if (data != null)
                 {
                     success = true;
                     message = "Successfully changed note color";
@@ -523,11 +516,11 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
-                return this.BadRequest(new {success, message });
+                return this.BadRequest(new { success, message });
             }
         }
 
@@ -535,7 +528,7 @@ namespace FundooApp.Controllers
         /// Sets the reminder.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="dateTime">The date time.</param>
+        /// <param name="reminder">The reminder.</param>
         /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Reminder")]
@@ -550,11 +543,11 @@ namespace FundooApp.Controllers
 
                 var data = await this.noteBL.SetReminder(noteID, reminder.Reminder, userID);
 
-                if(data != null)
+                if (data != null)
                 {
                     success = true;
                     message = "Reminder Added ";
-                    return this.Ok(new { success, message, data});
+                    return this.Ok(new { success, message, data });
                 }
                 else
                 {
@@ -563,7 +556,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -601,7 +594,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -613,7 +606,7 @@ namespace FundooApp.Controllers
         /// Images the upload.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="file">The form file.</param>
         /// <returns> returns the operation result</returns>
         [HttpPut]
         [Route("{noteID}/Image")]
@@ -629,7 +622,7 @@ namespace FundooApp.Controllers
                 var data = await this.noteBL.ImageUpload(noteID, userID, file);
 
                 // check whether data is null or not
-                if(data != null)
+                if (data != null)
                 {
                     // if data is not null that means image is uploaded successfully
                     success = true;
@@ -644,7 +637,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success, message });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 success = false;
                 message = exception.Message;
@@ -679,7 +672,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success = false, message = "Failed to delete image" });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -688,7 +681,7 @@ namespace FundooApp.Controllers
         /// <summary>
         /// Searches the specified key.
         /// </summary>
-        /// <param name="key">The key.</param>
+        /// <param name="requestedKey">The key.</param>
         /// <returns>returns the list of notes or bad request result</returns>
         [HttpPost]
         [Route("Search")]
@@ -702,7 +695,7 @@ namespace FundooApp.Controllers
                 // get the user id
                 var userID = HttpContext.User.Claims.First(s => s.Type == "UserID").Value;
 
-                IList<NoteResponse> result = this.noteBL.Search(requestedKey.key, userID);
+                IList<NoteResponse> result = this.noteBL.Search(requestedKey.Key, userID);
 
                 // check whether any note contains user entered key or not
                 if (result.Count > 0)
@@ -742,7 +735,7 @@ namespace FundooApp.Controllers
                 var result = await this.noteBL.BulkTrash(userId);
 
                 // check wheather the result variable contains true value or not
-                if(result)
+                if (result)
                 {
                     // if result variable contains true value means opeartion is done successfully
                     return this.Ok(new { success = true, message = "Successfully deleted notes from trash" });
@@ -753,7 +746,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success = false, message = "Failed" });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -762,8 +755,8 @@ namespace FundooApp.Controllers
         /// <summary>
         /// Gets the contacts.
         /// </summary>
-        /// <param name="key">The key.</param>
-        /// <returns></returns>
+        /// <param name="requestedKey">The requested key.</param>
+        /// <returns> returns the list of user EmailID and ID</returns>
         [HttpPost]
         [Route("SearchPerson")]
         public async Task<IActionResult> GetContacts(SearchkeyRequest requestedKey)
@@ -774,7 +767,7 @@ namespace FundooApp.Controllers
                 var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the list of Contacts which contains key entered by user
-               Dictionary<string,string> contactList = this.noteBL.GetContacts(requestedKey.key, userID);
+               Dictionary<string, string> contactList = this.noteBL.GetContacts(requestedKey.Key, userID);
 
                 // check wheather any record of person is found or not
                 if (contactList.Count > 0)
@@ -788,7 +781,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success = false, message = "Contact not Found" });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -815,14 +808,14 @@ namespace FundooApp.Controllers
                 // check wheather operation is done or not
                 if (result)
                 {
-                    return Ok(new { success = true, message = "Successfully Shared note" });
+                    return this.Ok(new { success = true, message = "Successfully Shared note" });
                 }
                 else
                 {
-                    return BadRequest(new { success = false, message = "Failed" });                
+                    return this.BadRequest(new { success = false, message = "Failed" });                
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -847,7 +840,7 @@ namespace FundooApp.Controllers
                 var result = await this.noteBL.DeleteCollaborator(noteID, collaboratorRequest.ID, userID);
 
                 // check wheather result is true or false
-                if(result)
+                if (result)
                 {
                     return this.Ok(new { success = true, message = "Successfully Deleted Collaborator" });
                 }
@@ -856,7 +849,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success = false, message = "Failed to delete Collaborator" });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -866,11 +859,11 @@ namespace FundooApp.Controllers
         /// Adds the label on note.
         /// </summary>
         /// <param name="noteID">The note identifier.</param>
-        /// <param name="lableID">The lable identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
         /// <returns> returns the operation result</returns>
         [HttpPost]
-        [Route("{noteID}/Label/{lableID}")]
-        public async Task<IActionResult> AddLabelOnNote(int noteID, int lableID)
+        [Route("{noteID}/Label/{labelID}")]
+        public async Task<IActionResult> AddLabelOnNote(int noteID, int labelID)
         {
             try
             {
@@ -878,7 +871,7 @@ namespace FundooApp.Controllers
                 var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
                 // get the result of Add label operation
-                var data = await this.noteBL.AddLabel(lableID, noteID, userId);
+                var data = await this.noteBL.AddLabel(labelID, noteID, userId);
 
                 // check wheather data is null or not
                 if (data != null)
@@ -892,7 +885,7 @@ namespace FundooApp.Controllers
                     return this.BadRequest(new { success = false, message = "Note or Label Not Found" });
                 }
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
@@ -917,7 +910,7 @@ namespace FundooApp.Controllers
                 var data = await this.noteBL.RemoveLabel(noteID, labelID, userID);
 
                 // check wheather data is null or not
-                if(data != null)
+                if (data != null)
                 {
                     // if data is not null means Label is removed from note
                     return this.Ok(new { success = true, message = "Successfully removed label", data });
@@ -927,9 +920,8 @@ namespace FundooApp.Controllers
                     // if data is null that means user entered note Id or label ID is not present in database
                     return this.BadRequest(new { success = false, message = "Note or Label not Found" });
                 }
-
             }
-            catch(Exception exception)
+            catch (Exception exception)
             {
                 return this.BadRequest(new { success = false, message = exception.Message });
             }

@@ -22,8 +22,20 @@ namespace FundooCommonLayer.Model.Response.Note
     /// </summary>
     public class CollaboratorRsponse
     {
+        /// <summary>
+        /// Gets or sets the collaborator identifier.
+        /// </summary>
+        /// <value>
+        /// The collaborator identifier.
+        /// </value>
         public string CollaboratorID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the email identifier.
+        /// </summary>
+        /// <value>
+        /// The email identifier.
+        /// </value>
         public string EmailID { get; set; }
     }
 }

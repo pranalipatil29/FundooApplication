@@ -20,26 +20,71 @@ namespace FundooCommonLayer.Model
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Text;
 
+    /// <summary>
+    /// Defining columns for Collaborator table
+    /// </summary>
     public class CollaboratorModel
     {
+        /// <summary>
+        /// Gets or sets the identifier.
+        /// </summary>
+        /// <value>
+        /// The identifier.
+        /// </value>
         [Key]
         public int ID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the note identifier.
+        /// </summary>
+        /// <value>
+        /// The note identifier.
+        /// </value>
         [ForeignKey("NoteModel")]
         public int NoteID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the user identifier.
+        /// </summary>
+        /// <value>
+        /// The user identifier.
+        /// </value>
         [ForeignKey("RegistrationModel")]
         public string UserID { get; set; }
 
-        [Column (TypeName ="nvarchar(150)")]
+        /// <summary>
+        /// Gets or sets the collaborator identifier.
+        /// </summary>
+        /// <value>
+        /// The collaborator identifier.
+        /// </value>
+        [Column(TypeName = "nvarchar(150)")]
         public string CollaboratorID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the email identifier.
+        /// </summary>
+        /// <value>
+        /// The email identifier.
+        /// </value>
         [Column(TypeName = "nvarchar(150)")]
         public string EmailID { get; set; }
 
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
+        /// <value>
+        /// The created date.
+        /// </value>
         [Column(TypeName = "DateTime")]
         public DateTime CreatedDate { get; set; }
 
+        /// <summary>
+        /// Gets or sets the modified date.
+        /// </summary>
+        /// <value>
+        /// The modified date.
+        /// </value>
         [Column(TypeName = "DateTime")]
         public DateTime ModifiedDate { get; set; }
     }

@@ -24,9 +24,12 @@ namespace FundooCommonLayer.Model.Request.Note
     /// </summary>
     public class CollaboratorRequest
     {
-         /// <summary>
-        /// The email identifier
+        /// <summary>
+        /// Gets or sets the identifier.
         /// </summary>
-        public string ID;
+        /// <value>
+        /// The identifier.
+        /// </value>
+        public string ID { get; set; }
     }
 }

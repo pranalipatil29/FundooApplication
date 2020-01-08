@@ -62,7 +62,7 @@ namespace FundooCommonLayer.Model.Request
         /// <value>
         /// The color.
         /// </value>
-        [RegularExpression ("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")]
+        [RegularExpression("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$")]
         public string Color { get; set; }
 
         /// <summary>
