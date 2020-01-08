@@ -85,22 +85,27 @@ namespace FundooRepositoryLayer.ServiceRL
                     var count = 0;
                     if(data.Collaborator != null)
                     {
+                        var newCollaborator = new CollaboratorRequest()
+                        {
+                            ID = requestNote.Collaborator
+                        };
+
                         count++;
                     }
                     var noteInfo = new NoteModel()
                     {
-                        UserID =userID,
-                        Title=data.Title,
-                        Description=data.Description,
-                        Collaborators=count,
-                        Color=data.Color,
-                        Reminder=data.Reminder,
-                        Image=data.Image,
-                        IsArchive=data.IsArchive,
-                        IsPin=data.IsPin,
-                        IsTrash= data.IsTrash,
-                        CreatedDate=DateTime.Now,
-                        ModifiedDate=DateTime.Now
+                        UserID = userID,
+                        Title = data.Title,
+                        Description = data.Description,
+                        Collaborators = count,
+                        Color = data.Color,
+                        Reminder = data.Reminder,
+                        Image = data.Image,
+                        IsArchive = data.IsArchive,
+                        IsPin = data.IsPin,
+                        IsTrash = data.IsTrash,
+                        CreatedDate = DateTime.Now,
+                        ModifiedDate = DateTime.Now
                     };
                     // add new note in tabel
                     this.authenticationContext.Note.Add(noteInfo);
@@ -188,12 +193,11 @@ namespace FundooRepositoryLayer.ServiceRL
                         note.Description = noteRequest.Description;
                     }
 
-                    //// check whether user entered value for collaborator or not
-                    //if (noteRequest.Collaborator != null && noteRequest.Collaborator != string.Empty)
-                    //{ 
-                    //  
-                    //    note.Collaborators = noteRequest.Collaborator;
-                    //}
+                    // check whether user entered value for collaborator or not
+                    if (noteRequest.Collaborator != null && noteRequest.Collaborator != string.Empty)
+                    {
+                       var result = await this.ShareWith(note.NoteID, noteRequest.Collaborator, userID);             
+                    }
 
                     // check whether user entered value for color or not
                     if (noteRequest.Color != null && noteRequest.Color != string.Empty)
@@ -1250,9 +1254,11 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// Gets the contacts.
         /// </summary>
-        /// <param name="key">The key.</param>
+        /// <param name="key">The key tobe searched.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns> returns the list of contacts or null value</returns>
+        /// <returns>
+        /// returns the list of contacts or null value
+        /// </returns>
         /// <exception cref="Exception">
         /// Key required to search Person
         /// or
@@ -1304,9 +1310,10 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// Shares the with.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns> returns true or false depending upon operation result</returns>
+        /// <returns></returns>
         /// <exception cref="Exception">
         /// This email already exists
         /// or
@@ -1347,10 +1354,10 @@ namespace FundooRepositoryLayer.ServiceRL
                             };
 
                             this.authenticationContext.Collaborators.Add(collaborator);
-                            await this.authenticationContext.SaveChangesAsync();
 
                             note.Collaborators = note.Collaborators + 1;
                             this.authenticationContext.Note.Update(note);
+
                             await this.authenticationContext.SaveChangesAsync();
                             
                             return true;
@@ -1379,12 +1386,16 @@ namespace FundooRepositoryLayer.ServiceRL
         /// <summary>
         /// Deletes the collaborator.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true or false depending upon operation result
         /// </returns>
-        /// <exception cref="Exception"></exception>
+        /// <exception cref="Exception">
+        /// Note not found
+        /// or
+        /// </exception>
         public async Task<bool> DeleteCollaborator(int noteID, string id, string userID)
         {
             try
@@ -1401,12 +1412,11 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         // if note is found in collaborators table then delete the collaborator for specified note
                         this.authenticationContext.Collaborators.Remove(note);
-                        
-                        // save the changes in database
-                        await this.authenticationContext.SaveChangesAsync();
-
+                                                                
                         noteData.Collaborators = noteData.Collaborators - 1;
                         this.authenticationContext.Note.Update(noteData);
+
+                        //// save the changes in database
                         await this.authenticationContext.SaveChangesAsync();
 
                         return true;
@@ -1426,8 +1436,6 @@ namespace FundooRepositoryLayer.ServiceRL
             {
                 throw new Exception(exception.Message);
             }
-        }
-
-       
+        }      
     }
 }

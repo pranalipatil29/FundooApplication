@@ -177,15 +177,16 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <summary>
         /// Gets the contacts.
         /// </summary>
-        /// <param name="key">The key.</param>
+        /// <param name="key">The key tobe searched.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns>returns the list of contacts or null value</returns>
-        Dictionary<string,string> GetContacts(string emailID, string userID);
+        /// <returns> returns the list of contacts or null value</returns>
+        Dictionary<string,string> GetContacts(string key, string userID);
 
         /// <summary>
         /// Shares the with.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>returns true or false depending upon operation result</returns>
         Task<bool> ShareWith(int noteOID, string id, string userID);
@@ -193,9 +194,10 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <summary>
         /// Deletes the collaborator.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns>returns true or false depending upon operation result</returns>
+        /// <returns> returns true or false depending upon operation result</returns>
         Task<bool> DeleteCollaborator(int noteID, string id, string userID);
 
         /// <summary>

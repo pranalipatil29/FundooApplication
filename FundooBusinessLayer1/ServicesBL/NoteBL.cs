@@ -672,11 +672,13 @@ namespace FundooBusinessLayer.ServicesBL
         /// <summary>
         /// Gets the contacts.
         /// </summary>
-        /// <param name="key">The key.</param>
+        /// <param name="key">The key tobe searched.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns>returns the list of contacts or null value</returns>
+        /// <returns>
+        /// returns the list of contacts or null value
+        /// </returns>
         /// <exception cref="Exception">
-        /// User not found
+        /// EmailID or UserId is required
         /// or
         /// </exception>
         public Dictionary<string,string> GetContacts(string key, string userID)
@@ -704,13 +706,14 @@ namespace FundooBusinessLayer.ServicesBL
         /// <summary>
         /// Shares the with.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true or false depending upon operation result
         /// </returns>
         /// <exception cref="Exception">
-        /// NoteId and email id is required
+        /// NoteId and user id is required
         /// or
         /// </exception>
         public async Task<bool> ShareWith(int noteID, string id, string userID)
@@ -735,13 +738,14 @@ namespace FundooBusinessLayer.ServicesBL
         /// <summary>
         /// Deletes the collaborator.
         /// </summary>
-        /// <param name="collaboratorRequest">The collaborator request.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="id">The identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns>
         /// returns true or false depending upon operation result
         /// </returns>
         /// <exception cref="Exception">
-        /// NoteId and email id is required
+        /// NoteId and user id is required
         /// or
         /// </exception>
         public async Task<bool> DeleteCollaborator(int noteID, string id, string userID)
