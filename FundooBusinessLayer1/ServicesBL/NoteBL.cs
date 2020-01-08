@@ -785,7 +785,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// <param name="labelID">The label identifier.</param>
         /// <param name="noteID">The note identifier.</param>
         /// <param name="userID">The user identifier.</param>
-        /// <returns> return the note info</returns>
+        /// <returns> return the note info or null value</returns>
         /// <exception cref="Exception">
         /// Note ID or labelID is Invalid
         /// or
@@ -801,7 +801,35 @@ namespace FundooBusinessLayer.ServicesBL
                 }
                 else
                 {
-                    throw new Exception("Note ID or labelID is Invalid");
+                    return null;
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Removes the label.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info or null value</returns>
+        /// <exception cref="Exception"></exception>
+        public async Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID)
+        {
+            try
+            {
+                // check wheather uer entered correct note ID and Label ID
+                if(noteID > 0 && labelID > 0)
+                {
+                    return await this.noteRL.RemoveLabel(noteID, labelID, userID);
+                }
+                else
+                {
+                    return null; 
                 }
             }
             catch(Exception exception)

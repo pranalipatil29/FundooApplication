@@ -1389,17 +1389,17 @@ namespace FundooRepositoryLayer.ServiceRL
                 // get the labels of user from label table
                 var label = this.authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
 
-                // check wheather user have label or not
-                if (label != null)
-                {
-                    // get the note data from note table
-                    var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
+                // get the note data from note table
+                var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
 
+                // check wheather user have label or not
+                if (noteData != null)
+                {            
                     // get data from Note label table for selected label and note
                     var noteLabelData = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.LabelID == labelID && s.NoteID == noteID).FirstOrDefault();
 
                     // check wheather user have note or not
-                    if (noteData != null)
+                    if (label != null)
                     {
                         // check wheather user already have label for selected note or not
                         if (noteLabelData == null)
@@ -1436,16 +1436,76 @@ namespace FundooRepositoryLayer.ServiceRL
                     else
                     {
                         // if user doen't have note then throw exception
-                        throw new Exception("Note not found");
+                        throw new Exception("Label not found");
                     }
                 }
                 else
                 {
-                    // if user entered label not found in label table then throw exception
-                    throw new Exception("Label not found");
+                    // if user entered note ID  not found in Note table return null
+                    return null;
                 }
             }
             catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        public async Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID)
+        {
+            try
+            {
+                // get the labels of user from label table
+                var label = this.authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
+
+                // get the note data from note table
+                var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
+
+                // check wheather user have label or not
+                if (noteData != null)
+                {
+                   
+                    // get data from Note-label table for selected label and note
+                    var noteLabelData = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.LabelID == labelID && s.NoteID == noteID).FirstOrDefault();
+
+                    // check wheather user have note or not
+                    if (label != null)
+                    {
+                        // check wheather user have label for selected note or not
+                        if (noteLabelData != null)
+                        {
+                            
+                            // Remove entry in Note-Lable table
+                            this.authenticationContext.NoteLabel.Remove(noteLabelData);
+
+                            // save the changes in database
+                            await this.authenticationContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            // if selected note already have user entered label then throw exception
+                            throw new Exception("Note doesn't have label");
+                        }
+
+                        // get the note info
+                        NoteResponse note = this.GetNoteResponse(userID, noteData);
+
+                        // return note info
+                        return note;
+                    }
+                    else
+                    {
+                        // if user doen't have note then throw exception
+                        throw new Exception("Label not found");
+                    }
+                }
+                else
+                {
+                    // if user entered noteID not found in Note table then return null
+                    return null;
+                }
+            }
+            catch(Exception exception)
             {
                 throw new Exception(exception.Message);
             }

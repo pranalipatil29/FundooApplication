@@ -208,5 +208,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the note info</returns>
         Task<NoteResponse> AddLabel(int labelID, int noteID, string userID);
-    }
+
+        Task<NoteResponse> RemoveLabel(int noteID, int labelID, string userID);
+    } 
 }

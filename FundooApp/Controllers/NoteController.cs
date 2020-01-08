@@ -862,24 +862,72 @@ namespace FundooApp.Controllers
             }
         }
 
+        /// <summary>
+        /// Adds the label on note.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="lableID">The lable identifier.</param>
+        /// <returns> returns the operation result</returns>
         [HttpPost]
         [Route("{noteID}/Label/{lableID}")]
         public async Task<IActionResult> AddLabelOnNote(int noteID, int lableID)
         {
             try
             {
+                // get the user ID
                 var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
 
+                // get the result of Add label operation
                 var data = await this.noteBL.AddLabel(lableID, noteID, userId);
 
+                // check wheather data is null or not
                 if (data != null)
                 {
+                    // if data is not null means Label is added on Note 
                     return this.Ok(new { success = true, message = "Successfully added label on note", data });
                 }
                 else
                 {
-                    return this.BadRequest(new { success = false, message = "Failed to add label on note" });
+                    // if data is null that means user entered note or label is not present in database
+                    return this.BadRequest(new { success = false, message = "Note or Label Not Found" });
                 }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
+
+        /// <summary>
+        /// Removes the label.
+        /// </summary>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="labelID">The label identifier.</param>
+        /// <returns> returns the operation result </returns>
+        [HttpDelete]
+        [Route("{noteID}/Label/{labelID}")]
+        public async Task<IActionResult> RemoveLabel(int noteID, int labelID)
+        {
+            try
+            {
+                // get the user ID
+                var userID = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                // get the operation rsult
+                var data = await this.noteBL.RemoveLabel(noteID, labelID, userID);
+
+                // check wheather data is null or not
+                if(data != null)
+                {
+                    // if data is not null means Label is removed from note
+                    return this.Ok(new { success = true, message = "Successfully removed label", data });
+                }
+                else
+                {
+                    // if data is null that means user entered note Id or label ID is not present in database
+                    return this.BadRequest(new { success = false, message = "Note or Label not Found" });
+                }
+
             }
             catch(Exception exception)
             {
