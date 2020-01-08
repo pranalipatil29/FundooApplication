@@ -22,6 +22,7 @@ namespace FundooRepositoryLayer.ServiceRL
     using FundooCommonLayer.Model.Request;
     using FundooCommonLayer.Model.Request.Note;
     using FundooCommonLayer.Model.Response;
+    using FundooCommonLayer.Model.Response.Note;
     using FundooRepositoryLayer.Context;
     using FundooRepositoryLayer.ImageUpload;
     using FundooRepositoryLayer.InterfaceRL;
@@ -133,11 +134,11 @@ namespace FundooRepositoryLayer.ServiceRL
                         {
                             // if user entered emailId for collaborator not found then throw exception
                             throw new Exception(" Email ID not found for Collaborator");
-                        }
-                       
+                        }                      
                     }
                     else
                     {
+                        // if user doesn't add any collaborator then save the note with collaborator as 0 value in note table
                         var noteInfo = new NoteModel()
                         {
                             UserID = userID,
@@ -156,8 +157,11 @@ namespace FundooRepositoryLayer.ServiceRL
 
                         // add new note in tabel
                         this.authenticationContext.Note.Add(noteInfo);
+
+                        // save the changes in database
                         await this.authenticationContext.SaveChangesAsync();
                     }
+
                     return true;
                 }
                 else
@@ -321,8 +325,23 @@ namespace FundooRepositoryLayer.ServiceRL
                     // iterates the loop for each note
                     foreach (var note in data)
                     {
+                       // creating a list for holding collaborators info for esch note
+                       var collaborators = new List<CollaboratorRsponse>();
+
+                        // get the collaborators for each note
                         var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
 
+                        foreach( var coll in collaboratorsList)
+                        {
+                            var collaboratorData = new CollaboratorRsponse()
+                            {
+                                CollaboratorID = coll.CollaboratorID,
+                                EmailID = coll.EmailID,
+                            };
+
+                            collaborators.Add(collaboratorData);
+                        }
+                        
                         // get the required values of note
                         var notes = new NoteResponse()
                         {
@@ -335,7 +354,8 @@ namespace FundooRepositoryLayer.ServiceRL
                             IsArchive = note.IsArchive,
                             IsPin = note.IsPin,
                             IsTrash = note.IsTrash,
-                            Reminder = note.Reminder
+                            Reminder = note.Reminder,
+                           Collaborators = collaborators
                         };
 
                         list.Add(notes);
@@ -365,20 +385,37 @@ namespace FundooRepositoryLayer.ServiceRL
                 // check whether user have notes or not
                 if (data != null)
                 {
-                    var list = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == noteID);
+                    // creating a list for holding collaborators info for note
+                    var collaborators = new List<CollaboratorRsponse>();
 
+                    // get the collaborators for each note
+                    var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == data.NoteID);
+
+                    foreach (var coll in collaboratorsList)
+                    {
+                        var collaboratorData = new CollaboratorRsponse()
+                        {
+                            CollaboratorID = coll.CollaboratorID,
+                            EmailID = coll.EmailID,
+                        };
+
+                        collaborators.Add(collaboratorData);
+                    }
+
+                    // get the note info
                     var note = new NoteResponse()
                     {
                         NoteID = data.NoteID,
                         Title = data.Title,
                         Description = data.Description,
-                        Collaborator = list.Count(),
+                        Collaborator = collaboratorsList.Count(),
                         Color = data.Color,
                         Image = data.Image,
                         IsArchive = data.IsArchive,
                         IsPin = data.IsPin,
                         IsTrash = data.IsTrash,
-                        Reminder = data.Reminder
+                        Reminder = data.Reminder,
+                        Collaborators = collaborators.ToList()
                     };
 
                     // returns the note info

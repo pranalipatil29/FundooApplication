@@ -229,7 +229,7 @@ namespace FundooApp.Controllers
                 else
                 {
                     success = false;
-                    message = "Failed";
+                    message = "Note not Found";
                     return this.BadRequest(new { success, message });
                 }
             }
