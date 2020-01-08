@@ -779,6 +779,35 @@ namespace FundooBusinessLayer.ServicesBL
             }
         }
 
-      
+        /// <summary>
+        /// Adds the label.
+        /// </summary>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> return the note info</returns>
+        /// <exception cref="Exception">
+        /// Note ID or labelID is Invalid
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> AddLabel(int labelID, int noteID, string userID)
+        {
+            try
+            {
+                // check wheather user entered correct label id and note id
+                if(noteID > 0 && labelID > 0)
+                {
+                    return await this.noteRL.AddLabel(labelID, noteID, userID);
+                }
+                else
+                {
+                    throw new Exception("Note ID or labelID is Invalid");
+                }
+            }
+            catch(Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }

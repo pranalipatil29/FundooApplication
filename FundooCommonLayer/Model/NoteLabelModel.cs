@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace FundooCommonLayer.Model
 {
+    using System;
     // Including the requried assemblies in to the program
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
@@ -38,7 +39,7 @@ namespace FundooCommonLayer.Model
         /// The user identifier.
         /// </value>
         [ForeignKey("RegistrationModel")]
-        public int UserID { get; set; }
+        public string UserID { get; set; }
 
         /// <summary>
         /// Gets or sets the note identifier.
@@ -66,5 +67,23 @@ namespace FundooCommonLayer.Model
         /// </value>
         [Column(TypeName = "nvarchar(150)")]
         public string Label { get; set; }
+
+        /// <summary>
+        /// Gets or sets the created date.
+        /// </summary>
+        /// <value>
+        /// The created date.
+        /// </value>
+        [Column(TypeName = "DateTime")]
+        public DateTime CreatedDate { get; set; }
+
+        /// <summary>
+        /// Gets or sets the modified date.
+        /// </summary>
+        /// <value>
+        /// The modified date.
+        /// </value>
+        [Column(TypeName = "DateTime")]
+        public DateTime ModifiedDate { get; set; }
     }
 }

@@ -111,5 +111,7 @@ namespace FundooCommonLayer.Model.Response
         /// The collaborators.
         /// </value>
         public List<CollaboratorRsponse> Collaborators { get; set; }
+
+        public List<LabelResponse> Labels { get; set; }
     }
 }

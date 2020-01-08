@@ -861,5 +861,30 @@ namespace FundooApp.Controllers
                 return this.BadRequest(new { success = false, message = exception.Message });
             }
         }
+
+        [HttpPost]
+        [Route("{noteID}/Label/{lableID}")]
+        public async Task<IActionResult> AddLabelOnNote(int noteID, int lableID)
+        {
+            try
+            {
+                var userId = this.HttpContext.User.Claims.First(c => c.Type == "UserID").Value;
+
+                var data = await this.noteBL.AddLabel(lableID, noteID, userId);
+
+                if (data != null)
+                {
+                    return this.Ok(new { success = true, message = "Successfully added label on note", data });
+                }
+                else
+                {
+                    return this.BadRequest(new { success = false, message = "Failed to add label on note" });
+                }
+            }
+            catch(Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
+            }
+        }
     }
 }

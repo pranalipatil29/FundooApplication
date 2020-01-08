@@ -74,14 +74,20 @@ namespace FundooRepositoryLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("DateTime");
+
                     b.Property<string>("Label")
                         .HasColumnType("nvarchar(150)");
 
                     b.Property<int>("LabelID");
 
+                    b.Property<DateTime>("ModifiedDate")
+                        .HasColumnType("DateTime");
+
                     b.Property<int>("NoteID");
 
-                    b.Property<int>("UserID");
+                    b.Property<string>("UserID");
 
                     b.HasKey("ID");
 

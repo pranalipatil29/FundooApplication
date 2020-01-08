@@ -94,7 +94,7 @@ namespace FundooRepositoryLayer.ServiceRL
         /// returns the info of label
         /// </returns>
         /// <exception cref="Exception"> exception message</exception>
-        public async Task<LabelModel> UpdateLabel(LabelRequest labelRequest, int labelID, string userID)
+        public async Task<LabelResponse> UpdateLabel(LabelRequest labelRequest, int labelID, string userID)
         {
             try
             {
@@ -116,7 +116,13 @@ namespace FundooRepositoryLayer.ServiceRL
                    // update the label name
                     this.authenticationContext.Label.Update(label);
                     await this.authenticationContext.SaveChangesAsync();
-                    return label;
+
+                    var data = new LabelResponse()
+                    {
+                        ID = label.LabelID,
+                        Label = label.Label,
+                    };
+                    return data;
                 }
                 else
                 {
@@ -189,8 +195,6 @@ namespace FundooRepositoryLayer.ServiceRL
                         {
                             ID = label.LabelID,
                             Label = label.Label,
-                            CreatedDate = label.CreatedDate,
-                            ModifiedDate = label.ModifiedDate
                         };
 
                         list.Add(labels);

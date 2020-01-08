@@ -42,7 +42,7 @@ namespace FundooBusinessLayer.InterfaceBL
         /// <param name="labelID">The label identifier.</param>
         /// <param name="userID">The user identifier.</param>
         /// <returns> returns the info of label</returns>
-        Task<LabelModel> UpdateLabel(LabelRequest labelRequest, int labelID, string userID);
+        Task<LabelResponse> UpdateLabel(LabelRequest labelRequest, int labelID, string userID);
 
         /// <summary>
         /// Displays the labels.

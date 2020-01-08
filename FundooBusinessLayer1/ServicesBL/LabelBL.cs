@@ -85,7 +85,7 @@ namespace FundooBusinessLayer.ServicesBL
         /// Please enter LabelID
         /// or
         /// </exception>
-        public async Task<LabelModel> UpdateLabel(LabelRequest labelRequest, int labelID, string userID)
+        public async Task<LabelResponse> UpdateLabel(LabelRequest labelRequest, int labelID, string userID)
         {
             try
             {

@@ -208,5 +208,13 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <returns>returns the note info or null value</returns>
         Task<NoteResponse> RemoveImage(int noteID, string userID);
 
+        /// <summary>
+        /// Adds the label.
+        /// </summary>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns the note info</returns>
+        Task<NoteResponse> AddLabel(int labelID, int noteID, string userID);
     }
 }

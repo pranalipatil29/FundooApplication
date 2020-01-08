@@ -105,8 +105,8 @@ namespace FundooRepositoryLayer.ServiceRL
 
                         // add new note in tabel
                         this.authenticationContext.Note.Add(noteInfo);
-                       await this.authenticationContext.SaveChangesAsync();
-                       
+                        await this.authenticationContext.SaveChangesAsync();
+
                         // get the collaborator info from User table
                         var user = this.authenticationContext.UserDataTable.Where(s => s.Email == data.Collaborator).FirstOrDefault();
 
@@ -134,7 +134,7 @@ namespace FundooRepositoryLayer.ServiceRL
                         {
                             // if user entered emailId for collaborator not found then throw exception
                             throw new Exception(" Email ID not found for Collaborator");
-                        }                      
+                        }
                     }
                     else
                     {
@@ -191,7 +191,7 @@ namespace FundooRepositoryLayer.ServiceRL
                 // get required note for user
                 var note = this.authenticationContext.Note.Where(s => s.NoteID == noteID && s.UserID == userID).FirstOrDefault();
 
-                
+
                 // check whether user have required note or not
                 if (note != null && note.IsTrash)
                 {
@@ -345,42 +345,6 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-        private NoteResponse GetNoteResponse(string userID, NoteModel note)
-        {
-            // creating a list for holding collaborators info for esch note
-            var collaborators = new List<CollaboratorRsponse>();
-
-            // get the collaborators for each note
-            var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
-
-            foreach (var coll in collaboratorsList)
-            {
-                var collaboratorData = new CollaboratorRsponse()
-                {
-                    CollaboratorID = coll.CollaboratorID,
-                    EmailID = coll.EmailID,
-                };
-
-                collaborators.Add(collaboratorData);
-            }
-
-            // get the required values of note
-            var notes = new NoteResponse()
-            {
-                NoteID = note.NoteID,
-                Title = note.Title,
-                Description = note.Description,
-                Collaborator = collaboratorsList.Count(),
-                Color = note.Color,
-                Image = note.Image,
-                IsArchive = note.IsArchive,
-                IsPin = note.IsPin,
-                IsTrash = note.IsTrash,
-                Reminder = note.Reminder,
-                Collaborators = collaborators
-            };
-            return notes;
-        }
 
         public async Task<NoteResponse> GetNote(int noteID, string userID)
         {
@@ -510,7 +474,7 @@ namespace FundooRepositoryLayer.ServiceRL
                     {
                         // get note info
                         NoteResponse notes = this.GetNoteResponse(userID, note);
-                       
+
                         // add note into list
                         list.Add(notes);
                     }
@@ -574,7 +538,7 @@ namespace FundooRepositoryLayer.ServiceRL
 
                         // save the changes
                         await this.authenticationContext.SaveChangesAsync();
-                       
+
                         // get note info
                         NoteResponse note = this.GetNoteResponse(userID, data);
 
@@ -1048,7 +1012,7 @@ namespace FundooRepositoryLayer.ServiceRL
 
                     // save the changes in databse
                     await this.authenticationContext.SaveChangesAsync();
-                 
+
                     // get note info
                     NoteResponse data = this.GetNoteResponse(userID, note);
 
@@ -1334,6 +1298,157 @@ namespace FundooRepositoryLayer.ServiceRL
             }
         }
 
-     
+        /// <summary>
+        /// Gets the note response.
+        /// </summary>
+        /// <param name="userID">The user identifier.</param>
+        /// <param name="note">The note.</param>
+        /// <returns> returns the note info </returns>
+        private NoteResponse GetNoteResponse(string userID, NoteModel note)
+        {
+            // creating a list for holding collaborators info for esch note
+            var collaborators = new List<CollaboratorRsponse>();
+
+            // get the collaborators for each note
+            var collaboratorsList = this.authenticationContext.Collaborators.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
+            // get labels for Note
+            var labelList = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.NoteID == note.NoteID);
+
+            // creating list for label
+            var labels = new List<LabelResponse>();
+
+            // iterate the loop for each collaborator for note
+            foreach (var coll in collaboratorsList)
+            {
+                // get the collaborator info
+                var collaboratorData = new CollaboratorRsponse()
+                {
+                    CollaboratorID = coll.CollaboratorID,
+                    EmailID = coll.EmailID,
+                };
+
+                // add the collaborator info into collaborator list
+                collaborators.Add(collaboratorData);
+            }
+
+            // iteartes the loop for each label for note
+            foreach (var data in labelList)
+            {
+                // get the label info
+                var label = new LabelResponse()
+                {
+                    ID = data.LabelID,
+                    Label = data.Label,
+                };
+
+                // add the label info into label list
+                labels.Add(label);
+            }
+
+            // get the required values of note
+            var notes = new NoteResponse()
+            {
+                NoteID = note.NoteID,
+                Title = note.Title,
+                Description = note.Description,
+                Collaborator = collaboratorsList.Count(),
+                Color = note.Color,
+                Image = note.Image,
+                IsArchive = note.IsArchive,
+                IsPin = note.IsPin,
+                IsTrash = note.IsTrash,
+                Reminder = note.Reminder,
+                Collaborators = collaborators,
+                Labels = labels
+            };
+
+            // return the note info
+            return notes;
+        }
+
+        /// <summary>
+        /// Adds the label.
+        /// </summary>
+        /// <param name="labelID">The label identifier.</param>
+        /// <param name="noteID">The note identifier.</param>
+        /// <param name="userID">The user identifier.</param>
+        /// <returns> returns note info</returns>
+        /// <exception cref="Exception">
+        /// Label already exist for note
+        /// or
+        /// Note not found
+        /// or
+        /// Label not found
+        /// or
+        /// </exception>
+        public async Task<NoteResponse> AddLabel(int labelID, int noteID, string userID)
+        {
+            try
+            {
+                // get the labels of user from label table
+                var label = this.authenticationContext.Label.Where(s => s.LabelID == labelID && s.UserID == userID).FirstOrDefault();
+
+                // check wheather user have label or not
+                if (label != null)
+                {
+                    // get the note data from note table
+                    var noteData = this.authenticationContext.Note.Where(s => s.UserID == userID && s.NoteID == noteID && s.IsTrash == false).FirstOrDefault();
+
+                    // get data from Note label table for selected label and note
+                    var noteLabelData = this.authenticationContext.NoteLabel.Where(s => s.UserID == userID && s.LabelID == labelID && s.NoteID == noteID).FirstOrDefault();
+
+                    // check wheather user have note or not
+                    if (noteData != null)
+                    {
+                        // check wheather user already have label for selected note or not
+                        if (noteLabelData == null)
+                        {
+                            // add the label on note in note label table
+                            var labelOnNote = new NoteLabelModel()
+                            {
+                                LabelID = label.LabelID,
+                                Label = label.Label,
+                                NoteID = noteID,
+                                UserID = userID,
+                                CreatedDate = DateTime.Now,
+                                ModifiedDate = DateTime.Now
+                            };
+
+                            // add new entry in Note Lable table
+                            this.authenticationContext.NoteLabel.Add(labelOnNote);
+
+                            // save the changes in database
+                            await this.authenticationContext.SaveChangesAsync();
+                        }
+                        else
+                        {
+                            // if selected note already have user entered label then throw exception
+                            throw new Exception("Label already exist for note");
+                        }
+
+                        // get the note info
+                        NoteResponse note = this.GetNoteResponse(userID, noteData);
+
+                        // return note info
+                        return note;
+                    }
+                    else
+                    {
+                        // if user doen't have note then throw exception
+                        throw new Exception("Note not found");
+                    }
+                }
+                else
+                {
+                    // if user entered label not found in label table then throw exception
+                    throw new Exception("Label not found");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
     }
 }
