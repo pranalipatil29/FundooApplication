@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace XUnitTestCases
 {
+    // Including the requried assemblies in to the program
     using System;
     using System.Threading.Tasks;
     using System.Web.Http.Results;
@@ -29,6 +30,9 @@ namespace XUnitTestCases
     using Moq;
     using Xunit;
 
+    /// <summary>
+    ///  this class contains different test cases for Note Controller
+    /// </summary>
     public class NotesTestCases
     {
         NoteController noteController;
@@ -295,6 +299,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestDeleteimageForSuccess()
         {
+            // passing correct note ID
             var result = await noteController.DeleteImage(2);
             Assert.IsType<OkObjectResult>(result);
         }
@@ -305,6 +310,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestDeleteImageForInvalidNoteID()
         {
+            // passing wrong Note ID
             var result = await noteController.DeleteImage(-1);
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -315,6 +321,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestAddLabelOnNoteForBadResult()
         {
+            // passing wrong values
             var result = await noteController.AddLabelOnNote(0,0);
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -325,6 +332,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestAddLabelOnNoteForSuccess()
         {
+            // passing currect values for Note ID and Label ID
             var result = await noteController.AddLabelOnNote(2,2);
             Assert.IsType<OkObjectResult>(result);
         }
@@ -335,6 +343,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestAddLabelOnNoteForInvalidNoteID()
         {
+            // passing correct label ID and wrong Note ID
             var result = await noteController.AddLabelOnNote(-1,2);
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -345,6 +354,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestAddLabelOnNoteForInvalidLabelID()
         {
+            // passing correct note id and wrong label id
             var result = await noteController.AddLabelOnNote(2,-1);
             Assert.IsType<BadRequestObjectResult>(result);
         }
@@ -355,6 +365,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestChangeColorForSuccess()
         {
+            // passing correct color code for color value
             ChangeColorRequest color = new ChangeColorRequest()
             {
                 Color = "#F00"
@@ -370,6 +381,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestChangeColorForBadRequest()
         {
+            // passing string as color value
             ChangeColorRequest color = new ChangeColorRequest()
             {
                 Color = "gsfdhvh"
@@ -385,6 +397,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestChangeColorForNullRequest()
         {
+            // passing null value to change color request model 
             ChangeColorRequest color = new ChangeColorRequest()
             {
 
@@ -400,6 +413,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestSetReminderForSuccess()
         {
+            // setting reminder
             ReminderRequest reminder = new ReminderRequest()
             {
                 Reminder = DateTime.Now.AddHours(1)
@@ -415,6 +429,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestSetReminderForBadRequest()
         {
+            // setting reminder for current time
             ReminderRequest reminder = new ReminderRequest()
             {
                 Reminder = DateTime.Now

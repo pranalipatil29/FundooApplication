@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace XUnitTestCases
 {
+    // Including the requried assemblies in to the program
     using System;
     using System.Collections.Generic;
     using System.Collections.ObjectModel;
@@ -28,11 +29,24 @@ namespace XUnitTestCases
     using Moq;
     using Xunit;
 
+    /// <summary>
+    /// this class contains different test cases for Account Controller
+    /// </summary>
     public class AccountTestCases
     {
+        /// <summary>
+        /// The account controller
+        /// </summary>
         AccountController accountController;
+
+        /// <summary>
+        /// The account bl
+        /// </summary>
         private readonly IAccountBL accountBL;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AccountTestCases"/> class.
+        /// </summary>
         public AccountTestCases()
         {
             var repository = new Mock<IAccountRL>();

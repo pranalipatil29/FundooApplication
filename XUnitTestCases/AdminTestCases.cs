@@ -13,6 +13,7 @@
 // ******************************************************************************
 namespace XUnitTestCases
 {
+    // Including the requried assemblies in to the program
     using FundooApp.Controllers;
     using FundooBusinessLayer.InterfaceBL;
     using FundooBusinessLayer.ServicesBL;
@@ -27,12 +28,24 @@ namespace XUnitTestCases
     using System.Threading.Tasks;
     using Xunit;
 
+    /// <summary>
+    /// this class contains different test cases for Admin Controller
+    /// </summary>
     public class AdminTestCases
     {
+        /// <summary>
+        /// The admin controller
+        /// </summary>
         private readonly AdminController adminController;
 
+        /// <summary>
+        /// The admin bl
+        /// </summary>
         private readonly IAdminBL adminBL;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AdminTestCases"/> class.
+        /// </summary>
         public AdminTestCases()
         {
             var repository = new Mock<IAdminRL>();
@@ -46,7 +59,7 @@ namespace XUnitTestCases
         [Fact]
         public async Task TestRegistrationForBadRequest()
         {
-
+            // setting the values for registration model with password field as empty
             RegistrationModel data = new RegistrationModel()
             {
                 FirstName = "Abc",
