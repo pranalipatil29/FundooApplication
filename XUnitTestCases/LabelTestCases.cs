@@ -13,6 +13,11 @@
 // ******************************************************************************
 namespace XUnitTestCases
 {
+    // Including the requried assemblies in to the program
+    using System;
+    using System.Collections.Generic;
+    using System.Text;
+    using System.Threading.Tasks;
     using FundooApp.Controllers;
     using FundooBusinessLayer.InterfaceBL;
     using FundooBusinessLayer.ServicesBL;
@@ -20,11 +25,6 @@ namespace XUnitTestCases
     using FundooRepositoryLayer.InterfaceRL;
     using Microsoft.AspNetCore.Mvc;
     using Moq;
-    // Including the requried assemblies in to the program
-    using System;
-    using System.Collections.Generic;
-    using System.Text;
-    using System.Threading.Tasks;
     using Xunit;
 
     /// <summary>
@@ -169,10 +169,10 @@ namespace XUnitTestCases
         }
 
         /// <summary>
-        /// Tests the label update for ok o result.
+        /// Tests the delete label for ok result.
         /// </summary>
         [Fact]
-        public async Task TestLabelUpdateForOkOResult()
+        public async Task TestDeleteLabelForOkOResult()
         {
             var result = await labelController.DeleteLabel(1);
             Assert.IsType<OkObjectResult>(result);
