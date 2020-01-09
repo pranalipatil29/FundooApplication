@@ -30,7 +30,7 @@ namespace FundooApp.Controllers
     /// this class contains different API's for Admin
     /// </summary>
     /// <seealso cref="Microsoft.AspNetCore.Mvc.ControllerBase" />
-    [Authorize]
+    [AllowAnonymous]
     [Route("api/[controller]")]
     [ApiController]
     public class AdminController : ControllerBase
@@ -138,8 +138,10 @@ namespace FundooApp.Controllers
 
             try
             {
+                // get the user Statistics
                 Dictionary<string, int> users = this.adminBL.GetUserStatistics();
 
+                // check wheather list holds any record or not
                 if (users.Count > 0)
                 {
                     success = true;
@@ -174,8 +176,10 @@ namespace FundooApp.Controllers
 
             try
             {
+                // get users data
                 IList<AccountResponse> users = this.adminBL.UsersInfo();
 
+                // check wheather users variable holds any user data or not
                 if (users.Count > 0)
                 {
                     success = true;
@@ -232,6 +236,39 @@ namespace FundooApp.Controllers
                 success = false;
                 message = exception.Message;
                 return this.BadRequest(new { success, message });
+            }
+        }
+
+        /// <summary>
+        /// Profiles the picture upload.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns> returns the operation result</returns>
+        [HttpPut]
+        [Route("ProfilePicture")]
+        public async Task<IActionResult> ProfilePictureUpload(IFormFile file)
+        {
+            try
+            {
+                // get the email ID of user
+                var emailID = HttpContext.User.Claims.First(s => s.Type == "EmailID").Value;
+
+                // pass the email ID and image to business layer method of account
+                var data = await this.adminBL.ChangeProfilePicture(emailID, file);
+
+                // check whether data is null or not
+                if (data != null)
+                {
+                    return this.Ok(new { success = true, message = "Profile Picture is Uploaded ", data });
+                }
+                else
+                {
+                    return this.Ok(new { success = false, message = "Admin doesn't exist" });
+                }
+            }
+            catch (Exception exception)
+            {
+                return this.BadRequest(new { success = false, message = exception.Message });
             }
         }
     }

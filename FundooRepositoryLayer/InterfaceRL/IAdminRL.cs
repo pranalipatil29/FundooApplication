@@ -20,6 +20,7 @@ namespace FundooRepositoryLayer.InterfaceRL
     using System.Threading.Tasks;
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// declaring the methods for admin controller
@@ -65,5 +66,13 @@ namespace FundooRepositoryLayer.InterfaceRL
         /// <param name="name">The name.</param>
         /// <returns>returns the list of users</returns>
         IList<AccountResponse> SearchUser(string name);
+
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="file">The form file.</param>
+        /// <returns> returns the operation result</returns>
+        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile file);
     }
 }

@@ -66,8 +66,8 @@ namespace FundooBusinessLayer1.InterfaceBL
         /// Changes the profile picture.
         /// </summary>
         /// <param name="emailID">The email identifier.</param>
-        /// <param name="formFile">The form file.</param>
+        /// <param name="file">The form file.</param>
         /// <returns> returns the operation result</returns>
-        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile);
+        Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile file);
     }
 }

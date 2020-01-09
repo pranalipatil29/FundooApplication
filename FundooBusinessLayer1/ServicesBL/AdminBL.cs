@@ -22,6 +22,7 @@ namespace FundooBusinessLayer.ServicesBL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
 
     /// <summary>
     /// this class implements all the methods in business layer Admin interface 
@@ -199,6 +200,39 @@ namespace FundooBusinessLayer.ServicesBL
                 else
                 {
                     throw new Exception("Please enter UserName");
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="formFile">The form file.</param>
+        /// <returns>
+        /// returns the operation result
+        /// </returns>
+        /// <exception cref="Exception">
+        /// Please select correct image
+        /// or
+        /// </exception>
+        public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile formFile)
+        {
+            try
+            {
+                // ckeck whether user passed correct image info or not
+                if (formFile != null)
+                {
+                    // pass user email id and image to repository layer method
+                    return await this.adminRL.ChangeProfilePicture(emailID, formFile);
+                }
+                else
+                {
+                    throw new Exception("Please select correct image");
                 }
             }
             catch (Exception exception)

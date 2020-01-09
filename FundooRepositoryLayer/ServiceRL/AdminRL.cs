@@ -24,7 +24,9 @@ namespace FundooRepositoryLayer.ServiceRL
     using FundooCommonLayer.Model;
     using FundooCommonLayer.Model.Response;
     using FundooRepositoryLayer.Context;
+    using FundooRepositoryLayer.ImageUpload;
     using FundooRepositoryLayer.InterfaceRL;
+    using Microsoft.AspNetCore.Http;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;
@@ -326,6 +328,60 @@ namespace FundooRepositoryLayer.ServiceRL
                 else
                 {
                     // if no record found for admin entered key then return null
+                    return null;
+                }
+            }
+            catch (Exception exception)
+            {
+                throw new Exception(exception.Message);
+            }
+        }
+
+
+        /// <summary>
+        /// Changes the profile picture.
+        /// </summary>
+        /// <param name="emailID">The email identifier.</param>
+        /// <param name="file">The form file.</param>
+        /// <returns> returns the admin info or null value</returns>
+        /// <exception cref="Exception"> exception message</exception>
+        public async Task<AccountResponse> ChangeProfilePicture(string emailID, IFormFile file)
+        {
+            try
+            {
+                // check whether admin data already exist in the database or not
+                var user = await this.userManager.FindByEmailAsync(emailID);
+
+                // if admin is exist or not
+                if (user != null)
+                {
+                    // send the API key,API secret key and cloud name to Upload Image class constructor
+                    UploadImage imageUpload = new UploadImage(this.applicationSettings.APIkey, this.applicationSettings.APISecret, this.applicationSettings.CloudName);
+
+                    // get the image url
+                    var url = imageUpload.Upload(file);
+
+                    // set the image to note
+                    user.ProfilePicture = url;
+                    var result = await this.userManager.UpdateAsync(user);
+
+                    // get the required user data 
+                    var data = new AccountResponse()
+                    {
+                        FirstName = user.FirstName,
+                        LastName = user.LastName,
+                        EmailID = user.Email,
+                        UserName = user.UserName,
+                        Profilepicture = user.ProfilePicture,
+                        ServiceType = user.ServiceType
+                    };
+
+                    // returning admin data
+                    return data;
+                }
+                else
+                {
+                    // if admin data not found in database return null
                     return null;
                 }
             }
